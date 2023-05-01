@@ -15,6 +15,6 @@ export default function ProductsProvider(props: PropsWithChildren) {
     return (
         <ProductsContext.Provider value={ProductContextValues}>
             {props.children}
-        </ProductsContext.Provider>
+        </ProductsContext.Provider> 
     );
 }
