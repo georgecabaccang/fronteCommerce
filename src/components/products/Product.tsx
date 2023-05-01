@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import styles from "../styles/item.module.css";
+import styles from "../../styles/item.module.css";
 
 interface Iitems {
-    item: ItemProperties;
+    item: IProductProperties;
 }
 
-export default function Item(props: Iitems) {
+export default function Product(props: Iitems) {
     const item = props.item;
 
     return (
@@ -17,7 +17,7 @@ export default function Item(props: Iitems) {
                 <img src={item.image} className="max-h-[10em] min-h-[10em]" />
             </div>
             <div className="pt-2">
-                <h3>{item.itemName}</h3>
+                <h3>{item.productName}</h3>
                 <p>Price: ${item.price.toFixed(2)}</p>
             </div>
         </Link>

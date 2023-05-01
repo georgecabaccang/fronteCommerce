@@ -5,7 +5,7 @@ import Home from "./components/pages/Home";
 import Cart from "./components/pages/Cart";
 import Shop from "./components/pages/Shop";
 import Layout from "./components/shared/Layout";
-import Item from "./components/pages/Item";
+import Item from "./components/products/ItemPage";
 
 function App() {
     return (
