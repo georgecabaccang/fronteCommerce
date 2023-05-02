@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import useProductDetails from "../../hooks/useProductDetails";
 import { IProductProperties } from "../../types/productTypes";
@@ -6,6 +6,7 @@ import styles from "../../styles/product.module.css";
 
 import Button from "../shared/Button";
 import Input from "../shared/Input";
+import { CartContext } from "../../providers/CartProvider";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>();
@@ -14,8 +15,36 @@ export default function ProductPage() {
     const [quantity, setQuantity] = useState(1);
     const { _id } = useParams();
 
-    const testFn = () => {
-        console.log("okay na");
+    const cartContext = useContext(CartContext);
+
+    const addToCart = () => {
+        console.log(productDetails);
+        if (
+            productDetails?.productName &&
+            productDetails?.description &&
+            productDetails?.price &&
+            productDetails?.discount >= 0 &&
+            productDetails?.stock >= 1 &&
+            productDetails?.image &&
+            productDetails?._id
+        ) {
+            const productAddToCart = {
+                productName: productDetails.productName,
+                description: productDetails.description,
+                price: productDetails.price,
+                discount: productDetails.discount,
+                stock: productDetails.stock,
+                image: productDetails.image,
+                _id: productDetails._id,
+                quantity: quantity,
+            };
+            cartContext.cart.push(productAddToCart);
+            console.log("if");
+        } else {
+            console.log("else");
+        }
+
+        console.log(cartContext.cart);
     };
 
     const minusQuantity = () => {
@@ -25,6 +54,11 @@ export default function ProductPage() {
     const plusQuantity = () => {
         setQuantity(quantity + 1);
     };
+
+    let totalPrice = productDetails?.price;
+    if (productDetails?.price) {
+        totalPrice = productDetails?.price * quantity;
+    }
 
     useEffect(() => {
         if (_id) {
@@ -88,7 +122,7 @@ export default function ProductPage() {
                                     className="border px-[0.7em] inline ms-2"
                                     clickEvent={minusQuantity}
                                     getState={quantity}
-                                    action="subtract"
+                                    disabled={quantity == 1 ? true : false}
                                 />
                             }
                             {
@@ -108,24 +142,24 @@ export default function ProductPage() {
                                     className="border px-[0.6em] inline"
                                     getState={quantity}
                                     clickEvent={plusQuantity}
-                                    action="add"
+                                    disabled={quantity == 10 ? true : false}
                                 />
                             }
                         </div>
-                        <div>Total:</div>
+                        <div>Total: ${totalPrice?.toFixed(2)}</div>
                     </div>
                     <div>
                         <Button
                             type="button"
                             name="Buy Now"
                             className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={testFn}
+                            clickEvent={addToCart}
                         />
                         <Button
                             type="button"
                             name="Add To Cart"
                             className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={testFn}
+                            clickEvent={addToCart}
                         />
                     </div>
                 </div>

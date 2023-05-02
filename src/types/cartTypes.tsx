@@ -5,5 +5,5 @@ export interface IItemsProperties extends IProductProperties {
 }
 
 export interface ICart {
-    items: Array<IItemsProperties>;
+    cart: Array<IItemsProperties>;
 }

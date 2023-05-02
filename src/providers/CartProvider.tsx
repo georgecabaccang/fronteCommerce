@@ -1,16 +1,20 @@
 import { PropsWithChildren, createContext, useState } from "react";
+import { IProductProperties } from "../types/productTypes";
+import { ICart, IItemsProperties } from "../types/cartTypes";
 
-const CartContext = createContext({
+export const CartContext = createContext<ICart>({
     cart: [],
-    toCheckout: [],
+    // toCheckout: [],
 });
 
 export default function CartProvider(props: PropsWithChildren) {
-    const [cart, setCart] = useState([]);
+    const cartSub: IItemsProperties[] = [];
+    const [cart, setCart] = useState<Array<IItemsProperties>>([]);
+    const [toCheckOut, setToCheckOut] = useState([1, 2, 3]);
 
     const CartPrroviderValues = {
-        cart: [],
-        toCheckout: [],
+        cart: cart,
+        // toCheckout: toCheckOut,
     };
 
     return (
