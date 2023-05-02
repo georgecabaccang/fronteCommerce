@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import styles from "../../styles/item.module.css";
+import styles from "../../styles/product.module.css";
 import { IProductProperties } from "../../types/productTypes";
 
 interface IProdcuts {
@@ -7,19 +7,23 @@ interface IProdcuts {
 }
 
 export default function Product(props: IProdcuts) {
-    const item = props.product;
+    const product = props.product;
+    console.log(product);
 
     return (
         <Link
-            to={`/shop/product/${item._id}`}
+            to={`/shop/product/${product._id}`}
             className={`${styles.card} grid grid-cols-1 p-2`}
         >
             <div className="flex place-content-center">
-                <img src={item.image} className="max-h-[10em] min-h-[10em]" />
+                <img
+                    src={product.image}
+                    className="max-h-[10em] min-h-[10em]"
+                />
             </div>
             <div className="pt-2">
-                <h3>{item.productName}</h3>
-                <p>Price: ${item.price.toFixed(2)}</p>
+                <h3>{product.productName}</h3>
+                <p>Price: ${product.price.toFixed(2)}</p>
             </div>
         </Link>
     );
