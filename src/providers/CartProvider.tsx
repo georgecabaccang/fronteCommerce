@@ -8,7 +8,6 @@ export const CartContext = createContext<ICart>({
 });
 
 export default function CartProvider(props: PropsWithChildren) {
-    const cartSub: IItemsProperties[] = [];
     const [cart, setCart] = useState<Array<IItemsProperties>>([]);
     const [toCheckOut, setToCheckOut] = useState([1, 2, 3]);
 
