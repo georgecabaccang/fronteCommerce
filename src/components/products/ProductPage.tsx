@@ -5,15 +5,25 @@ import { IProductProperties } from "../../types/productTypes";
 import styles from "../../styles/product.module.css";
 
 import Button from "../shared/Button";
+import Input from "../shared/Input";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>();
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
+    const [quantity, setQuantity] = useState(1);
     const { _id } = useParams();
 
     const testFn = () => {
         console.log("okay na");
+    };
+
+    const minusQuantity = () => {
+        setQuantity(quantity - 1);
+    };
+
+    const plusQuantity = () => {
+        setQuantity(quantity + 1);
     };
 
     useEffect(() => {
@@ -70,7 +80,38 @@ export default function ProductPage() {
                             Stock: {productDetails?.stock}
                         </div>
                         <div>Price: ${productDetails?.price.toFixed(2)}</div>
-                        <div>Quantity:</div>
+                        <div>
+                            Quantity:
+                            {
+                                <Button
+                                    name="-"
+                                    className="border px-[0.7em] inline ms-2"
+                                    clickEvent={minusQuantity}
+                                    getState={quantity}
+                                    action="subtract"
+                                />
+                            }
+                            {
+                                <Input
+                                    type="number"
+                                    setQuantity={setQuantity}
+                                    value={quantity}
+                                    min={1}
+                                    max={10}
+                                    isDisabled={true}
+                                    className="inline px-2 border max-w-[2.5em] text-center"
+                                />
+                            }
+                            {
+                                <Button
+                                    name="+"
+                                    className="border px-[0.6em] inline"
+                                    getState={quantity}
+                                    clickEvent={plusQuantity}
+                                    action="add"
+                                />
+                            }
+                        </div>
                         <div>Total:</div>
                     </div>
                     <div>
