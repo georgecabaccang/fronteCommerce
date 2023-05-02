@@ -5,7 +5,7 @@ import Home from "./components/pages/Home";
 import Cart from "./components/pages/Cart";
 import Shop from "./components/pages/Shop";
 import Layout from "./components/shared/Layout";
-import Product from "./components/products/ProductPage";
+import ProductPage from "./components/products/ProductPage";
 
 function App() {
     return (
@@ -15,7 +15,10 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/shop" element={<Shop />} />
-                    <Route path="/shop/product/:id" element={<Product />} />
+                    <Route
+                        path="/shop/product/:_id"
+                        element={<ProductPage />}
+                    />
                 </Routes>
             </Layout>
         </div>
