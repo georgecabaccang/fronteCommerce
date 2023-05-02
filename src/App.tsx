@@ -5,7 +5,7 @@ import Home from "./components/pages/Home";
 import Cart from "./components/pages/Cart";
 import Shop from "./components/pages/Shop";
 import Layout from "./components/shared/Layout";
-import Item from "./components/products/ItemPage";
+import Product from "./components/products/ProductPage";
 
 function App() {
     return (
@@ -15,7 +15,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/shop" element={<Shop />} />
-                    <Route path="/shop/item/:id" element={<Item />} />
+                    <Route path="/shop/product/:id" element={<Product />} />
                 </Routes>
             </Layout>
         </div>

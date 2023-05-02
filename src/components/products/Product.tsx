@@ -2,15 +2,15 @@ import { Link } from "react-router-dom";
 import styles from "../../styles/item.module.css";
 
 interface Iitems {
-    item: IProductProperties;
+    product: IProductProperties;
 }
 
 export default function Product(props: Iitems) {
-    const item = props.item;
+    const item = props.product;
 
     return (
         <Link
-            to={`/shop/item/${item.id}`}
+            to={`/shop/product/${item._id}`}
             className={`${styles.card} grid grid-cols-1 p-2`}
         >
             <div className="flex place-content-center">

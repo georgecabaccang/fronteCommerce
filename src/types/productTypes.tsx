@@ -2,7 +2,7 @@ interface IProductProperties {
     productName: string;
     price: number;
     image: string;
-    id: string;
+    _id: string;
 }
 
 interface IProductContextPropperties {
