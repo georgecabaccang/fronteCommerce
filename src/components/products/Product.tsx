@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import styles from "../../styles/item.module.css";
+import { IProductProperties } from "../../types/productTypes";
 
-interface Iitems {
+interface IProdcuts {
     product: IProductProperties;
 }
 
-export default function Product(props: Iitems) {
+export default function Product(props: IProdcuts) {
     const item = props.product;
 
     return (

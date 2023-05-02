@@ -1,4 +1,8 @@
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import {
+    IProductContextPropperties,
+    IProductProperties,
+} from "../types/productTypes";
 
 export const ProductsContext = createContext<IProductContextPropperties>({
     products: [],
@@ -11,7 +15,6 @@ export default function ProductsProvider(props: PropsWithChildren) {
     const loadProducts = async () => {
         const getProducts = await fetch("http://localhost:8002/shop");
         const loadedProducts = await getProducts.json();
-        console.log(loadedProducts);
         setProducts(loadedProducts);
     };
 

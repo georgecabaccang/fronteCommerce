@@ -1,11 +1,11 @@
-interface IProductProperties {
+export interface IProductProperties {
     productName: string;
     price: number;
     image: string;
     _id: string;
 }
 
-interface IProductContextPropperties {
+export interface IProductContextPropperties {
     products: Array<IProductProperties>;
     getProducts: () => void;
 }
