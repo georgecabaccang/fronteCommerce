@@ -2,5 +2,10 @@ import React from "react";
 import { IItemsProperties } from "../../types/cartTypes";
 
 export default function CartItem(props: IItemsProperties) {
-    return <div>{props.productName}</div>;
+    return (
+        <div>
+            <div>{props.productName}</div>
+            <div>{props.quantity}</div>
+        </div>
+    );
 }

@@ -39,9 +39,6 @@ export default function ProductPage() {
                 quantity: quantity,
             };
             cartContext.cart.push(productAddToCart);
-            console.log("if");
-        } else {
-            console.log("else");
         }
 
         console.log(cartContext.cart);
