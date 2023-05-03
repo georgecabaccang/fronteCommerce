@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Navigation() {
     return (
-        <div className="bg-orange-100 h-[3em]">
+        <div className="bg-orange-100 h-[3em] sticky top-0 z-10">
             <div className="flex mx-10 h-full items-center">
                 <div>
                     <h1>Shop</h1>

@@ -28,7 +28,7 @@ export default function Register() {
         console.log("?");
     };
     return (
-        <div className="border flex place-content-center py-20 h-[100vh]">
+        <div className="flex place-content-center py-20">
             <div className="border w-[24em] h-[21em] py-3 px-12 text-center">
                 <div>Register</div>
                 <form

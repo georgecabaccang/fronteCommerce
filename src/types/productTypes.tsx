@@ -8,6 +8,10 @@ export interface IProductProperties {
     _id: string;
 }
 
+export interface IAxiosProductResponse {
+    data: Array<IProductContextPropperties>;
+}
+
 export interface IProductContextPropperties {
     products: Array<IProductProperties>;
     getProducts: () => void;
