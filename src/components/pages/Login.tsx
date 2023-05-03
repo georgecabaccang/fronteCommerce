@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
+import { userLogin } from "../../api/loginRequest";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 
@@ -21,9 +22,16 @@ export default function Login() {
         setFormIsValid(false);
     }, [email, password]);
 
-    const submitHandler = (event: React.FormEvent) => {
+    const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log("?");
+
+        const userCredentials = {
+            email: email,
+            password: password,
+        };
+
+        const userLoggedIn = await userLogin(userCredentials);
+        console.log(userLoggedIn);
     };
     return (
         <div className="flex place-content-center py-20">
