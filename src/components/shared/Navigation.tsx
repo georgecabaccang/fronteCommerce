@@ -32,6 +32,12 @@ export default function Navigation() {
                     >
                         Login
                     </NavLink>
+                    <NavLink
+                        to={"/sign-up"}
+                        className="flex place-content-center items-center w-full h-full link-page"
+                    >
+                        Sign Up
+                    </NavLink>
                 </nav>
             </div>
         </div>

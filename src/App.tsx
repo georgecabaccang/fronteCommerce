@@ -7,6 +7,7 @@ import Shop from "./components/pages/Shop";
 import Layout from "./components/shared/Layout";
 import ProductPage from "./components/products/ProductPage";
 import Login from "./components/pages/Login";
+import Register from "./components/pages/Register";
 
 function App() {
     return (
@@ -21,6 +22,8 @@ function App() {
                         element={<ProductPage />}
                     />
                     <Route path="/login" element={<Login />} />
+                    registration
+                    <Route path="/sign-up" element={<Register />} />
                 </Routes>
             </Layout>
         </div>
