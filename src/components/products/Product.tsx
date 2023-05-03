@@ -8,8 +8,7 @@ interface IProdcuts {
 
 export default function Product(props: IProdcuts) {
     const product = props.product;
-    console.log(product);
-
+    
     return (
         <Link
             to={`/shop/product/${product._id}`}

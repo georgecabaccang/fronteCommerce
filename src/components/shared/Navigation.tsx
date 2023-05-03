@@ -7,7 +7,7 @@ export default function Navigation() {
                 <div>
                     <h1>Shop</h1>
                 </div>
-                <nav className="ms-auto flex w-1/6 h-full items-center navbar">
+                <nav className="ms-auto flex w-1/4 h-full items-center navbar">
                     <NavLink
                         to={"/"}
                         className="flex place-content-center items-center w-full h-full link-page"
@@ -25,6 +25,12 @@ export default function Navigation() {
                         className="flex place-content-center items-center w-full h-full link-page"
                     >
                         Cart
+                    </NavLink>
+                    <NavLink
+                        to={"/login"}
+                        className="flex place-content-center items-center w-full h-full link-page"
+                    >
+                        Login
                     </NavLink>
                 </nav>
             </div>

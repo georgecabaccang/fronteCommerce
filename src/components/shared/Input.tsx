@@ -1,9 +1,18 @@
 import { IInput } from "../../types/inputTypes";
 
 export default function Input(props: IInput) {
-    const { setQuantity, isDisabled, ...inputProps } = props;
+    const { setState, isDisabled, ...inputProps } = props;
     const setInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuantity?.(+event.target.value);
+        switch (props.type) {
+            case "text":
+                setState?.(event.target.value);
+                break;
+            case "number":
+                setState?.(+event.target.value);
+                break;
+            default:
+                break;
+        }
     };
 
     return (

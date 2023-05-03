@@ -6,9 +6,7 @@ export default function Button(props: IButton<string | number>) {
     return (
         <button
             {...btnProps}
-            className={`${props.className} ${
-                props.disabled ? "bg-slate-200" : ""
-            }`}
+            className={`${props.className}`}
             onClick={clickEvent}
         >
             {props.name}

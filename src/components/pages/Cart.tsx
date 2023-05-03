@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { CartContext } from "../../providers/CartProvider";
 import CartItem from "../cart/CartItem";
 
@@ -11,6 +11,7 @@ export default function Cart() {
                 {cartContext?.cart?.map((item) => {
                     return (
                         <CartItem
+                            key={item._id}
                             productName={item.productName}
                             description={item.description}
                             price={item.price}

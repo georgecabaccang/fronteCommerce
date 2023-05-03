@@ -12,7 +12,7 @@ export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>();
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState<string | number>(1);
     const { _id } = useParams();
 
     const cartContext = useContext(CartContext);
@@ -36,7 +36,7 @@ export default function ProductPage() {
                 stock: productDetails.stock,
                 image: productDetails.image,
                 _id: productDetails._id,
-                quantity: quantity,
+                quantity: +quantity,
             };
             cartContext.cart.push(productAddToCart);
         }
@@ -45,16 +45,16 @@ export default function ProductPage() {
     };
 
     const minusQuantity = () => {
-        setQuantity(quantity - 1);
+        setQuantity(+quantity - 1);
     };
 
     const plusQuantity = () => {
-        setQuantity(quantity + 1);
+        setQuantity(+quantity + 1);
     };
 
     let totalPrice = productDetails?.price;
     if (productDetails?.price) {
-        totalPrice = productDetails?.price * quantity;
+        totalPrice = productDetails?.price * +quantity;
     }
 
     useEffect(() => {
@@ -116,7 +116,7 @@ export default function ProductPage() {
                             {
                                 <Button
                                     name="-"
-                                    className="border px-[0.7em] inline ms-2"
+                                    className="border px-[0.7em] inline ms-2 disabled:bg-slate-200"
                                     clickEvent={minusQuantity}
                                     getState={quantity}
                                     disabled={quantity == 1 ? true : false}
@@ -125,7 +125,7 @@ export default function ProductPage() {
                             {
                                 <Input
                                     type="number"
-                                    setQuantity={setQuantity}
+                                    setState={setQuantity}
                                     value={quantity}
                                     min={1}
                                     max={10}
@@ -136,7 +136,7 @@ export default function ProductPage() {
                             {
                                 <Button
                                     name="+"
-                                    className="border px-[0.6em] inline"
+                                    className="border px-[0.6em] inline disabled:bg-slate-200"
                                     getState={quantity}
                                     clickEvent={plusQuantity}
                                     disabled={quantity == 10 ? true : false}

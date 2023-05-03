@@ -6,6 +6,7 @@ import Cart from "./components/pages/Cart";
 import Shop from "./components/pages/Shop";
 import Layout from "./components/shared/Layout";
 import ProductPage from "./components/products/ProductPage";
+import Login from "./components/pages/Login";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                         path="/shop/product/:_id"
                         element={<ProductPage />}
                     />
+                    <Route path="/login" element={<Login />} />
                 </Routes>
             </Layout>
         </div>
