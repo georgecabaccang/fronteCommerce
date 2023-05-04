@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { userLogin } from "../../api/loginRequest";
+import { UserContext } from "../../providers/UserProvider";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 
@@ -9,6 +10,8 @@ export default function Login() {
     const [email, setEmail] = useState<string | number>("");
     const [password, setPassword] = useState<string | number>("");
     const [formIsValid, setFormIsValid] = useState(false);
+
+    const userContext = useContext(UserContext);
 
     useEffect(() => {
         if (
@@ -29,10 +32,13 @@ export default function Login() {
             email: email,
             password: password,
         };
-
-        const userLoggedIn = await userLogin(userCredentials);
-        console.log(userLoggedIn);
+        await userLogin(userCredentials);
+        const accessToken = localStorage.getItem("token");
+        const refreshToken = localStorage.getItem("refreshToken");
+        userContext.setAccessToken(accessToken);
+        userContext.setRefreshToken(refreshToken);
     };
+
     return (
         <div className="flex place-content-center py-20">
             <div className="border w-[24em] h-[17.5em] py-3 px-12 text-center">

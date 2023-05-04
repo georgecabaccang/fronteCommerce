@@ -1,10 +1,11 @@
+import axios from "axios";
+
 export default async function useProductDetails(productID: string) {
     try {
-        const response = await fetch(
+        const { data } = await axios.get(
             `http://localhost:8002/shop/product/${productID}`
         );
-        const productDetails = await response.json();
-        return productDetails;
+        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }

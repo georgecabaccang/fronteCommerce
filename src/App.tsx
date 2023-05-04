@@ -8,6 +8,7 @@ import Layout from "./components/shared/Layout";
 import ProductPage from "./components/products/ProductPage";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
+import LoggedOutRoutes from "./utils/LoggedOutRoutes";
 
 function App() {
     return (
@@ -17,13 +18,15 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/shop" element={<Shop />} />
+
                     <Route
                         path="/shop/product/:_id"
                         element={<ProductPage />}
                     />
-                    <Route path="/login" element={<Login />} />
-                    registration
-                    <Route path="/sign-up" element={<Register />} />
+                    <Route element={<LoggedOutRoutes />}>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/sign-up" element={<Register />} />
+                    </Route>
                 </Routes>
             </Layout>
         </div>
