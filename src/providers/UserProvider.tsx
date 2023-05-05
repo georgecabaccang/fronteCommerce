@@ -17,12 +17,8 @@ export const UserContext = createContext<IUserContext>({
 });
 
 export default function UserProvider(props: PropsWithChildren) {
-    const [accessToken, setAccessToken] = useState(
-        localStorage.getItem("token")
-    );
-    const [refreshToken, setRefreshToken] = useState(
-        localStorage.getItem("refreshToken")
-    );
+    const [accessToken, setAccessToken] = useState(localStorage.getItem("token"));
+    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
 
     const userContextValues: IUserContext = {
         accessToken: accessToken,
@@ -32,9 +28,5 @@ export default function UserProvider(props: PropsWithChildren) {
         setRefreshToken: setRefreshToken,
     };
 
-    return (
-        <UserContext.Provider value={userContextValues}>
-            {props.children}
-        </UserContext.Provider>
-    );
+    return <UserContext.Provider value={userContextValues}>{props.children}</UserContext.Provider>;
 }

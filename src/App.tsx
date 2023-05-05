@@ -19,10 +19,7 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/shop" element={<Shop />} />
 
-                    <Route
-                        path="/shop/product/:_id"
-                        element={<ProductPage />}
-                    />
+                    <Route path="/shop/product/:_id" element={<ProductPage />} />
                     <Route element={<LoggedOutRoutes />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<Register />} />

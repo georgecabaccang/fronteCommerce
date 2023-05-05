@@ -31,10 +31,7 @@ export default function Register() {
         <div className="flex place-content-center py-20">
             <div className="border w-[24em] h-[21em] py-3 px-12 text-center">
                 <div>Register</div>
-                <form
-                    onSubmit={submitHandler}
-                    className="grid grid-cols-1 gap-3"
-                >
+                <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
                     <div className="grid grid-cols-1 gap-3 text-left">
                         <div>
                             <div>Email:</div>

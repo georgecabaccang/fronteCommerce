@@ -92,9 +92,7 @@ export default function ProductPage() {
 
     return (
         <div className="pt-8 flex justify-center items-center">
-            <div
-                className={`${styles.card} h-[30em] w-[50em] grid grid-cols-3 p-5`}
-            >
+            <div className={`${styles.card} h-[30em] w-[50em] grid grid-cols-3 p-5`}>
                 <div className={`col-span-2`}>
                     <div className="h-[20em] flex place-content-center mr-6 mb-2 p-1 border">
                         <img

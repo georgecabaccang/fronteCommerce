@@ -1,9 +1,6 @@
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import axios from "axios";
-import {
-    IProductContextPropperties,
-    IProductProperties,
-} from "../types/productTypes";
+import { IProductContextPropperties, IProductProperties } from "../types/productTypes";
 
 export const ProductsContext = createContext<IProductContextPropperties>({
     products: [],

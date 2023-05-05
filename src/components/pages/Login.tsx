@@ -14,11 +14,7 @@ export default function Login() {
     const userContext = useContext(UserContext);
 
     useEffect(() => {
-        if (
-            email.toString().includes(".co") &&
-            email.toString().includes("@") &&
-            password
-        ) {
+        if (email.toString().includes(".co") && email.toString().includes("@") && password) {
             setFormIsValid(true);
             return;
         }
@@ -43,10 +39,7 @@ export default function Login() {
         <div className="flex place-content-center py-20">
             <div className="border w-[24em] h-[17.5em] py-3 px-12 text-center">
                 <div>Login</div>
-                <form
-                    onSubmit={submitHandler}
-                    className="grid grid-cols-1 gap-3"
-                >
+                <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
                     <div className="grid grid-cols-1 gap-3 text-left">
                         <div>
                             <div>Email:</div>
