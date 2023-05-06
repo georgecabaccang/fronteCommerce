@@ -28,7 +28,10 @@ export default function Login() {
             email: email,
             password: password,
         };
-        await userLogin(userCredentials);
+        const response = await userLogin(userCredentials);
+        if (response == "no tokens") {
+            return console.log("Something went wrong on our side. Please try again");
+        }
         const accessToken = localStorage.getItem("token");
         const refreshToken = localStorage.getItem("refreshToken");
         userContext.setAccessToken(accessToken);

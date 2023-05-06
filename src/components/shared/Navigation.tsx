@@ -1,11 +1,33 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
 import { logout } from "../../api/logoutRequest";
 
 export default function Navigation() {
-    const [activeLink, setActiveLink] = useState("home");
+    const [theLink, setTheLink] = useState("");
+    const [login, setLogin] = useState(true);
+    const [signUp, setSignUp] = useState(true);
+
     const userContext = useContext(UserContext);
+
+    const URLCheck = () => {
+        if (window.location.href == "http://localhost:5173/login") {
+            setLogin(false);
+            setSignUp(true);
+            return;
+        }
+        if (window.location.href == "http://localhost:5173/sign-up") {
+            setLogin(true);
+            setSignUp(false);
+            return;
+        }
+        setLogin(true);
+        setSignUp(true);
+    };
+
+    useEffect(() => {
+        URLCheck();
+    }, [theLink]);
 
     const logoutHandler = async () => {
         if (userContext.refreshToken) {
@@ -18,7 +40,7 @@ export default function Navigation() {
             localStorage.removeItem("refreshToken");
             userContext.setAccessToken("");
             userContext.setRefreshToken("");
-            setActiveLink("logout");
+            // setActiveLink("logout");
         }
     };
 
@@ -32,14 +54,14 @@ export default function Navigation() {
                     <NavLink
                         to={"/"}
                         className="flex place-content-center items-center w-full h-full link-page"
-                        onClick={() => setActiveLink("home")}
+                        onClick={() => setTheLink("home")}
                     >
                         Home
                     </NavLink>
                     <NavLink
                         to={"/shop"}
                         className="flex place-content-center items-center w-full h-full link-page"
-                        onClick={() => setActiveLink("shop")}
+                        onClick={() => setTheLink("shop")}
                     >
                         Shop
                     </NavLink>
@@ -48,7 +70,7 @@ export default function Navigation() {
                             <NavLink
                                 to={"/cart"}
                                 className="flex place-content-center items-center w-full h-full link-page"
-                                onClick={() => setActiveLink("cart")}
+                                onClick={() => setTheLink("cart")}
                             >
                                 Cart
                             </NavLink>
@@ -63,28 +85,22 @@ export default function Navigation() {
                     )}
                     {!userContext.accessToken && (
                         <>
-                            {activeLink === "sign-up" ||
-                            activeLink === "home" ||
-                            activeLink === "shop" ||
-                            activeLink === "logout" ? (
+                            {login ? (
                                 <NavLink
                                     to={"/login"}
                                     className="flex place-content-center items-center w-full h-full link-page"
-                                    onClick={() => setActiveLink("login")}
+                                    onClick={() => setTheLink("login")}
                                 >
                                     Login
                                 </NavLink>
                             ) : (
                                 ""
                             )}
-                            {activeLink === "login" ||
-                            activeLink === "home" ||
-                            activeLink === "shop" ||
-                            activeLink === "logout" ? (
+                            {signUp ? (
                                 <NavLink
                                     to={"/sign-up"}
                                     className="flex place-content-center items-center w-full h-full link-page"
-                                    onClick={() => setActiveLink("sign-up")}
+                                    onClick={() => setTheLink("sign-up")}
                                 >
                                     Sign Up
                                 </NavLink>

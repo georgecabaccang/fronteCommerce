@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
+import { registerUser } from "../../api/registerUser";
+import { IUserDetails } from "../../types/userRequestTypes";
+import { userLogin } from "../../api/loginRequest";
+import { UserContext } from "../../providers/UserProvider";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 
@@ -9,6 +13,8 @@ export default function Register() {
     const [password, setPassword] = useState<string | number>("");
     const [confirmPassword, setConfirmPassword] = useState<string | number>("");
     const [formIsValid, setFormIsValid] = useState(false);
+
+    const userContext = useContext(UserContext);
 
     useEffect(() => {
         if (
@@ -23,9 +29,26 @@ export default function Register() {
         setFormIsValid(false);
     }, [email, password, confirmPassword]);
 
-    const submitHandler = (event: React.FormEvent) => {
+    const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log("?");
+
+        const userDetails: IUserDetails = { email: email, password: password };
+        const response = await registerUser(userDetails);
+        console.log(response);
+        if (response === "user created") {
+            const userCredentials: IUserDetails = {
+                email: email,
+                password: password,
+            };
+            const response = await userLogin(userCredentials);
+            if (response == "no tokens") {
+                return console.log("Something went wrong on our side. Please try again");
+            }
+            const accessToken = localStorage.getItem("token");
+            const refreshToken = localStorage.getItem("refreshToken");
+            userContext.setAccessToken(accessToken);
+            userContext.setRefreshToken(refreshToken);
+        }
     };
     return (
         <div className="flex place-content-center py-20">

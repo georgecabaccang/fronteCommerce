@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ILoginUser } from "../types/userRequestTypes";
+import { IUserDetails } from "../types/userRequestTypes";
 
-export const userLogin = async (userCredentials: ILoginUser) => {
+export const userLogin = async (userCredentials: IUserDetails) => {
     try {
         const { data } = await axios.post("http://localhost:8002/user/login", {
             email: userCredentials.email,
@@ -11,7 +11,7 @@ export const userLogin = async (userCredentials: ILoginUser) => {
             localStorage.setItem("token", data.tokens.accessToken);
             localStorage.setItem("refreshToken", data.tokens.refreshToken);
         } else {
-            console.log("no tokens");
+            return "no tokens";
         }
     } catch (error) {
         if (error instanceof Error) return error.message;
