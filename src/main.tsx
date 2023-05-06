@@ -6,15 +6,18 @@ import { BrowserRouter } from "react-router-dom";
 import ProductsProvider from "./providers/ProductsProvider.tsx";
 import UserProvider from "./providers/UserProvider.tsx";
 import CartProvider from "./providers/CartProvider.tsx";
+import ActiveLinkProvider from "./providers/ActiveLinkProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <UserProvider>
             <ProductsProvider>
                 <CartProvider>
-                    <BrowserRouter>
-                        <App />
-                    </BrowserRouter>
+                    <ActiveLinkProvider>
+                        <BrowserRouter>
+                            <App />
+                        </BrowserRouter>
+                    </ActiveLinkProvider>
                 </CartProvider>
             </ProductsProvider>
         </UserProvider>
