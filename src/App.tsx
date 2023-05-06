@@ -9,6 +9,7 @@ import ProductPage from "./components/products/ProductPage";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import LoggedOutRoutes from "./utils/LoggedOutRoutes";
+import LoggedInRoutes from "./utils/LoggedInRoutes";
 
 function App() {
     return (
@@ -16,10 +17,15 @@ function App() {
             <Layout>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/cart" element={<Cart />} />
                     <Route path="/shop" element={<Shop />} />
 
-                    <Route path="/shop/product/:_id" element={<ProductPage />} />
+                    {/* Should-be-logged-IN-to-access routes */}
+                    <Route element={<LoggedInRoutes />}>
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/shop/product/:_id" element={<ProductPage />} />
+                    </Route>
+
+                    {/* Should-be-logged-OUT-to-access routes */}
                     <Route element={<LoggedOutRoutes />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<Register />} />
