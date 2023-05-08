@@ -3,8 +3,11 @@ import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
+import { Link } from "react-router-dom";
+import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
+const SIGN_UP_LINK = "http://localhost:5173/sign-up";
 
 export default function Login() {
     const [email, setEmail] = useState<string | number>("");
@@ -12,6 +15,7 @@ export default function Login() {
     const [formIsValid, setFormIsValid] = useState(false);
 
     const userContext = useContext(UserContext);
+    const activeLinkContext = useContext(ActiveLinkContext);
 
     useEffect(() => {
         if (email.toString().includes(".co") && email.toString().includes("@") && password) {
@@ -72,7 +76,12 @@ export default function Login() {
                         />
                         <div className="text-sm mt-2">
                             <div>Forgot Password?</div>
-                            <div>Register</div>
+                            <Link
+                                to={"/sign-up"}
+                                onClick={() => activeLinkContext.setActiveLink(SIGN_UP_LINK)}
+                            >
+                                Sign Up
+                            </Link>
                         </div>
                     </div>
                 </form>

@@ -5,8 +5,11 @@ import { registerUser } from "../../api/registerUser";
 import { IUserDetails } from "../../types/userRequestTypes";
 import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
+import { Link } from "react-router-dom";
+import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
+const LOGIN_LINK = "http://localhost:5173/login";
 
 export default function Register() {
     const [email, setEmail] = useState<string | number>("");
@@ -15,6 +18,7 @@ export default function Register() {
     const [formIsValid, setFormIsValid] = useState(false);
 
     const userContext = useContext(UserContext);
+    const activeLinkContext = useContext(ActiveLinkContext);
 
     useEffect(() => {
         if (
@@ -92,7 +96,12 @@ export default function Register() {
                             disabled={!formIsValid}
                         />
                         <div className="text-sm mt-2">
-                            <div>Already Registered?</div>
+                            <Link
+                                to={"/login"}
+                                onClick={() => activeLinkContext.setActiveLink(LOGIN_LINK)}
+                            >
+                                Already Registered?
+                            </Link>
                         </div>
                     </div>
                 </form>
