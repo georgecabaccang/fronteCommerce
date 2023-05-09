@@ -3,6 +3,7 @@ import { PropsWithChildren, createContext, useEffect, useState, useContext } fro
 import { ICart, IItemsProperties } from "../types/cartTypes";
 import { getUserCart } from "../api/getUserCart";
 import { UserContext } from "./UserProvider";
+import { addToCartRequest } from "../api/addToCart";
 
 export const CartContext = createContext<ICart>({
     cart: [],
@@ -25,7 +26,7 @@ export default function CartProvider(props: PropsWithChildren) {
     };
 
     const addToCart = async (productToBeAddedToCart: IItemsProperties) => {
-        const response = await addToCart(productToBeAddedToCart);
+        const response = await addToCartRequest(productToBeAddedToCart);
         console.log(response);
         getCartData();
     };

@@ -1,10 +1,10 @@
 export interface IProductProperties {
-    productName: string;
-    description: string;
-    price: number;
-    discount: number;
-    stock: number;
-    image: string;
+    productName?: string;
+    description?: string;
+    price?: number;
+    discount?: number;
+    stock?: number;
+    image?: string;
     _id: string;
 }
 

@@ -18,23 +18,8 @@ export default function ProductPage() {
     const cartContext = useContext(CartContext);
 
     const addToCart = () => {
-        console.log(productDetails);
-        if (
-            productDetails?.productName &&
-            productDetails?.description &&
-            productDetails?.price &&
-            productDetails?.discount >= 0 &&
-            productDetails?.stock >= 1 &&
-            productDetails?.image &&
-            productDetails?._id
-        ) {
+        if (productDetails?._id) {
             const productAddToCart = {
-                productName: productDetails.productName,
-                description: productDetails.description,
-                price: productDetails.price,
-                discount: productDetails.discount,
-                stock: productDetails.stock,
-                image: productDetails.image,
                 _id: productDetails._id,
                 quantity: +quantity,
             };
@@ -106,7 +91,9 @@ export default function ProductPage() {
                         <div className="text-[0.85em] text-gray-400 font-semibold">
                             Stock: {productDetails?.stock}
                         </div>
-                        <div>Price: ${productDetails?.price.toFixed(2)}</div>
+                        <div>
+                            Price: ${productDetails?.price && productDetails?.price.toFixed(2)}
+                        </div>
                         <div>
                             Quantity:
                             {
