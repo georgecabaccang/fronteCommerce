@@ -7,5 +7,5 @@ export interface IItemsProperties extends IProductProperties {
 
 export interface ICart {
     cart: Array<IItemsProperties>;
-    addToCart: () => void;
+    addToCart: (productToBeAddedToCart: IItemsProperties) => void;
 }

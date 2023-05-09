@@ -38,10 +38,8 @@ export default function ProductPage() {
                 _id: productDetails._id,
                 quantity: +quantity,
             };
-            cartContext.cart.push(productAddToCart);
+            cartContext.addToCart(productAddToCart);
         }
-
-        console.log(cartContext.cart);
     };
 
     const minusQuantity = () => {

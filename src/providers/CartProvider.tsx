@@ -24,8 +24,8 @@ export default function CartProvider(props: PropsWithChildren) {
         setCart(data);
     };
 
-    const addToCart = async () => {
-        const response = await addToCart();
+    const addToCart = async (productToBeAddedToCart: IItemsProperties) => {
+        const response = await addToCart(productToBeAddedToCart);
         console.log(response);
         getCartData();
     };
