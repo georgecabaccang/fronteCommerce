@@ -6,6 +6,7 @@ import { UserContext } from "./UserProvider";
 
 export const CartContext = createContext<ICart>({
     cart: [],
+    addToCart: () => {},
     // toCheckout: [],
 });
 
@@ -23,12 +24,19 @@ export default function CartProvider(props: PropsWithChildren) {
         setCart(data);
     };
 
+    const addToCart = async () => {
+        const response = await addToCart();
+        console.log(response);
+        getCartData();
+    };
+
     useEffect(() => {
         getCartData();
     }, [userContext.accessToken]);
 
     const CartPrroviderValues = {
         cart: cart,
+        addToCart: addToCart,
         // toCheckout: toCheckOut,
     };
 
