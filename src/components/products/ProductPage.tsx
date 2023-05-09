@@ -5,7 +5,6 @@ import { IProductProperties } from "../../types/productTypes";
 import styles from "../../styles/product.module.css";
 
 import Button from "../shared/Button";
-import Input from "../shared/Input";
 import Quantity from "../shared/Quantity";
 
 import { CartContext } from "../../providers/CartProvider";

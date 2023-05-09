@@ -1,4 +1,3 @@
-import React from "react";
 import { IProductProperties } from "./productTypes";
 
 export interface IItemsProperties extends IProductProperties {
