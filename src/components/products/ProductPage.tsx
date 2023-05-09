@@ -6,6 +6,8 @@ import styles from "../../styles/product.module.css";
 
 import Button from "../shared/Button";
 import Input from "../shared/Input";
+import Quantity from "../shared/Quantity";
+
 import { CartContext } from "../../providers/CartProvider";
 
 export default function ProductPage() {
@@ -25,14 +27,6 @@ export default function ProductPage() {
             };
             cartContext.addToCart(productAddToCart);
         }
-    };
-
-    const minusQuantity = () => {
-        setQuantity(+quantity - 1);
-    };
-
-    const plusQuantity = () => {
-        setQuantity(+quantity + 1);
     };
 
     let totalPrice = productDetails?.price;
@@ -95,36 +89,7 @@ export default function ProductPage() {
                             Price: ${productDetails?.price && productDetails?.price.toFixed(2)}
                         </div>
                         <div>
-                            Quantity:
-                            {
-                                <Button
-                                    name="-"
-                                    className="border px-[0.7em] inline ms-2 disabled:bg-slate-200"
-                                    clickEvent={minusQuantity}
-                                    getState={quantity}
-                                    disabled={quantity == 1 ? true : false}
-                                />
-                            }
-                            {
-                                <Input
-                                    type="number"
-                                    setState={setQuantity}
-                                    value={quantity}
-                                    min={1}
-                                    max={10}
-                                    isDisabled={true}
-                                    className="inline px-2 border max-w-[2.5em] text-center"
-                                />
-                            }
-                            {
-                                <Button
-                                    name="+"
-                                    className="border px-[0.6em] inline disabled:bg-slate-200"
-                                    getState={quantity}
-                                    clickEvent={plusQuantity}
-                                    disabled={quantity == 10 ? true : false}
-                                />
-                            }
+                            <Quantity quantity={quantity} setQuantity={setQuantity} />
                         </div>
                         <div>Total: ${totalPrice?.toFixed(2)}</div>
                     </div>
