@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
 import { logout } from "../../api/logoutRequest";
@@ -6,8 +6,6 @@ import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 const LOGIN_LINK = "http://localhost:5173/login";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
-const HOME_LINK = "http://localhost:5173";
-const SHOP_LINK = "http://localhost:5173/shop";
 
 export default function Navigation() {
     const userContext = useContext(UserContext);
@@ -16,15 +14,15 @@ export default function Navigation() {
     const logoutHandler = async () => {
         if (userContext.refreshToken) {
             const response = await logout(userContext.refreshToken);
-            if (response != "logout successful") {
+            if (response == false) {
                 console.log("something went wrong");
                 return;
             }
+            localStorage.removeItem("userEmail");
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
             userContext.setAccessToken("");
             userContext.setRefreshToken("");
-            // setActiveLink("logout");
         }
     };
 
@@ -59,7 +57,7 @@ export default function Navigation() {
                                 Cart
                             </NavLink>
                             <NavLink
-                                to={"/logout"}
+                                to={"/login"}
                                 className="flex place-content-center items-center w-full h-full link-page"
                                 onClick={logoutHandler}
                             >

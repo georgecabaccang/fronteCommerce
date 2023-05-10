@@ -8,6 +8,7 @@ export const userLogin = async (userCredentials: IUserDetails) => {
             password: userCredentials.password,
         });
         if (data.tokens) {
+            localStorage.setItem("userEmail", userCredentials.email as string);
             localStorage.setItem("token", data.tokens.accessToken);
             localStorage.setItem("refreshToken", data.tokens.refreshToken);
         } else {

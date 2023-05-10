@@ -20,7 +20,7 @@ export default function CartProvider(props: PropsWithChildren) {
     const getCartData = async () => {
         const data = await getUserCart();
         if (typeof data == "string") {
-            return console.log("relogin muna");
+            return console.log(data);
         }
         setCart(data);
     };

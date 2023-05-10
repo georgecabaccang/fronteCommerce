@@ -5,7 +5,7 @@ export const logout = async (refreshToken: string) => {
         const { data } = await axios.post("http://localhost:8002/user/logout", {
             refreshToken: refreshToken,
         });
-        return data;
+        return data.acknowledged;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }
