@@ -6,7 +6,7 @@ export const refreshTokenRequest = async (refreshToken: string, email: string) =
             email: email,
             refreshToken: refreshToken,
         });
-        console.log(data);
+        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }

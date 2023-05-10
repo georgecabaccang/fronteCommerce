@@ -4,23 +4,23 @@ import LoginTimeAlert from "./LoginTimeAlert";
 import { UserContext } from "../../providers/UserProvider";
 
 export default function Layout(props: PropsWithChildren) {
-    const [extendTime, setExtendTime] = useState(false);
+    const [extendTimePrompt, setExtendTimePrompt] = useState(false);
 
     const userContext = useContext(UserContext);
 
     useEffect(() => {
         if (userContext.accessToken) {
             setTimeout(() => {
-                setExtendTime(true);
+                setExtendTimePrompt(true);
             }, 5000);
             return;
         }
-        setExtendTime(false);
+        setExtendTimePrompt(false);
     }, [userContext.accessToken]);
 
     return (
         <div>
-            {extendTime && <LoginTimeAlert />}
+            {extendTimePrompt && <LoginTimeAlert setExtendTimePrompt={setExtendTimePrompt} />}
             <Navigation />
             <div>{props.children}</div>
         </div>
