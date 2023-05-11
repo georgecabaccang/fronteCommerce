@@ -18,8 +18,8 @@ export default function LoginTimeAlert(props: ILoginTimeAlert) {
             );
             localStorage.setItem("token", newTokens.accessToken);
             localStorage.setItem("refreshToken", newTokens.refreshToken);
-            userContext.setAccessToken(newTokens.accessToken);
-            userContext.setRefreshToken(newTokens.refreshToken);
+            userContext.setAccessToken(localStorage.getItem("token"));
+            userContext.setRefreshToken(localStorage.getItem("refreshToken"));
             props.setExtendTimePrompt(false);
         }
     };

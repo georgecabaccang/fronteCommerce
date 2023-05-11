@@ -21,8 +21,9 @@ export default function Navigation() {
             localStorage.removeItem("userEmail");
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
-            userContext.setAccessToken("");
-            userContext.setRefreshToken("");
+            userContext.setUserEmail(null);
+            userContext.setAccessToken(null);
+            userContext.setRefreshToken(null);
         }
     };
 

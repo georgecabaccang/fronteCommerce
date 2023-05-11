@@ -1,21 +1,26 @@
-import { PropsWithChildren, useState, useEffect, useContext } from "react";
+import { PropsWithChildren, useState, useEffect, useContext, useRef } from "react";
 import Navigation from "./Navigation";
 import LoginTimeAlert from "./LoginTimeAlert";
 import { UserContext } from "../../providers/UserProvider";
 
 export default function Layout(props: PropsWithChildren) {
+    const timer = useRef<number>();
     const [extendTimePrompt, setExtendTimePrompt] = useState(false);
 
     const userContext = useContext(UserContext);
 
     useEffect(() => {
         if (userContext.accessToken) {
-            setTimeout(() => {
+            timer.current = setTimeout(() => {
                 setExtendTimePrompt(true);
-            }, 5000);
+            }, 2000);
             return;
         }
-        setExtendTimePrompt(false);
+        if (!userContext.accessToken) {
+            clearTimeout(timer.current);
+            setExtendTimePrompt(false);
+            return;
+        }
     }, [userContext.accessToken]);
 
     return (
