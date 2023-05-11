@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import useProductDetails from "../../hooks/useProductDetails";
+import productDetailsReqeust from "../../api/productDetailsReqeust";
 import { IProductProperties } from "../../types/productTypes";
 import styles from "../../styles/product.module.css";
 
@@ -36,7 +36,7 @@ export default function ProductPage() {
     useEffect(() => {
         if (_id) {
             const getDetails = async () => {
-                const returnedDetails = await useProductDetails(_id);
+                const returnedDetails = await productDetailsReqeust(_id);
                 if (returnedDetails.message) {
                     setProductFound(false);
                     setIsLoading(false);
