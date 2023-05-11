@@ -23,6 +23,7 @@ function App() {
                     <Route element={<LoggedInRoutes />}>
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/shop/product/:_id" element={<ProductPage />} />
+                        <Route path={"/logout"} />
                     </Route>
 
                     {/* Should-be-logged-OUT-to-access routes */}

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, redirect } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
 import { logout } from "../../api/logoutRequest";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
@@ -24,6 +24,7 @@ export default function Navigation() {
             userContext.setUserEmail(null);
             userContext.setAccessToken(null);
             userContext.setRefreshToken(null);
+            redirect("/login");
         }
     };
 
@@ -58,7 +59,7 @@ export default function Navigation() {
                                 Cart
                             </NavLink>
                             <NavLink
-                                to={"/login"}
+                                to={"/logout"}
                                 className="flex place-content-center items-center w-full h-full link-page"
                                 onClick={logoutHandler}
                             >
