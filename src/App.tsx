@@ -18,12 +18,12 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/shop" element={<Shop />} />
+                    <Route path="/shop/product/:_id" element={<ProductPage />} />
 
                     {/* Should-be-logged-IN-to-access routes */}
                     <Route element={<LoggedInRoutes />}>
                         <Route path="/cart" element={<Cart />} />
-                        <Route path="/shop/product/:_id" element={<ProductPage />} />
-                        <Route path={"/logout"} />
+                        <Route path={"/logout"} element={<Login />} />
                     </Route>
 
                     {/* Should-be-logged-OUT-to-access routes */}

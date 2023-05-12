@@ -8,6 +8,7 @@ export const addToCartRequest = async (productToBeAddedToCart: IItemsProperties)
             {
                 productID: productToBeAddedToCart._id,
                 quantity: productToBeAddedToCart.quantity,
+                email: localStorage.getItem("userEmail"),
             },
             {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

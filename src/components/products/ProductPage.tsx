@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
-import productDetailsReqeust from "../../api/productDetailsReqeust";
+import { useNavigate, useParams } from "react-router-dom";
+import { productDetailsReqeust } from "../../api/productDetailsReqeust";
 import { IProductProperties } from "../../types/productTypes";
 import styles from "../../styles/product.module.css";
 
@@ -8,6 +8,7 @@ import Button from "../shared/Button";
 import Quantity from "../shared/Quantity";
 
 import { CartContext } from "../../providers/CartProvider";
+import { UserContext } from "../../providers/UserProvider";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>();
@@ -15,8 +16,10 @@ export default function ProductPage() {
     const [productFound, setProductFound] = useState(false);
     const [quantity, setQuantity] = useState<string | number>(1);
     const { _id } = useParams();
+    const navigate = useNavigate();
 
     const cartContext = useContext(CartContext);
+    const userContext = useContext(UserContext);
 
     const addToCart = () => {
         if (productDetails?._id) {
@@ -49,6 +52,13 @@ export default function ProductPage() {
             getDetails();
         }
     }, []);
+
+    const redirectToLogin = () => {
+        userContext.setLoginFrom("shop");
+        navigate("/login");
+    };
+
+    const loggedInOrOut = userContext.accessToken ? addToCart : redirectToLogin;
 
     if (isLoading) {
         return (
@@ -97,13 +107,13 @@ export default function ProductPage() {
                             type="button"
                             name="Buy Now"
                             className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={addToCart}
+                            clickEvent={loggedInOrOut}
                         />
                         <Button
                             type="button"
                             name="Add To Cart"
                             className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={addToCart}
+                            clickEvent={loggedInOrOut}
                         />
                     </div>
                 </div>
