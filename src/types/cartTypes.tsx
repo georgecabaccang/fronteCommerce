@@ -2,6 +2,7 @@ import { IProductProperties } from "./productTypes";
 
 export interface IItemsProperties extends IProductProperties {
     quantity: number;
+    _id?: string;
 }
 
 export interface ICart {

@@ -2,7 +2,7 @@ import "./index.css";
 import { Route, Routes } from "react-router-dom";
 
 import Home from "./components/pages/Home";
-import Cart from "./components/pages/Cart";
+import Cart from "./components/cart/Cart";
 import Shop from "./components/pages/Shop";
 import Layout from "./components/shared/Layout";
 import ProductPage from "./components/products/ProductPage";

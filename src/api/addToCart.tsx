@@ -6,7 +6,7 @@ export const addToCartRequest = async (productToBeAddedToCart: IItemsProperties)
         const { data } = await axios.post(
             "http://localhost:8002/cart/add-to-cart",
             {
-                productID: productToBeAddedToCart._id,
+                productID: productToBeAddedToCart.productID,
                 quantity: productToBeAddedToCart.quantity,
                 email: localStorage.getItem("userEmail"),
             },

@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { CartContext } from "../../providers/CartProvider";
-import CartItem from "../cart/CartItem";
+import CartItem from "./CartItem";
 
 export default function Cart() {
     const cartContext = useContext(CartContext);
+
     return (
         <div>
             Cart
@@ -18,7 +19,7 @@ export default function Cart() {
                             discount={item.discount}
                             stock={item.stock}
                             image={item.image}
-                            _id={item._id}
+                            productID={item.productID}
                             quantity={item.quantity}
                         />
                     );

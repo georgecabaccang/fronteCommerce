@@ -46,7 +46,8 @@ export default function Quantity(props: IQuantity) {
                     className="border px-[0.6em] inline disabled:bg-slate-200"
                     getState={quantity}
                     clickEvent={plusQuantity}
-                    disabled={quantity == 10 ? true : false}
+                    // think about implementing this or not
+                    // disabled={quantity == 10 ? true : false}
                 />
             }
         </>

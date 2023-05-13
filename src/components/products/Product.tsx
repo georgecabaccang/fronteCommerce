@@ -10,7 +10,7 @@ export default function Product(props: IProdcuts) {
     const product = props.product;
 
     return (
-        <Link to={`/shop/product/${product._id}`} className={`${styles.card} grid grid-cols-1 p-2`}>
+        <Link to={`/shop/product/${product.productID}`} className={`${styles.card} grid grid-cols-1 p-2`}>
             <div className="flex place-content-center">
                 <img src={product.image} className="max-h-[10em] min-h-[10em]" />
             </div>
