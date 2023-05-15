@@ -1,16 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { IItemsProperties } from "../../types/cartTypes";
+import { itemInCartChangeQuantity } from "../../api/cartRequests";
+import { CartContext } from "../../providers/CartProvider";
+
+import Input from "../shared/Input";
 import Quantity from "../shared/Quantity";
-import { itemInCartChangeQuantity } from "../../api/itemInCartChangeQuantity";
 
 export default function CartItem(props: IItemsProperties) {
     const [quantity, setQuantity] = useState<string | number>(props.quantity);
+    const [inCheckOut, setInCheckOut] = useState<string | number | boolean>(false);
     const [loading, setLoading] = useState(false);
 
+    const cartContext = useContext(CartContext);
+
     const changeQuantityOfItemInCart = async () => {
-        if (props.productID) {
-            await itemInCartChangeQuantity(+quantity, props.productID);
+        if (props.prod_id) {
+            await itemInCartChangeQuantity(+quantity, props.prod_id);
             setLoading(false);
         }
     };
@@ -20,6 +26,26 @@ export default function CartItem(props: IItemsProperties) {
         changeQuantityOfItemInCart();
         return;
     }, [quantity]);
+
+    const addOrRemoveToCheckOut = () => {
+        if (inCheckOut) {
+            const item = {
+                quantity: props.quantity,
+                cart_id: props.cart_id,
+                productName: props.productName,
+                price: props.price,
+                discount: props.discount,
+                stock: props.stock,
+                prod_id: props.prod_id,
+            };
+            return cartContext.addToCheckOut(item);
+        }
+        return console.log(inCheckOut);
+    };
+
+    useEffect(() => {
+        addOrRemoveToCheckOut();
+    }, [inCheckOut]);
 
     return (
         <div>
@@ -51,6 +77,9 @@ export default function CartItem(props: IItemsProperties) {
                     <div>{props.productName}</div>
                     <div>
                         <Quantity quantity={quantity} setQuantity={setQuantity} />
+                    </div>
+                    <div>
+                        <Input type="checkbox" setState={setInCheckOut} getState={inCheckOut} />
                     </div>
                 </div>
             </div>

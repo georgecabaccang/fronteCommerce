@@ -19,7 +19,7 @@ export default function Cart() {
                             discount={item.discount}
                             stock={item.stock}
                             image={item.image}
-                            productID={item.productID}
+                            prod_id={item.prod_id}
                             quantity={item.quantity}
                         />
                     );

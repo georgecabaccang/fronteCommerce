@@ -5,7 +5,8 @@ export interface IProductProperties {
     discount?: number;
     stock?: number;
     image?: string;
-    productID?: string;
+    prod_id?: string;
+    _id?: string; // This is just for the ProductProvider. This is just the same as the value of prod_id
 }
 
 export interface IAxiosProductResponse {

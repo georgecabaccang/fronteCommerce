@@ -15,16 +15,18 @@ export default function ProductPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
     const [quantity, setQuantity] = useState<string | number>(1);
-    const { productID } = useParams();
+    const { prod_id } = useParams();
     const navigate = useNavigate();
 
     const cartContext = useContext(CartContext);
     const userContext = useContext(UserContext);
 
     const addToCart = () => {
-        if (productDetails?.productID) {
+        const prod_id = productDetails?._id;
+
+        if (prod_id) {
             const productAddToCart = {
-                productID: productDetails.productID,
+                prod_id: prod_id,
                 quantity: +quantity,
             };
             // console.log(productAddToCart);
@@ -38,9 +40,9 @@ export default function ProductPage() {
     }
 
     useEffect(() => {
-        if (productID) {
+        if (prod_id) {
             const getDetails = async () => {
-                const returnedDetails = await productDetailsReqeust(productID);
+                const returnedDetails = await productDetailsReqeust(prod_id);
                 if (returnedDetails.message) {
                     setProductFound(false);
                     setIsLoading(false);

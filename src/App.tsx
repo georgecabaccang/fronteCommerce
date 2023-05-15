@@ -18,7 +18,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/shop" element={<Shop />} />
-                    <Route path="/shop/product/:_id" element={<ProductPage />} />
+                    <Route path="/shop/product/:prod_id" element={<ProductPage />} />
 
                     {/* Should-be-logged-IN-to-access routes */}
                     <Route element={<LoggedInRoutes />}>
