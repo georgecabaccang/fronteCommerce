@@ -8,15 +8,15 @@ import Input from "../shared/Input";
 import Quantity from "../shared/Quantity";
 
 export default function CartItem(props: IItemsProperties) {
-    const [quantity, setQuantity] = useState<string | number>(props.quantity);
-    const [inCheckOut, setInCheckOut] = useState<string | number | boolean>(false);
+    const [quantity, setQuantity] = useState<number>(props.quantity);
+    const [inCheckOut, setInCheckOut] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
     const cartContext = useContext(CartContext);
 
     const changeQuantityOfItemInCart = async () => {
         if (props.prod_id) {
-            await itemInCartChangeQuantity(+quantity, props.prod_id);
+            await itemInCartChangeQuantity(quantity, props.prod_id);
             setLoading(false);
         }
     };
@@ -30,7 +30,7 @@ export default function CartItem(props: IItemsProperties) {
     const addOrRemoveToCheckOut = () => {
         if (inCheckOut) {
             const item = {
-                quantity: +quantity,
+                quantity: quantity,
                 cart_id: props.cart_id,
                 productName: props.productName,
                 price: props.price,
@@ -79,7 +79,11 @@ export default function CartItem(props: IItemsProperties) {
                         <Quantity quantity={quantity} setQuantity={setQuantity} />
                     </div>
                     <div>
-                        <Input type="checkbox" setState={setInCheckOut} getState={inCheckOut} />
+                        <Input
+                            type="checkbox"
+                            setStateBoolean={setInCheckOut}
+                            getState={inCheckOut}
+                        />
                     </div>
                 </div>
             </div>

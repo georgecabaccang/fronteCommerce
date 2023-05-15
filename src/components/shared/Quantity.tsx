@@ -3,19 +3,19 @@ import Button from "./Button";
 import Input from "./Input";
 
 interface IQuantity {
-    quantity: string | number;
-    setQuantity: React.Dispatch<React.SetStateAction<string | number>>;
+    quantity: number;
+    setQuantity: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function Quantity(props: IQuantity) {
     const { setQuantity, quantity } = props;
 
     const minusQuantity = () => {
-        setQuantity(+quantity - 1);
+        setQuantity(quantity - 1);
     };
 
     const plusQuantity = () => {
-        setQuantity(+quantity + 1);
+        setQuantity(quantity + 1);
     };
     return (
         <>
@@ -32,7 +32,7 @@ export default function Quantity(props: IQuantity) {
             {
                 <Input
                     type="number"
-                    setState={setQuantity}
+                    setStateNumber={setQuantity}
                     value={quantity}
                     min={1}
                     max={10}

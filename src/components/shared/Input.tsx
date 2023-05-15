@@ -1,20 +1,21 @@
 import { IInput } from "../../types/inputTypes";
 
 export default function Input(props: IInput) {
-    const { setState, isDisabled, getState, ...inputProps } = props;
+    const { setStateString, setStateNumber, setStateBoolean, isDisabled, getState, ...inputProps } =
+        props;
     const setInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (props.type) {
             case "email":
-                setState?.(event.target.value);
+                setStateString?.(event.target.value);
                 break;
             case "password":
-                setState?.(event.target.value);
+                setStateString?.(event.target.value);
                 break;
             case "number":
-                setState?.(+event.target.value);
+                setStateNumber?.(+event.target.value);
                 break;
             case "checkbox":
-                setState?.(!getState);
+                setStateBoolean?.(!getState);
                 break;
             default:
                 break;

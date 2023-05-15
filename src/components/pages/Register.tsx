@@ -12,9 +12,9 @@ const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 const LOGIN_LINK = "http://localhost:5173/login";
 
 export default function Register() {
-    const [email, setEmail] = useState<string | number>("");
-    const [password, setPassword] = useState<string | number>("");
-    const [confirmPassword, setConfirmPassword] = useState<string | number>("");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
 
     const userContext = useContext(UserContext);
@@ -66,7 +66,7 @@ export default function Register() {
                                 type="email"
                                 value={email}
                                 className={INPUT_CLASSNAME}
-                                setState={setEmail}
+                                setStateString={setEmail}
                             />
                         </div>
                         <div>
@@ -75,7 +75,7 @@ export default function Register() {
                                 type="password"
                                 value={password}
                                 className={INPUT_CLASSNAME}
-                                setState={setPassword}
+                                setStateString={setPassword}
                             />
                         </div>
                         <div>
@@ -84,7 +84,7 @@ export default function Register() {
                                 type="password"
                                 value={confirmPassword}
                                 className={INPUT_CLASSNAME}
-                                setState={setConfirmPassword}
+                                setStateString={setConfirmPassword}
                             />
                         </div>
                     </div>
