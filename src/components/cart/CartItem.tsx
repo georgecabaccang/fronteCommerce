@@ -30,7 +30,7 @@ export default function CartItem(props: IItemsProperties) {
     const addOrRemoveToCheckOut = () => {
         if (inCheckOut) {
             const item = {
-                quantity: props.quantity,
+                quantity: +quantity,
                 cart_id: props.cart_id,
                 productName: props.productName,
                 price: props.price,
