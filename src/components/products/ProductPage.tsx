@@ -14,7 +14,7 @@ export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>();
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
-    const [quantity, setQuantity] = useState<string | number>(1);
+    const [quantity, setQuantity] = useState<number>(1);
     const { prod_id } = useParams();
     const navigate = useNavigate();
 
@@ -101,7 +101,11 @@ export default function ProductPage() {
                             Price: ${productDetails?.price && productDetails?.price.toFixed(2)}
                         </div>
                         <div>
-                            <Quantity quantity={quantity} setQuantity={setQuantity} />
+                            <Quantity
+                                quantity={quantity}
+                                setQuantity={setQuantity}
+                                quantityFrom={"shop"}
+                            />
                         </div>
                         <div>Total: ${totalPrice?.toFixed(2)}</div>
                     </div>

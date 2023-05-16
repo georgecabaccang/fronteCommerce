@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
 import Input from "./Input";
+import { CartContext } from "../../providers/CartProvider";
 
 interface IQuantity {
+    prod_id?: string;
+    quantityFrom?: string;
     quantity: number;
     setQuantity: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -11,12 +14,20 @@ export default function Quantity(props: IQuantity) {
     const { setQuantity, quantity } = props;
 
     const minusQuantity = () => {
-        setQuantity(quantity - 1);
+        return setQuantity(quantity - 1);
     };
 
     const plusQuantity = () => {
-        setQuantity(quantity + 1);
+        return setQuantity(quantity + 1);
     };
+
+    let quantityCheck: boolean = true;
+    if (props.quantityFrom === "shop") {
+        quantityCheck = quantity == 1 ? true : false;
+    } else {
+        quantityCheck = false;
+    }
+
     return (
         <>
             Quantity:
@@ -26,7 +37,7 @@ export default function Quantity(props: IQuantity) {
                     className="border px-[0.7em] inline ms-2 disabled:bg-slate-200"
                     clickEvent={minusQuantity}
                     getState={quantity}
-                    disabled={quantity == 1 ? true : false}
+                    disabled={quantityCheck}
                 />
             }
             {

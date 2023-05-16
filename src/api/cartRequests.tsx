@@ -37,6 +37,21 @@ export const addToCartRequest = async (productToBeAddedToCart: IItemsProperties)
     }
 };
 
+export const removeFromCartRequest = async (itemInCartId: string) => {
+    try {
+        const reponse = await axios.delete("http://localhost:8002/cart/remove-from-cart", {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            data: {
+                email: localStorage.getItem("userEmail"),
+                prod_id: itemInCartId,
+            },
+        });
+        console.log(reponse);
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
+
 // CHANGING QUANTITY OF ITEMS IN CRART
 export const itemInCartChangeQuantity = async (quantity: number, prod_id: string) => {
     try {
