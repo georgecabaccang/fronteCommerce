@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { CartContext } from "../../providers/CartProvider";
 import CartItem from "./CartItem";
+import { Link } from "react-router-dom";
 
 export default function Cart() {
     const cartContext = useContext(CartContext);
@@ -26,6 +27,9 @@ export default function Cart() {
                 })}
             </div>
             <div>Total Amount: ${cartContext.toCheckOutItems.totalAmountToPay.toFixed(2)}</div>
+            <div>
+                <Link to={"/cart/checkout"}>Check Out</Link>
+            </div>
         </div>
     );
 }

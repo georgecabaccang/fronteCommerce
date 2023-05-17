@@ -48,6 +48,7 @@ export default function CartItem(props: IItemsProperties) {
                 discount: props.discount,
                 stock: props.stock,
                 prod_id: props.prod_id,
+                image: props.image,
             };
             return cartContext.addToCheckOut(item);
         }

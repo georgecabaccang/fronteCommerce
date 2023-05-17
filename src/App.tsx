@@ -10,6 +10,7 @@ import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import LoggedOutRoutes from "./utils/LoggedOutRoutes";
 import LoggedInRoutes from "./utils/LoggedInRoutes";
+import CheckOutItems from "./components/cart/CheckOutItems";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <Route element={<LoggedInRoutes />}>
                         <Route path="/cart" element={<Cart />} />
                         <Route path={"/logout"} element={<Login />} />
+                        <Route path={"/cart/checkout"} element={<CheckOutItems />} />
                     </Route>
 
                     {/* Should-be-logged-OUT-to-access routes */}
