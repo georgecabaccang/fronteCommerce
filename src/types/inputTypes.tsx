@@ -6,5 +6,7 @@ export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
     setStateBoolean?: React.Dispatch<SetStateAction<boolean>>;
     isDisabled?: boolean;
     type?: string;
-    getState?: string | number | boolean;
+    getStateString?: string;
+    getStateNumber?: number;
+    getStateBoolean?: boolean;
 }

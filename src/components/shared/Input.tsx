@@ -1,8 +1,14 @@
 import { IInput } from "../../types/inputTypes";
 
 export default function Input(props: IInput) {
-    const { setStateString, setStateNumber, setStateBoolean, isDisabled, getState, ...inputProps } =
-        props;
+    const {
+        setStateString,
+        setStateNumber,
+        setStateBoolean,
+        isDisabled,
+        getStateBoolean,
+        ...inputProps
+    } = props;
     const setInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (props.type) {
             case "email":
@@ -15,7 +21,7 @@ export default function Input(props: IInput) {
                 setStateNumber?.(+event.target.value);
                 break;
             case "checkbox":
-                setStateBoolean?.(!getState);
+                setStateBoolean?.(!getStateBoolean);
                 break;
             default:
                 break;
@@ -28,6 +34,7 @@ export default function Input(props: IInput) {
             className={props.className}
             onChange={(event) => setInput(event)}
             disabled={isDisabled}
+            checked={props.type == "checkbox" && getStateBoolean}
         />
     );
 }

@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ICheckoutProps {
     prod_id: string;
     productName: string;

@@ -27,8 +27,16 @@ export default function Cart() {
                 })}
             </div>
             <div>Total Amount: ${cartContext.toCheckOutItems.totalAmountToPay.toFixed(2)}</div>
-            <div>
-                <Link to={"/cart/checkout"}>Check Out</Link>
+            <div className="my-2">
+                <Link
+                    className="border py-2 px-5 my-3 bg-blue-100"
+                    to={"/cart/checkout"}
+                    onClick={(event) => {
+                        cartContext.toCheckOutItems.items.length === 0 && event.preventDefault();
+                    }}
+                >
+                    Check Out
+                </Link>
             </div>
         </div>
     );

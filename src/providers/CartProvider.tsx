@@ -36,6 +36,7 @@ export default function CartProvider(props: PropsWithChildren) {
         if (typeof response == "string") {
             return console.log(response);
         }
+        // console.log(response);
         return setToCheckOutItems(response);
     };
 

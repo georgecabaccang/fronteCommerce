@@ -46,7 +46,7 @@ export default function Quantity(props: IQuantity) {
                     setStateNumber={setQuantity}
                     value={quantity}
                     min={1}
-                    max={10}
+                    // max={10}
                     isDisabled={true}
                     className="inline px-2 border max-w-[2.5em] text-center"
                 />
