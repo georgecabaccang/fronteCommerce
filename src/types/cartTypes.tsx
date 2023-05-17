@@ -15,5 +15,6 @@ export interface ICart {
     toCheckOutItems: ICheckOut;
     addToCart: (productToBeAddedToCart: IItemsProperties) => void;
     addToCheckOut: (productToBeAddedToCheckOut: IItemsProperties) => void;
+    removeFromCheckOut: (productToBeRemovedFromCheckOut: string) => void;
     getCartData: () => void;
 }

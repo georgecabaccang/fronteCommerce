@@ -73,11 +73,24 @@ export const itemInCartChangeQuantity = async (quantity: number, prod_id: string
 export const addToCheckOutRequest = async (itemToCheckOut: IItemsProperties) => {
     try {
         const { data } = await axios.post(
-            "http://localhost:8002/cart/addToCheckOut",
+            "http://localhost:8002/cart/add-to-checkout",
             { email: localStorage.getItem("userEmail"), itemToCheckOut: itemToCheckOut },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
-        console.log(data);
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
+
+export const removeFromCheckOutRequest = async (removeFromCheckOut: string) => {
+    try {
+        const { data } = await axios.post(
+            "http://localhost:8002/cart/remove-from-checkout",
+            { email: localStorage.getItem("userEmail"), itemToRemove: removeFromCheckOut },
+            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }
@@ -86,11 +99,10 @@ export const addToCheckOutRequest = async (itemToCheckOut: IItemsProperties) => 
 export const getCheckOutItemsRequest = async () => {
     try {
         const { data } = await axios.post(
-            "http://localhost:8002/cart/getToCheckOutItems",
+            "http://localhost:8002/cart/get-to-checkout-items",
             { email: localStorage.getItem("userEmail") },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
-        console.log(data);
         return data;
     } catch (error) {
         if (error instanceof Error) return error.message;

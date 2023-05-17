@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import Button from "./Button";
 import Input from "./Input";
-import { CartContext } from "../../providers/CartProvider";
 
 interface IQuantity {
     prod_id?: string;
     quantityFrom?: string;
     quantity: number;
     setQuantity: React.Dispatch<React.SetStateAction<number>>;
+    disableButton?: boolean;
 }
 
 export default function Quantity(props: IQuantity) {
@@ -37,7 +37,7 @@ export default function Quantity(props: IQuantity) {
                     className="border px-[0.7em] inline ms-2 disabled:bg-slate-200"
                     clickEvent={minusQuantity}
                     getState={quantity}
-                    disabled={quantityCheck}
+                    disabled={props.disableButton ? props.disableButton : quantityCheck}
                 />
             }
             {
@@ -58,7 +58,7 @@ export default function Quantity(props: IQuantity) {
                     getState={quantity}
                     clickEvent={plusQuantity}
                     // think about implementing this or not
-                    // disabled={quantity == 10 ? true : false}
+                    disabled={props.disableButton}
                 />
             }
         </>

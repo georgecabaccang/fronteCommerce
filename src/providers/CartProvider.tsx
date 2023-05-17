@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useEffect, useState, useContext } from "react";
 import { ICart, ICheckOut, IItemsProperties } from "../types/cartTypes";
 import { UserContext } from "./UserProvider";
-import { addToCartRequest } from "../api/cartRequests";
+import { addToCartRequest, removeFromCheckOutRequest } from "../api/cartRequests";
 
 import { addToCheckOutRequest, getCheckOutItemsRequest, getUserCart } from "../api/cartRequests";
 
@@ -10,6 +10,7 @@ export const CartContext = createContext<ICart>({
     toCheckOutItems: { items: [], totalAmountToPay: 0 },
     addToCart: () => {},
     addToCheckOut: () => {},
+    removeFromCheckOut: () => {},
     getCartData: () => {},
 });
 
@@ -48,6 +49,11 @@ export default function CartProvider(props: PropsWithChildren) {
         getCheckOutItems();
     };
 
+    const removeFromCheckOut = async (prod_id: string) => {
+        await removeFromCheckOutRequest(prod_id);
+        getCheckOutItems();
+    };
+
     useEffect(() => {
         getCheckOutItems();
         getCartData();
@@ -58,6 +64,7 @@ export default function CartProvider(props: PropsWithChildren) {
         toCheckOutItems: toCheckOutItems,
         addToCart: addToCart,
         addToCheckOut: addToCheckOut,
+        removeFromCheckOut: removeFromCheckOut,
         getCartData: getCartData,
     };
 

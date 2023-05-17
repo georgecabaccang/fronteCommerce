@@ -51,6 +51,11 @@ export default function CartItem(props: IItemsProperties) {
             };
             return cartContext.addToCheckOut(item);
         }
+        if (!inCheckOut) {
+            if (props.prod_id) {
+                return cartContext.removeFromCheckOut(props.prod_id);
+            }
+        }
         return console.log(inCheckOut);
     };
 
@@ -81,7 +86,7 @@ export default function CartItem(props: IItemsProperties) {
                         </svg>
                     </div>
                 )}
-                {!loading && (
+                {!loading && quantity != 0 && (
                     <>
                         <div className="flex place-content-center col-span-2">
                             <img src={props.image} className="max-h-[10em] min-h-[10em]" />
@@ -94,6 +99,7 @@ export default function CartItem(props: IItemsProperties) {
                                     setQuantity={setQuantity}
                                     quantityFrom="cart"
                                     prod_id={props.prod_id}
+                                    disableButton={inCheckOut}
                                 />
                             </div>
                             <div>

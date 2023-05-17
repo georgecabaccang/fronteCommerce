@@ -25,6 +25,7 @@ export default function Cart() {
                     );
                 })}
             </div>
+            <div>Total Amount: ${cartContext.toCheckOutItems.totalAmountToPay.toFixed(2)}</div>
         </div>
     );
 }
