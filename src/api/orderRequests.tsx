@@ -1,0 +1,20 @@
+import axios from "axios";
+import { ICheckOut } from "../types/cartTypes";
+
+export const orderCheckOutRequest = async (checkOutItems: ICheckOut) => {
+    try {
+        const { data } = await axios.post(
+            "http://localhost:8002/orders/order-checkout",
+            {
+                email: localStorage.getItem("userEmail"),
+                toPurchase: checkOutItems,
+            },
+            {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            }
+        );
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};

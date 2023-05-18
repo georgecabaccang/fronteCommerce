@@ -58,30 +58,11 @@ export default function CartItem(props: IItemsProperties) {
                 return cartContext.removeFromCheckOut(props.prod_id);
             }
         }
-        // return console.log(inCheckOut);
     };
 
-    // THIS IS THE PROBLEM,EVERY RENDER REMOVES ITEMS FROM CHECKOUT BECAUSE inCheckOut REVERTS TO FALSE-- THE DEFAULT
     useEffect(() => {
         addOrRemoveToCheckOut();
     }, [inCheckOut]);
-
-    // let yes: boolean = true;
-    // useEffect(() => {
-    //     const indexInCheckOut = cartContext.toCheckOutItems.items.findIndex((item) => {
-    //         return item.prod_id === props.prod_id;
-    //     });
-    //     if (indexInCheckOut != -1) {
-    //         console.log("in");
-    //         yes = true;
-    //         setInCheckOut(true);
-    //         return;
-    //     }
-    //     console.log("not");
-    //     yes = false;
-    //     setInCheckOut(false);
-    //     return;
-    // }, []);
 
     return (
         <div className="border">
