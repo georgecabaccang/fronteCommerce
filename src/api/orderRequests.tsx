@@ -18,3 +18,16 @@ export const orderCheckOutRequest = async (checkOutItems: ICheckOut) => {
         if (error instanceof Error) return error.message;
     }
 };
+
+export const getOrdersRequest = async () => {
+    try {
+        const { data } = await axios.post(
+            "http://localhost:8002/orders",
+            { email: localStorage.getItem("userEmail") },
+            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
