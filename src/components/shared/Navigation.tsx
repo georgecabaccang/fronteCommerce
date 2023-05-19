@@ -59,6 +59,13 @@ export default function Navigation() {
                                 Cart
                             </NavLink>
                             <NavLink
+                                to={"/orders"}
+                                className="flex place-content-center items-center w-full h-full link-page"
+                                onClick={() => activeLinkContext.setActiveLink("orders")}
+                            >
+                                Orders
+                            </NavLink>
+                            <NavLink
                                 to={"/logout"}
                                 className="flex place-content-center items-center w-full h-full link-page"
                                 onClick={logoutHandler}
