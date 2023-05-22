@@ -5,6 +5,7 @@ import { IOrder, IOrderList } from "../types/orderTypes";
 
 export const OrdersContext = createContext<IOrderList>({
     orders: [],
+    getOrders: () => {}
 });
 
 export default function OrdersProvider(props: PropsWithChildren) {
@@ -23,6 +24,7 @@ export default function OrdersProvider(props: PropsWithChildren) {
 
     const ordersContextValues = {
         orders: orders,
+        getOrders: getOrders,
     };
 
     return (

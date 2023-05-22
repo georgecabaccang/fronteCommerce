@@ -4,7 +4,6 @@ import Orders from "./Orders";
 
 export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
-    console.log(ordersContext.orders);
 
     return (
         <div>
@@ -16,6 +15,7 @@ export default function OrdersList() {
                         totalAmount={order.totalAmount}
                         _id={order._id}
                         createdAt={order.createdAt}
+                        status={order.status}
                     />
                 );
             })}

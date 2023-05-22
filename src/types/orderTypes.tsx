@@ -10,10 +10,12 @@ export interface IOrderItem {
 export interface IOrder {
     items: Array<IOrderItem>;
     totalAmount: number;
-    orderedOn: Date;
+    createdAt: Date;
     _id: string;
+    status: string;
 }
 
 export interface IOrderList {
     orders: Array<IOrder>;
+    getOrders: () => void;
 }

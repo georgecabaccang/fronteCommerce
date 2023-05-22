@@ -3,15 +3,20 @@ import { CartContext } from "../../providers/CartProvider";
 import CheckOutItem from "./CheckOutItem";
 import Button from "../shared/Button";
 import { orderCheckOutRequest } from "../../api/orderRequests";
+import { OrdersContext } from "../../providers/OrdersProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckOutItems() {
     const cartContext = useContext(CartContext);
+    const odersContext = useContext(OrdersContext);
+
+    const navigate = useNavigate();
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-
-        const response = await orderCheckOutRequest(cartContext.toCheckOutItems);
-        console.log(response);
+        await orderCheckOutRequest(cartContext.toCheckOutItems);
+        odersContext.getOrders();
+        navigate("/orders");
     };
     return (
         <div>
