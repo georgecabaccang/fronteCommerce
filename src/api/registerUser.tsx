@@ -7,6 +7,9 @@ export const registerUser = async (userDetails: IUserDetails) => {
             email: userDetails.email,
             password: userDetails.password,
         });
+        if (data === "email is taken") {
+            return data;
+        }
         return data;
     } catch (error) {
         if (error instanceof Error) return error.message;

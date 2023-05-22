@@ -16,6 +16,7 @@ export default function Register() {
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
+    const [emailDupe, setEmailDupe] = useState(false);
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -38,7 +39,9 @@ export default function Register() {
 
         const userDetails: IUserDetails = { email: email, password: password };
         const response = await registerUser(userDetails);
-        console.log(response);
+
+        if (response === "email is taken") return setEmailDupe(true);
+
         if (response === "user created") {
             const userCredentials: IUserDetails = {
                 email: email,
@@ -56,6 +59,7 @@ export default function Register() {
     };
     return (
         <div className="flex place-content-center py-20">
+            {emailDupe && <div>Email Already Taken</div>}
             <div className="border w-[24em] h-[21em] py-3 px-12 text-center">
                 <div>Register</div>
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">

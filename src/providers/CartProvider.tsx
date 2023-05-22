@@ -26,7 +26,7 @@ export default function CartProvider(props: PropsWithChildren) {
     const getCartData = async () => {
         const response = await getUserCart();
         if (typeof response == "string") {
-            return console.log(response);
+            return;
         }
         return setCart(response);
     };
@@ -34,9 +34,8 @@ export default function CartProvider(props: PropsWithChildren) {
     const getCheckOutItems = async () => {
         const response = await getCheckOutItemsRequest();
         if (typeof response == "string") {
-            return console.log(response);
+            return;
         }
-        // console.log(response);
         return setToCheckOutItems(response);
     };
 
