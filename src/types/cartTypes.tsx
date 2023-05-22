@@ -8,6 +8,7 @@ export interface IItemsProperties extends IProductProperties {
 export interface ICheckOut {
     items: Array<IItemsProperties>;
     totalAmountToPay: number;
+    order_id: string;
 }
 
 export interface ICart {

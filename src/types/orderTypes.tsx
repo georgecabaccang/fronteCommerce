@@ -1,10 +1,3 @@
-import { IItemsProperties } from "./cartTypes";
-
-export interface IOrder {
-    items: Array<IItemsProperties>;
-    totalAmountToPay: number;
-}
-
 export interface IOrderItem {
     productName: string;
     prod_id: string;
@@ -12,4 +5,15 @@ export interface IOrderItem {
     price: number;
     image: string;
     discount: number;
+}
+
+export interface IOrder {
+    items: Array<IOrderItem>;
+    totalAmount: number;
+    orderedOn: Date;
+    _id: string;
+}
+
+export interface IOrderList {
+    orders: Array<IOrder>;
 }

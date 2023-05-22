@@ -27,6 +27,7 @@ export const getOrdersRequest = async () => {
             { email: localStorage.getItem("userEmail") },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
+        console.log(data);
         return data;
     } catch (error) {
         if (error instanceof Error) return error.message;

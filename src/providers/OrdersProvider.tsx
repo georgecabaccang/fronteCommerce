@@ -1,25 +1,21 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
-import { ICheckOut } from "../types/cartTypes";
 import { UserContext } from "./UserProvider";
 import { getOrdersRequest } from "../api/orderRequests";
+import { IOrder, IOrderList } from "../types/orderTypes";
 
-interface IOrders {
-    orders: Array<ICheckOut>;
-}
-
-export const OrdersContext = createContext<IOrders>({
+export const OrdersContext = createContext<IOrderList>({
     orders: [],
 });
 
 export default function OrdersProvider(props: PropsWithChildren) {
-    const [orders, setOrders] = useState<Array<ICheckOut>>([]);
+    const [orders, setOrders] = useState<Array<IOrder>>([]);
 
     const userContext = useContext(UserContext);
 
     const getOrders = async () => {
         const response = await getOrdersRequest();
         console.log(response);
-        setOrders(response);
+        setOrders(response.orders);
     };
 
     useEffect(() => {
