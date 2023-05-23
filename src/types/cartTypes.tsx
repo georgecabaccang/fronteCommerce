@@ -13,7 +13,7 @@ export interface ICheckOut {
 export interface ICart {
     cart: Array<IItemsProperties>;
     toCheckOutItems: ICheckOut;
-    addToCart: (productToBeAddedToCart: IItemsProperties) => void;
+    addToCart: (productToBeAddedToCart: { prod_id: string; quantity: number }) => void;
     addToCheckOut: (productToBeAddedToCheckOut: IItemsProperties) => void;
     removeFromCheckOut: (productToBeRemovedFromCheckOut: string) => void;
     getCartData: () => void;

@@ -28,7 +28,7 @@ export default function CartProvider(props: PropsWithChildren) {
         if (typeof response == "string") {
             return;
         }
-        return setCart(response);
+        return setCart(response.items);
     };
 
     const getCheckOutItems = async () => {
@@ -39,7 +39,7 @@ export default function CartProvider(props: PropsWithChildren) {
         return setToCheckOutItems(response);
     };
 
-    const addToCart = async (productToBeAddedToCart: IItemsProperties) => {
+    const addToCart = async (productToBeAddedToCart: { prod_id: string; quantity: number }) => {
         await addToCartRequest(productToBeAddedToCart);
         getCartData();
     };

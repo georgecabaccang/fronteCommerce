@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../../providers/CartProvider";
 import CheckOutItem from "./CheckOutItem";
 import Button from "../shared/Button";
@@ -18,6 +18,10 @@ export default function CheckOutItems() {
         odersContext.getOrders();
         navigate("/orders");
     };
+
+    // useEffect(() => {
+    //     console.log(cartContext.toCheckOutItems);
+    // }, [cartContext.toCheckOutItems]);
     return (
         <div>
             <form onSubmit={submitHandler}>

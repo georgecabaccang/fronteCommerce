@@ -9,9 +9,18 @@ import Quantity from "../shared/Quantity";
 
 import { CartContext } from "../../providers/CartProvider";
 import { UserContext } from "../../providers/UserProvider";
+import { getUserCart } from "../../api/cartRequests";
+import { Link } from "react-router-dom";
 
 export default function ProductPage() {
-    const [productDetails, setProductDetails] = useState<IProductProperties>();
+    const [productDetails, setProductDetails] = useState<IProductProperties>({
+        productName: "",
+        price: 0,
+        discount: 0,
+        stock: 0,
+        prod_id: "",
+        image: "",
+    });
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
     const [quantity, setQuantity] = useState<number>(1);
@@ -27,9 +36,8 @@ export default function ProductPage() {
         if (prod_id) {
             const productAddToCart = {
                 prod_id: prod_id,
-                quantity: +quantity,
+                quantity: quantity,
             };
-            // console.log(productAddToCart);
             cartContext.addToCart(productAddToCart);
         }
     };
@@ -38,6 +46,23 @@ export default function ProductPage() {
     if (productDetails?.price) {
         totalPrice = productDetails?.price * +quantity;
     }
+
+    const buyNow = async () => {
+        const userCart = await getUserCart();
+        const item = {
+            quantity: quantity,
+            cart_id: userCart._id,
+            productName: productDetails.productName,
+            price: productDetails.price,
+            discount: productDetails.discount,
+            stock: productDetails.stock,
+            prod_id: productDetails._id as string,
+            image: productDetails.image,
+        };
+        console.log(item);
+        cartContext.addToCheckOut(item);
+        navigate("/cart/checkout");
+    };
 
     useEffect(() => {
         if (prod_id) {
@@ -61,7 +86,7 @@ export default function ProductPage() {
         navigate("/login");
     };
 
-    const loggedInOrOut = userContext.accessToken ? addToCart : redirectToLogin;
+    const addToCartLoggedInOrOut = userContext.accessToken ? addToCart : redirectToLogin;
 
     if (isLoading) {
         return (
@@ -114,13 +139,13 @@ export default function ProductPage() {
                             type="button"
                             name="Buy Now"
                             className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={loggedInOrOut}
+                            clickEvent={buyNow}
                         />
                         <Button
                             type="button"
                             name="Add To Cart"
                             className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={loggedInOrOut}
+                            clickEvent={addToCartLoggedInOrOut}
                         />
                     </div>
                 </div>

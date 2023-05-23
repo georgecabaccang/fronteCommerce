@@ -18,7 +18,10 @@ export const getUserCart = async () => {
 };
 
 // ADD ITEMS TO CART
-export const addToCartRequest = async (productToBeAddedToCart: IItemsProperties) => {
+export const addToCartRequest = async (productToBeAddedToCart: {
+    prod_id: string;
+    quantity: number;
+}) => {
     try {
         const { data } = await axios.post(
             "http://localhost:8002/cart/add-to-cart",
