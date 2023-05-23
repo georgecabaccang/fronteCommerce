@@ -42,14 +42,13 @@ export const addToCartRequest = async (productToBeAddedToCart: {
 
 export const removeFromCartRequest = async (itemInCartId: string) => {
     try {
-        const reponse = await axios.delete("http://localhost:8002/cart/remove-from-cart", {
+        await axios.delete("http://localhost:8002/cart/remove-from-cart", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             data: {
                 email: localStorage.getItem("userEmail"),
                 prod_id: itemInCartId,
             },
         });
-        console.log(reponse);
     } catch (error) {
         if (error instanceof Error) return error.message;
     }
@@ -103,6 +102,19 @@ export const getCheckOutItemsRequest = async () => {
     try {
         const { data } = await axios.post(
             "http://localhost:8002/cart/get-to-checkout-items",
+            { email: localStorage.getItem("userEmail") },
+            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
+
+export const deleteCheckOutInstanceRequest = async () => {
+    try {
+        const { data } = await axios.post(
+            "http://localhost:8002/orders/delete-checkout-instance",
             { email: localStorage.getItem("userEmail") },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );

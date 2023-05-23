@@ -1,9 +1,14 @@
 import { PropsWithChildren, createContext, useEffect, useState, useContext } from "react";
 import { ICart, ICheckOut, IItemsProperties } from "../types/cartTypes";
 import { UserContext } from "./UserProvider";
-import { addToCartRequest, removeFromCheckOutRequest } from "../api/cartRequests";
+import {
+    addToCartRequest,
+    deleteCheckOutInstanceRequest,
+    removeFromCheckOutRequest,
+} from "../api/cartRequests";
 
 import { addToCheckOutRequest, getCheckOutItemsRequest, getUserCart } from "../api/cartRequests";
+import { ActiveLinkContext } from "./ActiveLinkProvider";
 
 export const CartContext = createContext<ICart>({
     cart: [],
@@ -22,6 +27,7 @@ export default function CartProvider(props: PropsWithChildren) {
     });
 
     const userContext = useContext(UserContext);
+    const activeLinkContext = useContext(ActiveLinkContext);
 
     const getCartData = async () => {
         const response = await getUserCart();
@@ -53,6 +59,18 @@ export default function CartProvider(props: PropsWithChildren) {
         await removeFromCheckOutRequest(prod_id);
         getCheckOutItems();
     };
+
+    const deleteCheckOutInstance = async () => {
+        await deleteCheckOutInstanceRequest();
+        setToCheckOutItems({
+            items: [],
+            totalAmountToPay: 0,
+        });
+    };
+
+    useEffect(() => {
+        if (toCheckOutItems.items.length != 0) deleteCheckOutInstance();
+    }, [activeLinkContext.link]);
 
     useEffect(() => {
         getCheckOutItems();

@@ -9,7 +9,7 @@ import Quantity from "../shared/Quantity";
 
 import { CartContext } from "../../providers/CartProvider";
 import { UserContext } from "../../providers/UserProvider";
-import { getUserCart } from "../../api/cartRequests";
+import { deleteCheckOutInstanceRequest, getUserCart } from "../../api/cartRequests";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>({
@@ -50,6 +50,7 @@ export default function ProductPage() {
 
     const buyNow = async () => {
         const userCart = await getUserCart();
+        await deleteCheckOutInstanceRequest();
         const item = {
             quantity: quantity,
             cart_id: userCart._id,
@@ -60,7 +61,7 @@ export default function ProductPage() {
             prod_id: productDetails._id as string,
             image: productDetails.image,
         };
-        console.log(item);
+
         cartContext.addToCheckOut(item);
         navigate("/cart/checkout");
     };
@@ -69,9 +70,7 @@ export default function ProductPage() {
         const inCart = cartContext.cart.findIndex((product) => {
             return productDetails._id === product.prod_id;
         });
-        // console.log(productDetails._id);
-        // console.log(cartContext.cart);
-        console.log(inCart);
+
         if (inCart != -1) {
             return setInCart(true);
         }
@@ -101,6 +100,7 @@ export default function ProductPage() {
     };
 
     const addToCartLoggedInOrOut = userContext.accessToken ? addToCart : redirectToLogin;
+    const buyNowLoggedInOrOut = userContext.accessToken ? buyNow : redirectToLogin;
 
     if (isLoading) {
         return (
@@ -154,7 +154,7 @@ export default function ProductPage() {
                                 type="button"
                                 name="Buy Now"
                                 className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                                clickEvent={buyNow}
+                                clickEvent={buyNowLoggedInOrOut}
                             />
                             <Button
                                 type="button"
