@@ -10,7 +10,6 @@ import Quantity from "../shared/Quantity";
 import { CartContext } from "../../providers/CartProvider";
 import { UserContext } from "../../providers/UserProvider";
 import { getUserCart } from "../../api/cartRequests";
-import { Link } from "react-router-dom";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>({
@@ -24,6 +23,8 @@ export default function ProductPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
     const [quantity, setQuantity] = useState<number>(1);
+    const [inCart, setInCart] = useState<boolean>(false);
+
     const { prod_id } = useParams();
     const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ export default function ProductPage() {
 
     let totalPrice = productDetails?.price;
     if (productDetails?.price) {
-        totalPrice = productDetails?.price * +quantity;
+        totalPrice = productDetails?.price * quantity;
     }
 
     const buyNow = async () => {
@@ -63,6 +64,19 @@ export default function ProductPage() {
         cartContext.addToCheckOut(item);
         navigate("/cart/checkout");
     };
+
+    useEffect(() => {
+        const inCart = cartContext.cart.findIndex((product) => {
+            return productDetails._id === product.prod_id;
+        });
+        // console.log(productDetails._id);
+        // console.log(cartContext.cart);
+        console.log(inCart);
+        if (inCart != -1) {
+            return setInCart(true);
+        }
+        return setInCart(false);
+    }, [isLoading]);
 
     useEffect(() => {
         if (prod_id) {
@@ -134,20 +148,23 @@ export default function ProductPage() {
                         </div>
                         <div>Total: ${totalPrice?.toFixed(2)}</div>
                     </div>
-                    <div>
-                        <Button
-                            type="button"
-                            name="Buy Now"
-                            className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={buyNow}
-                        />
-                        <Button
-                            type="button"
-                            name="Add To Cart"
-                            className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                            clickEvent={addToCartLoggedInOrOut}
-                        />
-                    </div>
+                    {!inCart && (
+                        <div>
+                            <Button
+                                type="button"
+                                name="Buy Now"
+                                className="border rounded-sm px-2 py-1 hover:bg-orange-500"
+                                clickEvent={buyNow}
+                            />
+                            <Button
+                                type="button"
+                                name="Add To Cart"
+                                className="border rounded-sm px-2 py-1 hover:bg-orange-500"
+                                clickEvent={addToCartLoggedInOrOut}
+                            />
+                        </div>
+                    )}
+                    {inCart && <div>In Cart</div>}
                 </div>
             </div>
         </div>
