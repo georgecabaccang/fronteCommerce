@@ -3,12 +3,14 @@ import { NavLink, redirect } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
 import { logout } from "../../api/logoutRequest";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
+import { CartContext } from "../../providers/CartProvider";
 
 const LOGIN_LINK = "http://localhost:5173/login";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
 
 export default function Navigation() {
     const userContext = useContext(UserContext);
+    const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
 
     const logoutHandler = async () => {
@@ -54,7 +56,10 @@ export default function Navigation() {
                             <NavLink
                                 to={"/cart"}
                                 className="flex place-content-center items-center w-full h-full link-page"
-                                onClick={() => activeLinkContext.setActiveLink("cart")}
+                                onClick={() => {
+                                    activeLinkContext.setActiveLink("cart");
+                                    cartContext.resetCheckout();
+                                }}
                             >
                                 Cart
                             </NavLink>

@@ -6,7 +6,7 @@ export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
 
     return (
-        <div>
+        <div className="mx-10">
             {ordersContext.orders.map((order) => {
                 return (
                     <Orders

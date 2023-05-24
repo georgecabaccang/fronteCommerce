@@ -6,10 +6,11 @@ import OrderItemList from "./OrderItemList";
 import { OrdersContext } from "../../providers/OrdersProvider";
 
 export default function Orders(props: IOrder) {
-    const timeOrdered = new Date(props.createdAt).toLocaleString();
     const [loading, setLaoding] = useState(false);
 
     const ordersContext = useContext(OrdersContext);
+
+    const timeOrdered = new Date(props.createdAt).toLocaleString();
 
     const cancelOrder = async () => {
         setLaoding(true);
@@ -18,7 +19,7 @@ export default function Orders(props: IOrder) {
     };
 
     return (
-        <div className="border">
+        <div className="border my-10 p-3">
             {loading && "Loadin. . ."}
             {!loading && (
                 <div>
@@ -38,8 +39,11 @@ export default function Orders(props: IOrder) {
                         })}
                     </div>
                     <div>
-                        <div>{props.totalAmount}</div>
-                        <div>Dated Issued: {timeOrdered}</div>
+                        <div>Total Amount To Pay: ${props.totalAmount.toFixed(2)}</div>
+                        <div>
+                            Status:
+                            {` ${props.status.charAt(0).toUpperCase()}${props.status.slice(1)}`}
+                        </div>
                         <div className="grid grid-cols-2 gap-2 mx-2">
                             <Button name={"Received"} className="border" type="button" />
                             <Button
@@ -49,7 +53,8 @@ export default function Orders(props: IOrder) {
                                 clickEvent={cancelOrder}
                             />
                         </div>
-                        <div>This Receipt is Valid for Five (5) Years After Date Of Issue</div>
+                        {/* <div>Dated Issued: {timeOrdered}</div> */}
+                        {/* <div>This Receipt is Valid for Five (5) Years After Date Of Issue</div> */}
                     </div>
                 </div>
             )}

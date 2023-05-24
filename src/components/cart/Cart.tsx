@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Button from "../shared/Button";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
+const CHECKOUT_URL = "/cart/checkout";
+
 export default function Cart() {
     const [isDisabled, setIsDisabled] = useState(true);
 
@@ -15,7 +17,7 @@ export default function Cart() {
 
     const checkoutHandler = (event: FormEvent) => {
         event.preventDefault();
-        navigate("/cart/checkout");
+        navigate(CHECKOUT_URL);
     };
 
     useEffect(() => {
@@ -51,7 +53,7 @@ export default function Cart() {
                     <Button
                         className="border py-2 px-5 my-3 bg-blue-100"
                         type="submit"
-                        name={"Checkout"}
+                        name="Checkout"
                         disabled={isDisabled}
                         onClick={() => {
                             activeLinkContext.setActiveLink("checkout");

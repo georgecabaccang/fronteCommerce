@@ -8,12 +8,14 @@ import { useNavigate } from "react-router-dom";
 
 const CART_URL = "/cart";
 const ORDERS_URL = "/orders";
+const BUTTON_CLASSNAME = "border py-2 px-4 bg-gray-200";
 
 export default function CheckOutItems() {
     const cartContext = useContext(CartContext);
     const odersContext = useContext(OrdersContext);
 
     const navigate = useNavigate();
+    console.log(cartContext.checkOutDetails);
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -53,9 +55,9 @@ export default function CheckOutItems() {
                 </div>
                 <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay}</div>
                 <div>
-                    <Button className={"border py-2 px-4 bg-gray-200"} name="Order" type="submit" />
+                    <Button className={BUTTON_CLASSNAME} name="Order" type="submit" />
                     <Button
-                        className={"border py-2 px-4 bg-gray-200"}
+                        className={BUTTON_CLASSNAME}
                         name="Cancel"
                         type="button"
                         clickEvent={cancelCheckoutHandler}

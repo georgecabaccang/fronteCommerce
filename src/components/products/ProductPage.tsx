@@ -9,6 +9,7 @@ import Quantity from "../shared/Quantity";
 
 import { CartContext } from "../../providers/CartProvider";
 import { UserContext } from "../../providers/UserProvider";
+import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>({
@@ -29,6 +30,7 @@ export default function ProductPage() {
 
     const cartContext = useContext(CartContext);
     const userContext = useContext(UserContext);
+    const activeLinkContext = useContext(ActiveLinkContext);
 
     const addToCart = () => {
         const prod_id = productDetails?._id;
@@ -59,6 +61,7 @@ export default function ProductPage() {
         };
 
         cartContext.updateCheckout(item, "add");
+        activeLinkContext.setActiveLink("checkout");
         navigate("/cart/checkout");
     };
 
