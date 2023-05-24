@@ -13,11 +13,21 @@ export default function CheckOutItems() {
     const navigate = useNavigate();
 
     const submitHandler = async (event: React.FormEvent) => {
+        console.log("?");
         event.preventDefault();
         await orderCheckOutRequest(cartContext.checkOutDetails);
         odersContext.getOrders();
         navigate("/orders");
     };
+
+    const cancelCheckoutHandler = () => {
+        cartContext.resetCheckout();
+        navigate("/cart");
+    };
+
+    if (cartContext.checkOutDetails.items.length === 0) {
+        navigate("/cart");
+    }
 
     return (
         <div>
@@ -40,6 +50,12 @@ export default function CheckOutItems() {
                 <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay}</div>
                 <div>
                     <Button className={"border py-2 px-4 bg-gray-200"} name="Order" type="submit" />
+                    <Button
+                        className={"border py-2 px-4 bg-gray-200"}
+                        name="Cancel"
+                        type="button"
+                        clickEvent={cancelCheckoutHandler}
+                    />
                 </div>
             </form>
         </div>

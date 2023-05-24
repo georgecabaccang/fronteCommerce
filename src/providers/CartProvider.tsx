@@ -1,19 +1,9 @@
 import { PropsWithChildren, createContext, useEffect, useState, useContext } from "react";
-import {
-    ICart,
-    ICheckOut,
-    IICheckoutDetails,
-    IItemInCheckout,
-    IItemsProperties,
-} from "../types/cartTypes";
+import { ICart, IICheckoutDetails, IItemInCheckout, IItemsProperties } from "../types/cartTypes";
 import { UserContext } from "./UserProvider";
-import {
-    addToCartRequest,
-    deleteCheckOutInstanceRequest,
-    removeFromCheckOutRequest,
-} from "../api/cartRequests";
+import { addToCartRequest } from "../api/cartRequests";
 
-import { addToCheckOutRequest, getCheckOutItemsRequest, getUserCart } from "../api/cartRequests";
+import { getUserCart } from "../api/cartRequests";
 import { ActiveLinkContext } from "./ActiveLinkProvider";
 
 export const CartContext = createContext<ICart>({
@@ -21,7 +11,7 @@ export const CartContext = createContext<ICart>({
     checkOutDetails: { items: [], totalAmountToPay: 0 },
     addToCart: () => {},
     updateCheckout: () => {},
-    // removeFromCheckOut: () => {},
+    resetCheckout: () => {},
     getCartData: () => {},
 });
 
@@ -31,8 +21,6 @@ export default function CartProvider(props: PropsWithChildren) {
         items: [],
         totalAmountToPay: 0,
     });
-
-    // const checkOutDetails: IICheckoutDetails = { items: [], totalAmountToPay: 0 };
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -44,14 +32,6 @@ export default function CartProvider(props: PropsWithChildren) {
         }
         return setCart(response.items);
     };
-
-    // const getCheckOutItems = async () => {
-    //     const response = await getCheckOutItemsRequest();
-    //     if (typeof response == "string") {
-    //         return;
-    //     }
-    //     return setToCheckOutItems(response);
-    // };
 
     const addToCart = async (productToBeAddedToCart: { prod_id: string; quantity: number }) => {
         await addToCartRequest(productToBeAddedToCart);
@@ -84,19 +64,15 @@ export default function CartProvider(props: PropsWithChildren) {
         }
     };
 
-    // const removeFromCheckOut = async (checkOutItemDetails: IItemInCheckout) => {
-    //     const priceComputation =
-    //         (checkOutItemDetails.price - checkOutItemDetails.price * checkOutItemDetails.discount) *
-    //         checkOutItemDetails.quantity;
-    //     const newTotalAmountToPay = checkOutDetails.totalAmountToPay - priceComputation;
-    // };
+    const resetCheckout = () => {
+        return setCheckOutDetails({
+            items: [],
+            totalAmountToPay: 0,
+        });
+    };
 
     useEffect(() => {
-        if (activeLinkContext.link != "checkout")
-            setCheckOutDetails({
-                items: [],
-                totalAmountToPay: 0,
-            });
+        if (activeLinkContext.link != "checkout") return resetCheckout();
     }, [activeLinkContext.link]);
 
     useEffect(() => {
@@ -108,7 +84,7 @@ export default function CartProvider(props: PropsWithChildren) {
         checkOutDetails: checkOutDetails,
         addToCart: addToCart,
         updateCheckout: updateCheckout,
-        // removeFromCheckOut: removeFromCheckOut,
+        resetCheckout: resetCheckout,
         getCartData: getCartData,
     };
 

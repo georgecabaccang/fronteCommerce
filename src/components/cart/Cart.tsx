@@ -13,7 +13,7 @@ export default function Cart() {
 
     const navigate = useNavigate();
 
-    const placeOrder = (event: FormEvent) => {
+    const checkoutHandler = (event: FormEvent) => {
         event.preventDefault();
         navigate("/cart/checkout");
     };
@@ -28,7 +28,7 @@ export default function Cart() {
     return (
         <div>
             Cart
-            <form onSubmit={placeOrder}>
+            <form onSubmit={checkoutHandler}>
                 <div>
                     {cartContext?.cart?.map((item) => {
                         return (

@@ -9,7 +9,6 @@ import Quantity from "../shared/Quantity";
 
 import { CartContext } from "../../providers/CartProvider";
 import { UserContext } from "../../providers/UserProvider";
-import { deleteCheckOutInstanceRequest, getUserCart } from "../../api/cartRequests";
 
 export default function ProductPage() {
     const [productDetails, setProductDetails] = useState<IProductProperties>({
@@ -49,11 +48,8 @@ export default function ProductPage() {
     }
 
     const buyNow = async () => {
-        const userCart = await getUserCart();
-        await deleteCheckOutInstanceRequest();
         const item = {
             quantity: quantity,
-            cart_id: userCart._id,
             productName: productDetails.productName,
             price: productDetails.price,
             discount: productDetails.discount,

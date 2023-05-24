@@ -1,5 +1,4 @@
 import axios from "axios";
-import { IItemsProperties } from "../types/cartTypes";
 
 // GET USER CART
 export const getUserCart = async () => {
@@ -67,58 +66,6 @@ export const itemInCartChangeQuantity = async (quantity: number, prod_id: string
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
         return response;
-    } catch (error) {
-        if (error instanceof Error) return error.message;
-    }
-};
-
-export const addToCheckOutRequest = async (itemToCheckOut: IItemsProperties) => {
-    try {
-        const { data } = await axios.post(
-            "http://localhost:8002/cart/add-to-checkout",
-            { email: localStorage.getItem("userEmail"), itemToCheckOut: itemToCheckOut },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-        return data;
-    } catch (error) {
-        if (error instanceof Error) return error.message;
-    }
-};
-
-export const removeFromCheckOutRequest = async (removeFromCheckOut: string) => {
-    try {
-        const { data } = await axios.post(
-            "http://localhost:8002/cart/remove-from-checkout",
-            { email: localStorage.getItem("userEmail"), itemToRemove: removeFromCheckOut },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-        return data;
-    } catch (error) {
-        if (error instanceof Error) return error.message;
-    }
-};
-
-export const getCheckOutItemsRequest = async () => {
-    try {
-        const { data } = await axios.post(
-            "http://localhost:8002/cart/get-to-checkout-items",
-            { email: localStorage.getItem("userEmail") },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-        return data;
-    } catch (error) {
-        if (error instanceof Error) return error.message;
-    }
-};
-
-export const deleteCheckOutInstanceRequest = async () => {
-    try {
-        const { data } = await axios.post(
-            "http://localhost:8002/orders/delete-checkout-instance",
-            { email: localStorage.getItem("userEmail") },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-        );
-        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }
