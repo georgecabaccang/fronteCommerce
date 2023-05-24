@@ -6,6 +6,9 @@ import { orderCheckOutRequest } from "../../api/orderRequests";
 import { OrdersContext } from "../../providers/OrdersProvider";
 import { useNavigate } from "react-router-dom";
 
+const CART_URL = "/cart";
+const ORDERS_URL = "/orders";
+
 export default function CheckOutItems() {
     const cartContext = useContext(CartContext);
     const odersContext = useContext(OrdersContext);
@@ -13,20 +16,21 @@ export default function CheckOutItems() {
     const navigate = useNavigate();
 
     const submitHandler = async (event: React.FormEvent) => {
-        console.log("?");
         event.preventDefault();
         await orderCheckOutRequest(cartContext.checkOutDetails);
+        cartContext.getCartData();
+        cartContext.resetCheckout();
         odersContext.getOrders();
-        navigate("/orders");
+        navigate(ORDERS_URL);
     };
 
     const cancelCheckoutHandler = () => {
         cartContext.resetCheckout();
-        navigate("/cart");
+        navigate(CART_URL);
     };
 
     if (cartContext.checkOutDetails.items.length === 0) {
-        navigate("/cart");
+        navigate(CART_URL);
     }
 
     return (

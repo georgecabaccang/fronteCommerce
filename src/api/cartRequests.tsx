@@ -39,6 +39,7 @@ export const addToCartRequest = async (productToBeAddedToCart: {
     }
 };
 
+// REMOVE ITEMS FROM CART
 export const removeFromCartRequest = async (itemInCartId: string) => {
     try {
         await axios.delete("http://localhost:8002/cart/remove-from-cart", {
