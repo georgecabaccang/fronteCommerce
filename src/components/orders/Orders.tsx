@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { cancelOrderRequest } from "../../api/orderRequests";
 import { IOrder } from "../../types/orderTypes";
 import Button from "../shared/Button";
-import OrderItemList from "./OrderItemList";
+import OrderItem from "./OrderItem";
 import { OrdersContext } from "../../providers/OrdersProvider";
 
 export default function Orders(props: IOrder) {
@@ -26,7 +26,7 @@ export default function Orders(props: IOrder) {
                     <div>
                         {props.items.map((orderItem) => {
                             return (
-                                <OrderItemList
+                                <OrderItem
                                     key={orderItem.prod_id}
                                     productName={orderItem.productName}
                                     prod_id={orderItem.prod_id}
