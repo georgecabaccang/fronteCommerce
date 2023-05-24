@@ -62,7 +62,7 @@ export default function ProductPage() {
             image: productDetails.image,
         };
 
-        cartContext.addToCheckOut(item);
+        cartContext.updateCheckout(item, "add");
         navigate("/cart/checkout");
     };
 

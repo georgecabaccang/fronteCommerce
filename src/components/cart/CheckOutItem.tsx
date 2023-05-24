@@ -1,14 +1,6 @@
-interface ICheckoutProps {
-    prod_id: string;
-    productName: string;
-    price: number;
-    discount: number;
-    quantity: number;
-    stock: number;
-    image: string;
-}
+import { IItemInCheckout } from "../../types/cartTypes";
 
-export default function CheckOutItem(props: ICheckoutProps) {
+export default function CheckOutItem(props: IItemInCheckout) {
     return (
         <div className="border grid grid-cols-5 py-4 mx-10 my-5">
             <div>{props.productName}</div>

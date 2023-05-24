@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ICheckOut } from "../types/cartTypes";
+import { IICheckoutDetails } from "../types/cartTypes";
 
-export const orderCheckOutRequest = async (checkOutItems: ICheckOut) => {
+export const orderCheckOutRequest = async (checkOutItems: IICheckoutDetails) => {
     try {
         const { data } = await axios.post(
             "http://localhost:8002/orders/order-checkout",

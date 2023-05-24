@@ -1,5 +1,11 @@
 import { PropsWithChildren, createContext, useEffect, useState, useContext } from "react";
-import { ICart, ICheckOut, IItemsProperties } from "../types/cartTypes";
+import {
+    ICart,
+    ICheckOut,
+    IICheckoutDetails,
+    IItemInCheckout,
+    IItemsProperties,
+} from "../types/cartTypes";
 import { UserContext } from "./UserProvider";
 import {
     addToCartRequest,
@@ -12,19 +18,21 @@ import { ActiveLinkContext } from "./ActiveLinkProvider";
 
 export const CartContext = createContext<ICart>({
     cart: [],
-    toCheckOutItems: { items: [], totalAmountToPay: 0 },
+    checkOutDetails: { items: [], totalAmountToPay: 0 },
     addToCart: () => {},
-    addToCheckOut: () => {},
-    removeFromCheckOut: () => {},
+    updateCheckout: () => {},
+    // removeFromCheckOut: () => {},
     getCartData: () => {},
 });
 
 export default function CartProvider(props: PropsWithChildren) {
     const [cart, setCart] = useState<Array<IItemsProperties>>([]);
-    const [toCheckOutItems, setToCheckOutItems] = useState<ICheckOut>({
+    const [checkOutDetails, setCheckOutDetails] = useState<IICheckoutDetails>({
         items: [],
         totalAmountToPay: 0,
     });
+
+    // const checkOutDetails: IICheckoutDetails = { items: [], totalAmountToPay: 0 };
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -37,52 +45,70 @@ export default function CartProvider(props: PropsWithChildren) {
         return setCart(response.items);
     };
 
-    const getCheckOutItems = async () => {
-        const response = await getCheckOutItemsRequest();
-        if (typeof response == "string") {
-            return;
-        }
-        return setToCheckOutItems(response);
-    };
+    // const getCheckOutItems = async () => {
+    //     const response = await getCheckOutItemsRequest();
+    //     if (typeof response == "string") {
+    //         return;
+    //     }
+    //     return setToCheckOutItems(response);
+    // };
 
     const addToCart = async (productToBeAddedToCart: { prod_id: string; quantity: number }) => {
         await addToCartRequest(productToBeAddedToCart);
         getCartData();
     };
 
-    const addToCheckOut = async (item: IItemsProperties) => {
-        await addToCheckOutRequest(item);
-        getCheckOutItems();
+    const updateCheckout = async (checkOutItemDetails: IItemInCheckout, action: string) => {
+        const priceComputation =
+            (checkOutItemDetails.price - checkOutItemDetails.price * checkOutItemDetails.discount) *
+            checkOutItemDetails.quantity;
+        let newTotalAmountToPay: number = 0;
+
+        if (action === "add") {
+            newTotalAmountToPay = checkOutDetails.totalAmountToPay + priceComputation;
+            setCheckOutDetails({
+                items: [...checkOutDetails.items, checkOutItemDetails],
+                totalAmountToPay: newTotalAmountToPay,
+            });
+            return;
+        }
+        if (action === "remove") {
+            newTotalAmountToPay = checkOutDetails.totalAmountToPay - priceComputation;
+            const newCheckoutItems = checkOutDetails.items.filter(
+                (item) => item.prod_id != checkOutItemDetails.prod_id
+            );
+            setCheckOutDetails({
+                items: newCheckoutItems,
+                totalAmountToPay: newTotalAmountToPay,
+            });
+        }
     };
 
-    const removeFromCheckOut = async (prod_id: string) => {
-        await removeFromCheckOutRequest(prod_id);
-        getCheckOutItems();
-    };
-
-    const deleteCheckOutInstance = async () => {
-        await deleteCheckOutInstanceRequest();
-        setToCheckOutItems({
-            items: [],
-            totalAmountToPay: 0,
-        });
-    };
+    // const removeFromCheckOut = async (checkOutItemDetails: IItemInCheckout) => {
+    //     const priceComputation =
+    //         (checkOutItemDetails.price - checkOutItemDetails.price * checkOutItemDetails.discount) *
+    //         checkOutItemDetails.quantity;
+    //     const newTotalAmountToPay = checkOutDetails.totalAmountToPay - priceComputation;
+    // };
 
     useEffect(() => {
-        if (toCheckOutItems.items.length != 0) deleteCheckOutInstance();
+        if (activeLinkContext.link != "checkout")
+            setCheckOutDetails({
+                items: [],
+                totalAmountToPay: 0,
+            });
     }, [activeLinkContext.link]);
 
     useEffect(() => {
-        getCheckOutItems();
         getCartData();
     }, [userContext.accessToken]);
 
     const CartPrroviderValues = {
         cart: cart,
-        toCheckOutItems: toCheckOutItems,
+        checkOutDetails: checkOutDetails,
         addToCart: addToCart,
-        addToCheckOut: addToCheckOut,
-        removeFromCheckOut: removeFromCheckOut,
+        updateCheckout: updateCheckout,
+        // removeFromCheckOut: removeFromCheckOut,
         getCartData: getCartData,
     };
 

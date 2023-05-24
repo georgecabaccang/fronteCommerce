@@ -10,11 +10,25 @@ export interface ICheckOut {
     totalAmountToPay: number;
 }
 
+export interface IItemInCheckout {
+    quantity: number;
+    prod_id: string;
+    price: number;
+    productName: string;
+    discount: number;
+    image: string;
+}
+
+export interface IICheckoutDetails {
+    items: Array<IItemInCheckout>;
+    totalAmountToPay: number;
+}
+
 export interface ICart {
     cart: Array<IItemsProperties>;
-    toCheckOutItems: ICheckOut;
+    checkOutDetails: IICheckoutDetails;
     addToCart: (productToBeAddedToCart: { prod_id: string; quantity: number }) => void;
-    addToCheckOut: (productToBeAddedToCheckOut: IItemsProperties) => void;
-    removeFromCheckOut: (productToBeRemovedFromCheckOut: string) => void;
+    updateCheckout: (item: IItemInCheckout, action: string) => void;
+    // removeFromCheckOut: (productToBeRemovedFromCheckOut: IItemInCheckout) => void;
     getCartData: () => void;
 }

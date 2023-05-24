@@ -30,39 +30,36 @@ export default function CartItem(props: IItemsProperties) {
         }
     };
 
-    useEffect(() => {
-        setLoading(true);
-        if (quantity === 0) {
-            removeFromCart();
-        }
-        changeQuantityOfItemInCart();
-        return;
-    }, [quantity]);
-
-    const addOrRemoveToCheckOut = () => {
+    const addOrRemoveToOrFromCheckOut = () => {
+        const item = {
+            quantity: quantity,
+            prod_id: props.prod_id,
+            price: props.price,
+            productName: props.productName,
+            discount: props.discount,
+            image: props.image,
+        };
         if (inCheckOut) {
-            const item = {
-                quantity: quantity,
-                cart_id: props.cart_id,
-                productName: props.productName,
-                price: props.price,
-                discount: props.discount,
-                stock: props.stock,
-                prod_id: props.prod_id,
-                image: props.image,
-            };
-            return cartContext.addToCheckOut(item);
+            return cartContext.updateCheckout(item, "add");
         }
-        if (!inCheckOut) {
-            if (props.prod_id) {
-                return cartContext.removeFromCheckOut(props.prod_id);
-            }
+        if (!inCheckOut && cartContext.checkOutDetails.totalAmountToPay > 0) {
+            return cartContext.updateCheckout(item, "remove");
         }
     };
 
     useEffect(() => {
-        addOrRemoveToCheckOut();
+        addOrRemoveToOrFromCheckOut();
     }, [inCheckOut]);
+
+    useEffect(() => {
+        setLoading(true);
+        if (quantity === 0) {
+            removeFromCart();
+            return;
+        }
+        changeQuantityOfItemInCart();
+        return;
+    }, [quantity]);
 
     return (
         <div className="border">

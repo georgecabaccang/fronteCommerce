@@ -14,7 +14,7 @@ export default function CheckOutItems() {
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        await orderCheckOutRequest(cartContext.toCheckOutItems);
+        await orderCheckOutRequest(cartContext.checkOutDetails);
         odersContext.getOrders();
         navigate("/orders");
     };
@@ -23,7 +23,7 @@ export default function CheckOutItems() {
         <div>
             <form onSubmit={submitHandler}>
                 <div>
-                    {cartContext.toCheckOutItems.items.map((item) => {
+                    {cartContext.checkOutDetails.items.map((item) => {
                         return (
                             <CheckOutItem
                                 key={item.prod_id}
@@ -32,13 +32,12 @@ export default function CheckOutItems() {
                                 price={item.price}
                                 discount={item.discount}
                                 quantity={item.quantity}
-                                stock={item.stock}
                                 image={item.image}
                             />
                         );
                     })}
                 </div>
-                <div>Total Amount: ${cartContext.toCheckOutItems.totalAmountToPay}</div>
+                <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay}</div>
                 <div>
                     <Button className={"border py-2 px-4 bg-gray-200"} name="Order" type="submit" />
                 </div>

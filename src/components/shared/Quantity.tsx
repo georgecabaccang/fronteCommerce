@@ -37,6 +37,7 @@ export default function Quantity(props: IQuantity) {
                     className="border px-[0.7em] inline ms-2 disabled:bg-slate-200"
                     clickEvent={minusQuantity}
                     getStateNumber={quantity}
+                    type="button"
                     disabled={props.disableButton ? props.disableButton : quantityCheck}
                 />
             }
@@ -46,7 +47,6 @@ export default function Quantity(props: IQuantity) {
                     setStateNumber={setQuantity}
                     value={quantity}
                     min={1}
-                    // max={10}
                     isDisabled={true}
                     className="inline px-2 border max-w-[2.5em] text-center"
                 />
@@ -57,6 +57,7 @@ export default function Quantity(props: IQuantity) {
                     className="border px-[0.6em] inline disabled:bg-slate-200"
                     getStateNumber={quantity}
                     clickEvent={plusQuantity}
+                    type="button"
                     // think about implementing this or not
                     disabled={props.disableButton}
                 />
