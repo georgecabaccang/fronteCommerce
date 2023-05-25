@@ -9,22 +9,22 @@ const COUNT_DOWN_TIMER = 10;
 export default function Layout(props: PropsWithChildren) {
     const timer = useRef<number>();
     const [extendTimePrompt, setExtendTimePrompt] = useState(false);
-    const [countDown, setCountDown] = useState(COUNT_DOWN_TIMER);
+    // const [countDown, setCountDown] = useState(COUNT_DOWN_TIMER);
 
     const userContext = useContext(UserContext);
 
     // MAYBE JUST GET THE TIME FROM BACKEND@@@@@@@@@@@@@@@@@@@@@@@
-    let count = COUNT_DOWN_TIMER;
-    const startCountDown = () => {
-        if (count > 0) {
-            setInterval(() => {
-                setCountDown(count);
-                count--;
-                console.log(count);
-                startCountDown();
-            }, 1000);
-        }
-    };
+    // let count = COUNT_DOWN_TIMER;
+    // const startCountDown = () => {
+    //     if (count > 0) {
+    //         setInterval(() => {
+    //             setCountDown(count);
+    //             count--;
+    //             console.log(count);
+    //             startCountDown();
+    //         }, 1000);
+    //     }
+    // };
 
     useEffect(() => {
         if (userContext.accessToken) {
