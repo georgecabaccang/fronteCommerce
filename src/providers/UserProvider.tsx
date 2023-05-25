@@ -1,7 +1,6 @@
-import React, { PropsWithChildren, createContext, useState, useContext } from "react";
+import React, { PropsWithChildren, createContext, useState, useEffect } from "react";
 import { logoutRequest } from "../api/logoutRequest";
-import { redirect } from "react-router-dom";
-import { ActiveLinkContext } from "./ActiveLinkProvider";
+import { refreshTokenRequest } from "../api/refreshTokenRequest";
 
 interface IUserContext {
     email: string | null;
@@ -10,6 +9,7 @@ interface IUserContext {
     isAdmin: boolean;
     loginFrom: string;
     logout: () => void;
+    getNewTokens: () => void;
     setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
     setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
     setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
@@ -23,6 +23,7 @@ export const UserContext = createContext<IUserContext>({
     isAdmin: false,
     loginFrom: "",
     logout: () => {},
+    getNewTokens: () => {},
     setUserEmail: () => {},
     setAccessToken: () => {},
     setRefreshToken: () => {},
@@ -34,8 +35,6 @@ export default function UserProvider(props: PropsWithChildren) {
     const [accessToken, setAccessToken] = useState(localStorage.getItem("token"));
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
     const [loginFrom, setLoginFrom] = useState("login");
-
-    const activeLinkContext = useContext(ActiveLinkContext);
 
     const logout = async () => {
         if (refreshToken) {
@@ -50,9 +49,26 @@ export default function UserProvider(props: PropsWithChildren) {
             setUserEmail(null);
             setAccessToken(null);
             setRefreshToken(null);
-            // activeLinkContext.setActiveLink("http://localhost:5173/login");
         }
     };
+
+    const getNewTokens = async () => {
+        if (refreshToken && userEmail) {
+            const newTokens = await refreshTokenRequest(refreshToken, userEmail);
+            if (typeof newTokens == "string") {
+                alert("Refresh Token Invalid. Please Relogin.");
+                logout();
+            }
+            localStorage.setItem("token", newTokens.accessToken);
+            localStorage.setItem("refreshToken", newTokens.refreshToken);
+            setAccessToken(localStorage.getItem("token"));
+            setRefreshToken(localStorage.getItem("refreshToken"));
+        }
+    };
+
+    useEffect(() => {
+        getNewTokens();
+    }, []);
 
     const userContextValues: IUserContext = {
         email: userEmail,
@@ -61,6 +77,7 @@ export default function UserProvider(props: PropsWithChildren) {
         isAdmin: false,
         loginFrom: loginFrom,
         logout: logout,
+        getNewTokens: getNewTokens,
         setUserEmail: setUserEmail,
         setAccessToken: setAccessToken,
         setRefreshToken: setRefreshToken,

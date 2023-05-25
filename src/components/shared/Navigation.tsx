@@ -11,6 +11,7 @@ export default function Navigation() {
     const userContext = useContext(UserContext);
     const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
+    
     const logoutHandler = async () => {
         userContext.logout();
     };
