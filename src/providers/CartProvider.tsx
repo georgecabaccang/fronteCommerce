@@ -72,7 +72,6 @@ export default function CartProvider(props: PropsWithChildren) {
     };
 
     useEffect(() => {
-        console.log(activeLinkContext.link);
         if (activeLinkContext.link != "checkout") return resetCheckout();
     }, [activeLinkContext.link]);
 

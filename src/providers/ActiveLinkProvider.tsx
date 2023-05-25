@@ -12,6 +12,7 @@ export const ActiveLinkContext = createContext<IActiveLink>({
 
 export default function ActiveLinkProvider(props: PropsWithChildren) {
     const [activeLink, setActiveLink] = useState(window.location.href);
+    console.log(activeLink);
 
     const activeLinkContextValues = {
         link: activeLink,

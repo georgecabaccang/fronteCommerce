@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { NavLink, redirect } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
-import { logout } from "../../api/logoutRequest";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import { CartContext } from "../../providers/CartProvider";
 
@@ -12,22 +11,8 @@ export default function Navigation() {
     const userContext = useContext(UserContext);
     const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
-
     const logoutHandler = async () => {
-        if (userContext.refreshToken) {
-            const response = await logout(userContext.refreshToken);
-            if (response == false) {
-                console.log("something went wrong");
-                return;
-            }
-            localStorage.removeItem("userEmail");
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            userContext.setUserEmail(null);
-            userContext.setAccessToken(null);
-            userContext.setRefreshToken(null);
-            redirect("/login");
-        }
+        userContext.logout();
     };
 
     return (

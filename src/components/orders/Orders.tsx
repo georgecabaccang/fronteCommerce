@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { cancelOrderRequest } from "../../api/orderRequests";
 import { IOrder } from "../../types/orderTypes";
 import Button from "../shared/Button";
 import OrderItem from "./OrderItem";

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const logout = async (refreshToken: string) => {
+export const logoutRequest = async (refreshToken: string) => {
     try {
         const { data } = await axios.post("http://localhost:8002/user/logout", {
             refreshToken: refreshToken,
