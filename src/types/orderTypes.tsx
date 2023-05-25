@@ -18,4 +18,6 @@ export interface IOrder {
 export interface IOrderList {
     orders: Array<IOrder>;
     getOrders: () => void;
+    cancelOrder: (order_id: string) => void;
+    receiveOrder: (order_id: string) => void;
 }

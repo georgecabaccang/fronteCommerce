@@ -12,15 +12,21 @@ export default function Orders(props: IOrder) {
 
     const timeOrdered = new Date(props.createdAt).toLocaleString();
 
-    const cancelOrder = async () => {
+    const cancel = async () => {
         setLaoding(true);
-        await cancelOrderRequest(props._id);
-        ordersContext.getOrders();
+        ordersContext.cancelOrder(props._id);
+        setLaoding(false);
+    };
+
+    const receive = () => {
+        setLaoding(true);
+        ordersContext.receiveOrder(props._id);
+        setLaoding(false);
     };
 
     return (
         <div className="border my-10 p-3">
-            {loading && "Loadin. . ."}
+            {loading && "Loading. . ."}
             {!loading && (
                 <div>
                     <div>
@@ -44,17 +50,30 @@ export default function Orders(props: IOrder) {
                             Status:
                             {` ${props.status.charAt(0).toUpperCase()}${props.status.slice(1)}`}
                         </div>
-                        <div className="grid grid-cols-2 gap-2 mx-2">
-                            <Button name={"Received"} className="border" type="button" />
-                            <Button
-                                name={"Cancel"}
-                                className="border"
-                                type="button"
-                                clickEvent={cancelOrder}
-                            />
-                        </div>
-                        {/* <div>Dated Issued: {timeOrdered}</div> */}
-                        {/* <div>This Receipt is Valid for Five (5) Years After Date Of Issue</div> */}
+                        {props.status != "received" && (
+                            <div className="grid grid-cols-2 gap-2 mx-2">
+                                <Button
+                                    name={"Received"}
+                                    className="border"
+                                    type="button"
+                                    clickEvent={receive}
+                                />
+                                <Button
+                                    name={"Cancel"}
+                                    className="border"
+                                    type="button"
+                                    clickEvent={cancel}
+                                />
+                            </div>
+                        )}
+                        {props.status == "received" && (
+                            <div>
+                                <div>Dated Issued: {timeOrdered}</div>
+                                <div>
+                                    This Receipt is Valid for Five (5) Years After Date Of Issue
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
