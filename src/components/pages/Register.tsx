@@ -13,47 +13,61 @@ const LOGIN_LINK = "http://localhost:5173/login";
 
 // Regex for at least one special character, min length of 9
 const PASSWORD_REGEX = /^(?=.{8,})(?=.*[a-z])(?=.*[!@#$%^()&+=*]).*$/;
+const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 
 export default function Register() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [isEmailValid, setIsEmailIsValid] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
     const [emailDupe, setEmailDupe] = useState(false);
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
 
+    // Check regex for email
+    useEffect(() => {
+        if (email === "") return;
+        if (EMAIL_REGEX.test(email)) {
+            return setIsEmailIsValid(true);
+        }
+        return setIsEmailIsValid(false);
+    }, [email]);
+
+    // Check regex for password
     useEffect(() => {
         if (password === "") return;
         if (PASSWORD_REGEX.test(password)) {
             return setIsValidPassword(true);
         }
         return setIsValidPassword(false);
-    }, [password]);
+    }, [password, confirmPassword]);
 
+    // Check if passwords match
     useEffect(() => {
         if (confirmPassword === "") return;
         if (password == confirmPassword) {
             return setPasswordsMatch(true);
         }
         return setPasswordsMatch(false);
-    }, [confirmPassword]);
+    }, [password, confirmPassword]);
 
     useEffect(() => {
         if (
-            email.toString().includes(".co") &&
-            email.toString().includes("@") &&
+            email &&
             password &&
-            confirmPassword == password
+            confirmPassword &&
+            isEmailValid &&
+            isValidPassword &&
+            passwordsMatch
         ) {
-            setFormIsValid(true);
-            return;
+            return setFormIsValid(true);
         }
-        setFormIsValid(false);
-    }, [email, password, confirmPassword]);
+        return setFormIsValid(false);
+    }, [isEmailValid, isValidPassword, passwordsMatch]);
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -93,6 +107,11 @@ export default function Register() {
                                 className={INPUT_CLASSNAME}
                                 setStateString={setEmail}
                             />
+                            {!isEmailValid && (
+                                <span className="text-red-500 text-xs">
+                                    Please enter a valid email address.
+                                </span>
+                            )}
                         </div>
                         <div>
                             <div>Password:</div>
