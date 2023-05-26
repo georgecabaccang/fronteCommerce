@@ -13,6 +13,7 @@ const LOGIN_LINK = "http://localhost:5173/login";
 
 // Regex for at least one special character, min length of 9
 const PASSWORD_REGEX = /^(?=.{8,})(?=.*[a-z])(?=.*[!@#$%^()&+=*]).*$/;
+// Regex for email validation
 const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 
 export default function Register() {
@@ -55,6 +56,7 @@ export default function Register() {
         return setPasswordsMatch(false);
     }, [password, confirmPassword]);
 
+    // Check form validation
     useEffect(() => {
         if (
             email &&
@@ -95,8 +97,8 @@ export default function Register() {
     return (
         <div className="flex place-content-center py-20">
             {emailDupe && <div>Email Already Taken</div>}
-            <div className="border w-[24em] h-[21em] py-3 px-12 text-center">
-                <div>Register</div>
+            <div className="border min-w-[24em] min-h-[21em] py-3 px-12 text-center">
+                <div className="font-bold text-lg">Register</div>
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
                     <div className="grid grid-cols-1 gap-3 text-left">
                         <div>

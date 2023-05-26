@@ -5,6 +5,7 @@ import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
+import Swal from "sweetalert2";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
@@ -13,6 +14,7 @@ export default function Login() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
+    const [failedLogin, setFailedLogin] = useState(false);
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -35,27 +37,31 @@ export default function Login() {
             email: email,
             password: password,
         };
-        const response = await userLogin(userCredentials);
-        if (response == "no tokens") {
-            return console.log("Something went wrong on our side. Please try again");
+        await userLogin(userCredentials);
+
+        if (localStorage.getItem("token")) {
+            const userEmail = localStorage.getItem("userEmail");
+            const accessToken = localStorage.getItem("token");
+            const refreshToken = localStorage.getItem("refreshToken");
+            userContext.setUserEmail(userEmail);
+            userContext.setAccessToken(accessToken);
+            userContext.setRefreshToken(refreshToken);
+
+            setFailedLogin(false);
+            if (userContext.loginFrom == "login") return navigate("/");
+            if (userContext.loginFrom == "shop") return window.history.go(-1);
         }
-        const userEmail = localStorage.getItem("userEmail");
-        const accessToken = localStorage.getItem("token");
-        const refreshToken = localStorage.getItem("refreshToken");
-        userContext.setUserEmail(userEmail);
-        userContext.setAccessToken(accessToken);
-        userContext.setRefreshToken(refreshToken);
 
-        if (userContext.loginFrom == "login") return navigate("/");
-        if (userContext.loginFrom == "shop") return window.history.go(-1);
-
-        console.log(id);
+        return setFailedLogin(true);
     };
 
     return (
         <div className="flex place-content-center py-20">
-            <div className="border w-[24em] h-[17.5em] py-3 px-12 text-center">
-                <div>Login</div>
+            <div className="border min-w-[24em] min-h-[17.5em] py-3 px-12 text-center">
+                <div className="font-bold text-lg">Login</div>
+                {failedLogin && (
+                    <div className="text-red-500">Invalid Email or Password. Please Try Again.</div>
+                )}
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
                     <div className="grid grid-cols-1 gap-3 text-left">
                         <div>
