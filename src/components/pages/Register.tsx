@@ -100,8 +100,8 @@ export default function Register() {
             <div className="border min-w-[24em] min-h-[21em] py-3 px-12 text-center">
                 <div className="font-bold text-lg">Register</div>
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
-                    <div className="grid grid-cols-1 gap-3 text-left">
-                        <div>
+                    <div className="grid grid-cols-1 gap-3 text-left max-w-[17.8em]">
+                        <div className="max-w-full">
                             <div>Email:</div>
                             <Input
                                 type="email"
@@ -110,7 +110,7 @@ export default function Register() {
                                 setStateString={setEmail}
                             />
                             {!isEmailValid && (
-                                <span className="text-red-500 text-xs">
+                                <span className="text-red-500 text-xs border">
                                     Please enter a valid email address.
                                 </span>
                             )}
@@ -124,7 +124,7 @@ export default function Register() {
                                 setStateString={setPassword}
                             />
                             {!isValidPassword && (
-                                <span className="text-red-500 text-xs">
+                                <span className="text-red-500 text-xs break-normal">
                                     Password must be at least 8 characters long and contain at least
                                     one special character.
                                 </span>

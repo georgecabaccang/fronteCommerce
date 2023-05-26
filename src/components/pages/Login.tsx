@@ -3,15 +3,18 @@ import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
-import Swal from "sweetalert2";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
 
+// Regex for email validation
+const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+
 export default function Login() {
     const [email, setEmail] = useState<string>("");
+    const [isEmailValid, setIsEmailValid] = useState(true);
     const [password, setPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
     const [failedLogin, setFailedLogin] = useState(false);
@@ -19,16 +22,23 @@ export default function Login() {
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
 
-    const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (email.toString().includes(".co") && email.toString().includes("@") && password) {
+        if (EMAIL_REGEX.test(email)) {
+            setIsEmailValid(true);
+            return;
+        }
+        return setIsEmailValid(false);
+    }, [email]);
+
+    useEffect(() => {
+        if (email && isEmailValid && password) {
             setFormIsValid(true);
             return;
         }
         setFormIsValid(false);
-    }, [email, password]);
+    }, [email, isEmailValid, password]);
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -51,7 +61,6 @@ export default function Login() {
             if (userContext.loginFrom == "login") return navigate("/");
             if (userContext.loginFrom == "shop") return window.history.go(-1);
         }
-
         return setFailedLogin(true);
     };
 
