@@ -28,7 +28,7 @@ export default function Layout(props: PropsWithChildren) {
     return (
         <div>
             {extendTimePrompt && (
-                <div className="flex absolute z-50 bg-black bg-opacity-60 min-h-full min-w-full place-content-center items-center">
+                <div className="flex fixed z-50 bg-black bg-opacity-60 min-h-full min-w-full place-content-center items-center">
                     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white max-h-[10em] min-h-[8em]">
                         <div className="px-6 py-4">
                             <div className="flex place-content-center font-bold text-xl mb-2">

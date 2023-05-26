@@ -5,6 +5,10 @@ import Orders from "./Orders";
 export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
 
+    if (!ordersContext.orders) {
+        return "Loading . . .";
+    }
+
     return (
         <div className="mx-10">
             {ordersContext.orders.map((order) => {

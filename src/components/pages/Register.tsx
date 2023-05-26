@@ -11,15 +11,36 @@ import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
 const LOGIN_LINK = "http://localhost:5173/login";
 
+// Regex for at least one special character, min length of 9
+const PASSWORD_REGEX = /^(?=.{8,})(?=.*[a-z])(?=.*[!@#$%^()&+=*]).*$/;
+
 export default function Register() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [isValidPassword, setIsValidPassword] = useState(true);
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
     const [emailDupe, setEmailDupe] = useState(false);
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
+
+    useEffect(() => {
+        if (password === "") return;
+        if (PASSWORD_REGEX.test(password)) {
+            return setIsValidPassword(true);
+        }
+        return setIsValidPassword(false);
+    }, [password]);
+
+    useEffect(() => {
+        if (confirmPassword === "") return;
+        if (password == confirmPassword) {
+            return setPasswordsMatch(true);
+        }
+        return setPasswordsMatch(false);
+    }, [confirmPassword]);
 
     useEffect(() => {
         if (
@@ -81,6 +102,12 @@ export default function Register() {
                                 className={INPUT_CLASSNAME}
                                 setStateString={setPassword}
                             />
+                            {!isValidPassword && (
+                                <span className="text-red-500 text-xs">
+                                    Password must be at least 8 characters long and contain at least
+                                    one special character.
+                                </span>
+                            )}
                         </div>
                         <div>
                             <div>Confirm Password:</div>
@@ -90,6 +117,9 @@ export default function Register() {
                                 className={INPUT_CLASSNAME}
                                 setStateString={setConfirmPassword}
                             />
+                            {!passwordsMatch && (
+                                <span className="text-red-500 text-xs">Passwords must match.</span>
+                            )}
                         </div>
                     </div>
                     <div>

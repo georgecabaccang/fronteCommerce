@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Button from "./Button";
 import { UserContext } from "../../providers/UserProvider";
 import Countdown, { zeroPad } from "react-countdown";
+import Swal from "sweetalert2";
 
 const BUTTON_CLASSNAME = "border border-black bg-gray-200 py-1 px-3 rounded hover:bg-gray-300";
 
@@ -30,6 +31,12 @@ export default function LoginTimeAlert(props: ILoginTimeAlert) {
     };
 
     const onCompleteHandler = () => {
+        Swal.fire({
+            title: "Logged Out Due To Inactivity.",
+            confirmButtonColor: "gray",
+            confirmButtonText: "Okay",
+        });
+        props.setExtendTimePrompt(false);
         return userContext.logout();
     };
 

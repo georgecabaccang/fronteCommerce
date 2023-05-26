@@ -15,7 +15,6 @@ export default function CheckOutItems() {
     const odersContext = useContext(OrdersContext);
 
     const navigate = useNavigate();
-    console.log(cartContext.checkOutDetails);
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();

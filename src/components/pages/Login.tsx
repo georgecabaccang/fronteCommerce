@@ -3,7 +3,7 @@ import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
-import { Link, redirect, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
@@ -18,6 +18,7 @@ export default function Login() {
     const activeLinkContext = useContext(ActiveLinkContext);
 
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (email.toString().includes(".co") && email.toString().includes("@") && password) {
@@ -45,7 +46,7 @@ export default function Login() {
         userContext.setAccessToken(accessToken);
         userContext.setRefreshToken(refreshToken);
 
-        if (userContext.loginFrom == "login") return redirect("/");
+        if (userContext.loginFrom == "login") return navigate("/");
         if (userContext.loginFrom == "shop") return window.history.go(-1);
 
         console.log(id);

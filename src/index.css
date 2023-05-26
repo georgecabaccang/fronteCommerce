@@ -28,3 +28,10 @@ input[type="number"] {
 .link-page:hover {
     font-size: large;
 }
+
+/* Sweet Alerts CSS */
+.swal2-popup {
+    font-size: 0.8em !important;
+}
+
+/* End Of Sweet Alerts CSS */
