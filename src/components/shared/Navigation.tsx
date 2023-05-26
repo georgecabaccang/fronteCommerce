@@ -11,7 +11,7 @@ export default function Navigation() {
     const userContext = useContext(UserContext);
     const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
-    
+
     const logoutHandler = async () => {
         userContext.logout();
     };
@@ -57,7 +57,7 @@ export default function Navigation() {
                                 Orders
                             </NavLink>
                             <NavLink
-                                to={"/logout"}
+                                to={"/login"}
                                 className="flex place-content-center items-center w-full h-full link-page"
                                 onClick={logoutHandler}
                             >
