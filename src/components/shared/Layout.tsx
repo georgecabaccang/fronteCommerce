@@ -9,7 +9,7 @@ const COUNT_DOWN_TIMER = 10;
 export default function Layout(props: PropsWithChildren) {
     const timer = useRef<number>();
     const [extendTimePrompt, setExtendTimePrompt] = useState(false);
-    // const [countDown, setCountDown] = useState(COUNT_DOWN_TIMER);
+    const [countDown, setCountDown] = useState(COUNT_DOWN_TIMER);
 
     const userContext = useContext(UserContext);
 
@@ -44,7 +44,12 @@ export default function Layout(props: PropsWithChildren) {
     return (
         <div>
             {extendTimePrompt && (
-                <LoginTimeAlert setExtendTimePrompt={setExtendTimePrompt} countDown={countDown} />
+                <LoginTimeAlert
+                    setExtendTimePrompt={setExtendTimePrompt}
+                    extendTimePrompt={extendTimePrompt}
+                    countDown={countDown}
+                    setCountDown={setCountDown}
+                />
             )}
             <Navigation />
             <div>{props.children}</div>

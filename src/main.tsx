@@ -11,18 +11,18 @@ import OrdersProvider from "./providers/OrdersProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <ActiveLinkProvider>
-            <UserProvider>
-                <ProductsProvider>
-                    <OrdersProvider>
-                        <CartProvider>
-                            <BrowserRouter>
+        <BrowserRouter>
+            <ActiveLinkProvider>
+                <UserProvider>
+                    <ProductsProvider>
+                        <OrdersProvider>
+                            <CartProvider>
                                 <App />
-                            </BrowserRouter>
-                        </CartProvider>
-                    </OrdersProvider>
-                </ProductsProvider>
-            </UserProvider>
-        </ActiveLinkProvider>
+                            </CartProvider>
+                        </OrdersProvider>
+                    </ProductsProvider>
+                </UserProvider>
+            </ActiveLinkProvider>
+        </BrowserRouter>
     </React.StrictMode>
 );

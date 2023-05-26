@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, createContext, useState, useEffect } from "react";
 import { logoutRequest } from "../api/logoutRequest";
 import { refreshTokenRequest } from "../api/refreshTokenRequest";
+import { redirect, useNavigate } from "react-router-dom";
 
 interface IUserContext {
     email: string | null;
@@ -36,6 +37,8 @@ export default function UserProvider(props: PropsWithChildren) {
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
     const [loginFrom, setLoginFrom] = useState("login");
 
+    const navigate = useNavigate();
+
     const logout = async () => {
         if (refreshToken) {
             const response = await logoutRequest(refreshToken);
@@ -49,6 +52,7 @@ export default function UserProvider(props: PropsWithChildren) {
             setUserEmail(null);
             setAccessToken(null);
             setRefreshToken(null);
+            navigate("/login");
         }
     };
 
