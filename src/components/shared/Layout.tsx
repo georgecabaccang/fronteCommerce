@@ -3,13 +3,11 @@ import Navigation from "./Navigation";
 import LoginTimeAlert from "./LoginTimeAlert";
 import { UserContext } from "../../providers/UserProvider";
 
-const TIME_FOR_PROMPT = 3000;
-const COUNT_DOWN_TIMER = 10;
+const TIME_FOR_PROMPT = 300000;
 
 export default function Layout(props: PropsWithChildren) {
     const timer = useRef<number>();
     const [extendTimePrompt, setExtendTimePrompt] = useState(false);
-    const [countDown, setCountDown] = useState(COUNT_DOWN_TIMER);
 
     const userContext = useContext(UserContext);
 
@@ -17,7 +15,7 @@ export default function Layout(props: PropsWithChildren) {
         if (userContext.accessToken) {
             timer.current = setTimeout(() => {
                 setExtendTimePrompt(true);
-            }, 1000);
+            }, TIME_FOR_PROMPT);
             return;
         }
         if (!userContext.accessToken) {
@@ -30,12 +28,19 @@ export default function Layout(props: PropsWithChildren) {
     return (
         <div>
             {extendTimePrompt && (
-                <LoginTimeAlert
-                    setExtendTimePrompt={setExtendTimePrompt}
-                    extendTimePrompt={extendTimePrompt}
-                    countDown={countDown}
-                    setCountDown={setCountDown}
-                />
+                <div className="flex absolute z-50 bg-black bg-opacity-60 min-h-full min-w-full place-content-center items-center">
+                    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white max-h-[10em] min-h-[8em]">
+                        <div className="px-6 py-4">
+                            <div className="flex place-content-center font-bold text-xl mb-2">
+                                Are You Still There?
+                            </div>
+                            <LoginTimeAlert
+                                setExtendTimePrompt={setExtendTimePrompt}
+                                extendTimePrompt={extendTimePrompt}
+                            />
+                        </div>
+                    </div>
+                </div>
             )}
             <Navigation />
             <div>{props.children}</div>

@@ -1,19 +1,19 @@
 import { useContext } from "react";
 import Button from "./Button";
 import { UserContext } from "../../providers/UserProvider";
-import { Link } from "react-router-dom";
 import Countdown, { zeroPad } from "react-countdown";
+
+const BUTTON_CLASSNAME = "border border-black bg-gray-200 py-1 px-3 rounded hover:bg-gray-300";
 
 interface ILoginTimeAlert {
     setExtendTimePrompt: React.Dispatch<React.SetStateAction<boolean>>;
     extendTimePrompt: boolean;
-    countDown: number;
-    setCountDown: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface ITimes {
     minutes: number;
     seconds: number;
+    completed: boolean;
 }
 
 export default function LoginTimeAlert(props: ILoginTimeAlert) {
@@ -42,9 +42,10 @@ export default function LoginTimeAlert(props: ILoginTimeAlert) {
     };
 
     return (
-        <div>
+        <div className="grid grid-cols-1 text-center">
+            <div>Time Remaining:</div>
             {props.extendTimePrompt && (
-                <div className="text-red-800">
+                <div className="mt-1 mb-3">
                     <Countdown
                         date={Date.now() + 180000}
                         renderer={timer}
@@ -52,10 +53,18 @@ export default function LoginTimeAlert(props: ILoginTimeAlert) {
                     />
                 </div>
             )}
-            <Button name="Yes" clickEvent={extendTime} />
-            <Link to={"/logout"} onClick={logMeOutHandler}>
-                Log Me Out
-            </Link>
+            <div className="grid grid-cols-2 gap-3 text-[0.9em]">
+                <Button
+                    name="Keep Me Logged In"
+                    className={BUTTON_CLASSNAME}
+                    clickEvent={extendTime}
+                />
+                <Button
+                    name="Log Me Out"
+                    className={BUTTON_CLASSNAME}
+                    clickEvent={logMeOutHandler}
+                />
+            </div>
         </div>
     );
 }

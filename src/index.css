@@ -21,9 +21,8 @@ input[type="number"] {
 }
 
 .navbar a.active {
-    background: gray;
     font-size: large;
-    border-bottom: 0.2em solid black;
+    color: gray;
 }
 
 .link-page:hover {

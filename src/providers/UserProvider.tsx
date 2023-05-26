@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, createContext, useState, useEffect } from "react";
 import { logoutRequest } from "../api/logoutRequest";
 import { refreshTokenRequest } from "../api/refreshTokenRequest";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface IUserContext {
     email: string | null;

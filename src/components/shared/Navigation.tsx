@@ -3,14 +3,20 @@ import { NavLink } from "react-router-dom";
 import { UserContext } from "../../providers/UserProvider";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import { CartContext } from "../../providers/CartProvider";
+import { Link } from "react-router-dom";
 
 const LOGIN_LINK = "http://localhost:5173/login";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
+
+const LOGGED_IN_CLASSNAME = "ms-auto flex w-1/3 h-full items-center navbar";
+const LOGGED_OUT_CLASSNAME = "ms-auto flex w-1/5 h-full items-center navbar";
 
 export default function Navigation() {
     const userContext = useContext(UserContext);
     const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
+
+    const NAV_CLASSNAME = userContext.accessToken ? LOGGED_IN_CLASSNAME : LOGGED_OUT_CLASSNAME;
 
     const logoutHandler = async () => {
         userContext.logout();
@@ -20,9 +26,9 @@ export default function Navigation() {
         <div className="bg-orange-100 h-[3em] sticky top-0 z-10">
             <div className="flex mx-10 h-full items-center">
                 <div>
-                    <h1>Shop</h1>
+                    <Link to={"/"}>Shop</Link>
                 </div>
-                <nav className="ms-auto flex w-1/4 h-full items-center navbar">
+                <nav className={NAV_CLASSNAME}>
                     <NavLink
                         to={"/"}
                         className="flex place-content-center items-center w-full h-full link-page"
