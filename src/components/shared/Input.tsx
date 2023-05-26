@@ -11,6 +11,9 @@ export default function Input(props: IInput) {
     } = props;
     const setInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         switch (props.type) {
+            case "text":
+                setStateString?.(event.target.value);
+                break;
             case "email":
                 setStateString?.(event.target.value);
                 break;

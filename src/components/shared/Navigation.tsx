@@ -9,7 +9,7 @@ const LOGIN_LINK = "http://localhost:5173/login";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
 
 const LOGGED_IN_CLASSNAME = "ms-auto flex w-1/3 h-full items-center navbar";
-const LOGGED_OUT_CLASSNAME = "ms-auto flex w-1/5 h-full items-center navbar";
+const LOGGED_OUT_CLASSNAME = "ms-auto flex w-1/4 h-full items-center navbar";
 
 export default function Navigation() {
     const userContext = useContext(UserContext);

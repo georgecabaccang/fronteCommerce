@@ -8,8 +8,10 @@ import { UserContext } from "../../providers/UserProvider";
 import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
-const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
+const INPUT_CLASSNAME = "border-l border-t border-b w-full px-3 py-[0.2em] focus:z-10 block ";
 const LOGIN_LINK = "http://localhost:5173/login";
+const SHOW_EYE_ICON = "../../public/images/png/showEyeIcon.png";
+const NOT_SHOW_EYE_ICON = "../../public/images/png/notShowEyeIcon.png";
 
 // Regex for at least one special character, min length of 9
 const PASSWORD_REGEX = /^(?=.{8,})(?=.*[a-z])(?=.*[!@#$%^()&+=*]).*$/;
@@ -25,6 +27,9 @@ export default function Register() {
     const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [formIsValid, setFormIsValid] = useState(false);
     const [emailDupe, setEmailDupe] = useState(false);
+
+    const [showConfirmPassword, setShowConfirmPassword] = useState("password");
+    const [showPassword, setShowPassword] = useState("password");
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -94,6 +99,17 @@ export default function Register() {
             userContext.setRefreshToken(refreshToken);
         }
     };
+
+    const showPasswordHandler = () => {
+        if (showPassword == "password") return setShowPassword("text");
+        return setShowPassword("password");
+    };
+
+    const showConfirmPasswordHandler = () => {
+        if (showConfirmPassword == "password") return setShowConfirmPassword("text");
+        return setShowConfirmPassword("password");
+    };
+
     return (
         <div className="flex place-content-center py-20">
             {emailDupe && <div>Email Already Taken</div>}
@@ -117,12 +133,23 @@ export default function Register() {
                         </div>
                         <div>
                             <div>Password:</div>
-                            <Input
-                                type="password"
-                                value={password}
-                                className={INPUT_CLASSNAME}
-                                setStateString={setPassword}
-                            />
+                            <div className="flex">
+                                <Input
+                                    type={showPassword}
+                                    value={password}
+                                    className={INPUT_CLASSNAME}
+                                    setStateString={setPassword}
+                                />
+                                <Button
+                                    className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
+                                    image={
+                                        showPassword == "text" ? NOT_SHOW_EYE_ICON : SHOW_EYE_ICON
+                                    }
+                                    imageProps="object-contain h-[1.2em] mr-1"
+                                    clickEvent={showPasswordHandler}
+                                />
+                            </div>
+
                             {!isValidPassword && (
                                 <span className="text-red-500 text-xs break-normal">
                                     Password must be at least 8 characters long and contain at least
@@ -132,12 +159,25 @@ export default function Register() {
                         </div>
                         <div>
                             <div>Confirm Password:</div>
-                            <Input
-                                type="password"
-                                value={confirmPassword}
-                                className={INPUT_CLASSNAME}
-                                setStateString={setConfirmPassword}
-                            />
+                            <div className="flex ">
+                                <Input
+                                    type={showConfirmPassword}
+                                    value={confirmPassword}
+                                    className={INPUT_CLASSNAME}
+                                    setStateString={setConfirmPassword}
+                                />
+                                <Button
+                                    className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
+                                    image={
+                                        showConfirmPassword == "text"
+                                            ? NOT_SHOW_EYE_ICON
+                                            : SHOW_EYE_ICON
+                                    }
+                                    imageProps="object-contain h-[1.2em] mr-1"
+                                    clickEvent={showConfirmPasswordHandler}
+                                />
+                            </div>
+
                             {!passwordsMatch && (
                                 <span className="text-red-500 text-xs">Passwords must match.</span>
                             )}
