@@ -13,24 +13,10 @@ export default function Layout(props: PropsWithChildren) {
 
     const userContext = useContext(UserContext);
 
-    // MAYBE JUST GET THE TIME FROM BACKEND@@@@@@@@@@@@@@@@@@@@@@@
-    // let count = COUNT_DOWN_TIMER;
-    // const startCountDown = () => {
-    //     if (count > 0) {
-    //         setInterval(() => {
-    //             setCountDown(count);
-    //             count--;
-    //             console.log(count);
-    //             startCountDown();
-    //         }, 1000);
-    //     }
-    // };
-
     useEffect(() => {
         if (userContext.accessToken) {
             timer.current = setTimeout(() => {
                 setExtendTimePrompt(true);
-                // startCountDown();
             }, 1000);
             return;
         }

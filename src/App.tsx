@@ -25,7 +25,6 @@ function App() {
                     {/* Should-be-logged-IN-to-access routes */}
                     <Route element={<LoggedInRoutes />}>
                         <Route path="/cart" element={<Cart />} />
-                        {/* <Route path="/logout" element={<Login />} /> */}
                         <Route path="/cart/checkout" element={<CheckOutItems />} />
                         <Route path="/orders" element={<OrdersList />} />
                     </Route>
