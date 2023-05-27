@@ -6,7 +6,7 @@ import { UserContext } from "../../providers/UserProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
-const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em]";
+const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em] rounded";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
 
 // Regex for email validation
@@ -69,7 +69,9 @@ export default function Login() {
             <div className="border min-w-[24em] min-h-[17.5em] py-3 px-12 text-center">
                 <div className="font-bold text-lg">Login</div>
                 {failedLogin && (
-                    <div className="text-red-500">Invalid Email or Password. Please Try Again.</div>
+                    <div className="text-red-500  text-sm">
+                        Invalid Email or Password. Please Try Again.
+                    </div>
                 )}
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
                     <div className="grid grid-cols-1 gap-3 text-left">

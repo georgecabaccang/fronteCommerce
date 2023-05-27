@@ -8,7 +8,8 @@ import { UserContext } from "../../providers/UserProvider";
 import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
-const INPUT_CLASSNAME = "border-l border-t border-b w-full px-3 py-[0.2em] focus:z-10 block ";
+const INPUT_CLASSNAME =
+    "border-l border-t border-b w-full px-3 py-[0.2em] focus:z-10 block rounded ";
 const LOGIN_LINK = "http://localhost:5173/login";
 const SHOW_EYE_ICON = "../../public/images/png/showEyeIcon.png";
 const NOT_SHOW_EYE_ICON = "../../public/images/png/notShowEyeIcon.png";
@@ -82,8 +83,6 @@ export default function Register() {
         const userDetails: IUserDetails = { email: email, password: password };
         const response = await registerUser(userDetails);
 
-        if (response === "email is taken") return setEmailDupe(true);
-
         if (response === "user created") {
             const userCredentials: IUserDetails = {
                 email: email,
@@ -97,7 +96,10 @@ export default function Register() {
             const refreshToken = localStorage.getItem("refreshToken");
             userContext.setAccessToken(accessToken);
             userContext.setRefreshToken(refreshToken);
+            setEmailDupe(false);
+            return;
         }
+        return setEmailDupe(true);
     };
 
     const showPasswordHandler = () => {
@@ -112,9 +114,9 @@ export default function Register() {
 
     return (
         <div className="flex place-content-center py-20">
-            {emailDupe && <div>Email Already Taken</div>}
             <div className="border min-w-[24em] min-h-[21em] py-3 px-12 text-center">
                 <div className="font-bold text-lg">Register</div>
+                {emailDupe && <div className="text-red-500 text-sm">Email Already Taken</div>}
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
                     <div className="grid grid-cols-1 gap-3 text-left max-w-[17.8em]">
                         <div className="max-w-full">
@@ -122,7 +124,7 @@ export default function Register() {
                             <Input
                                 type="email"
                                 value={email}
-                                className={INPUT_CLASSNAME}
+                                className={`${INPUT_CLASSNAME} border rounded`}
                                 setStateString={setEmail}
                             />
                             {!isEmailValid && (
