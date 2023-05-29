@@ -11,7 +11,7 @@ export default function ProductsProvider(props: PropsWithChildren) {
     const [products, setProducts] = useState<Array<IProductProperties>>([]);
 
     const loadProducts = async () => {
-        const { data } = await axios("https://keen-profiterole-fc0f7a.netlify.app/shop");
+        const { data } = await axios("https://backend-commerce.vercel.app/shop");
         setProducts(data);
     };
 

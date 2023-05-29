@@ -3,7 +3,7 @@ import { IUserDetails } from "../types/userRequestTypes";
 
 export const userLogin = async (userCredentials: IUserDetails) => {
     try {
-        const { data } = await axios.post("https://keen-profiterole-fc0f7a.netlify.app/user/login", {
+        const { data } = await axios.post("https://backend-commerce.vercel.app/user/login", {
             email: userCredentials.email,
             password: userCredentials.password,
         });
