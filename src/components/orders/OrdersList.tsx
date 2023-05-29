@@ -22,7 +22,7 @@ export default function OrdersList() {
     };
 
     if (!ordersContext.orders) {
-        return "Loading . . .";
+        return <div>Loading . . .</div>;
     }
 
     return (
