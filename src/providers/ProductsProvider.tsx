@@ -11,7 +11,7 @@ export default function ProductsProvider(props: PropsWithChildren) {
     const [products, setProducts] = useState<Array<IProductProperties>>([]);
 
     const loadProducts = async () => {
-        const { data } = await axios("http://localhost:8002/shop");
+        const { data } = await axios("https://ecommercebackend.netlify.app/shop");
         setProducts(data);
     };
 

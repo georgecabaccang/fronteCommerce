@@ -3,7 +3,7 @@ import axios from "axios";
 export const getPurchasesRequest = async () => {
     try {
         const { data } = await axios.post(
-            "http://localhost:8002/purchases",
+            "https://ecommercebackend.netlify.app/purchases",
             { email: localStorage.getItem("userEmail") },
             {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

@@ -3,7 +3,7 @@ import { IUserDetails } from "../types/userRequestTypes";
 
 export const registerUser = async (userDetails: IUserDetails) => {
     try {
-        const { data } = await axios.post("http://localhost:8002/user/register", {
+        const { data } = await axios.post("https://ecommercebackend.netlify.app/user/register", {
             email: userDetails.email,
             password: userDetails.password,
         });
