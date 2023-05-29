@@ -4,7 +4,7 @@ import { IICheckoutDetails } from "../types/cartTypes";
 export const orderCheckOutRequest = async (checkOutDetails: IICheckoutDetails) => {
     try {
         const { data } = await axios.post(
-            "https://ecommercebackend.netlify.app/orders/order-checkout",
+            "https://keen-profiterole-fc0f7a.netlify.app/orders/order-checkout",
             {
                 email: localStorage.getItem("userEmail"),
                 toPurchase: checkOutDetails,
@@ -23,7 +23,7 @@ export const orderCheckOutRequest = async (checkOutDetails: IICheckoutDetails) =
 export const getOrdersRequest = async () => {
     try {
         const { data } = await axios.post(
-            "https://ecommercebackend.netlify.app/orders",
+            "https://keen-profiterole-fc0f7a.netlify.app/orders",
             { email: localStorage.getItem("userEmail") },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
@@ -36,7 +36,7 @@ export const getOrdersRequest = async () => {
 export const cancelOrderRequest = async (order_id: string) => {
     try {
         const { data } = await axios.post(
-            "https://ecommercebackend.netlify.app/orders/cancel-order",
+            "https://keen-profiterole-fc0f7a.netlify.app/orders/cancel-order",
             { email: localStorage.getItem("userEmail"), order_id: order_id },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );
@@ -49,7 +49,7 @@ export const cancelOrderRequest = async (order_id: string) => {
 export const receiveOrderRequest = async (order_id: string) => {
     try {
         const { data } = await axios.post(
-            "https://ecommercebackend.netlify.app/orders/order-status-received",
+            "https://keen-profiterole-fc0f7a.netlify.app/orders/order-status-received",
             { email: localStorage.getItem("userEmail"), order_id: order_id },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         );

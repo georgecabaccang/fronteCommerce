@@ -4,7 +4,7 @@ import axios from "axios";
 export const getUserCart = async () => {
     try {
         const { data } = await axios.post(
-            "https://ecommercebackend.netlify.app/cart",
+            "https://keen-profiterole-fc0f7a.netlify.app/cart",
             { email: localStorage.getItem("userEmail") },
             {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -23,7 +23,7 @@ export const addToCartRequest = async (productToBeAddedToCart: {
 }) => {
     try {
         const { data } = await axios.post(
-            "https://ecommercebackend.netlify.app/cart/add-to-cart",
+            "https://keen-profiterole-fc0f7a.netlify.app/cart/add-to-cart",
             {
                 prod_id: productToBeAddedToCart.prod_id,
                 quantity: productToBeAddedToCart.quantity,
@@ -42,7 +42,7 @@ export const addToCartRequest = async (productToBeAddedToCart: {
 // REMOVE ITEMS FROM CART
 export const removeFromCartRequest = async (itemInCartId: string) => {
     try {
-        await axios.delete("https://ecommercebackend.netlify.app/cart/remove-from-cart", {
+        await axios.delete("https://keen-profiterole-fc0f7a.netlify.app/cart/remove-from-cart", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             data: {
                 email: localStorage.getItem("userEmail"),
@@ -58,7 +58,7 @@ export const removeFromCartRequest = async (itemInCartId: string) => {
 export const itemInCartChangeQuantity = async (quantity: number, prod_id: string) => {
     try {
         const response = await axios.put(
-            "https://ecommercebackend.netlify.app/cart/change-quantity",
+            "https://keen-profiterole-fc0f7a.netlify.app/cart/change-quantity",
             {
                 email: localStorage.getItem("userEmail"),
                 quantity: quantity,
