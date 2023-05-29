@@ -7,7 +7,7 @@ import { IOrder } from "../../types/orderTypes";
 const filterByReceived = "received";
 
 export default function OrdersList() {
-    const [filterOrder, setFilterOrder] = useState<IOrder>();
+    // const [filterOrder, setFilterOrder] = useState<IOrder>();
     const ordersContext = useContext(OrdersContext);
 
     const filterBy = (filterBy: string) => {
@@ -18,7 +18,7 @@ export default function OrdersList() {
             });
         }
 
-        setFilterOrder(filteredOrders);
+        // setFilterOrder(filteredOrders);
     };
 
     if (!ordersContext.orders) {
