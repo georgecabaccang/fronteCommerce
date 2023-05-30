@@ -11,8 +11,8 @@ import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 const INPUT_CLASSNAME =
     "border-l border-t border-b w-full px-3 py-[0.2em] focus:z-10 block rounded ";
 const LOGIN_LINK = "http://localhost:5173/login";
-const SHOW_EYE_ICON = "../../public/images/png/showEyeIcon.png";
-const NOT_SHOW_EYE_ICON = "../../public/images/png/notShowEyeIcon.png";
+const SHOW_EYE_ICON = "/images/png/showEyeIcon.png";
+const NOT_SHOW_EYE_ICON = "/images/png/notShowEyeIcon.png";
 
 // Regex for at least one special character, min length of 9
 const PASSWORD_REGEX = /^(?=.{8,})(?=.*[a-z])(?=.*[!@#$%^()&+=*]).*$/;
