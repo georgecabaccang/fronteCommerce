@@ -10,7 +10,7 @@ export interface IOrderItem {
 export interface IOrder {
     items: Array<IOrderItem>;
     totalAmount: number;
-    createdAt: Date;
+    updatedAt: Date;
     _id: string;
     status: string;
 }

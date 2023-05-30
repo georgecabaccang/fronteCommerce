@@ -6,6 +6,7 @@ import { IOrder } from "../../types/orderTypes";
 
 const FILTER_BY_PENDING = "pending";
 const FILTER_BY_RECEIVED = "received";
+const FILTER_BY_CANCELLED = "cancelled";
 
 export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
@@ -15,32 +16,33 @@ export default function OrdersList() {
         {
             items: [],
             totalAmount: 0,
-            createdAt: new Date(),
+            updatedAt: new Date(),
             _id: "",
             status: "",
         },
     ];
 
     const filterBy = (filterBy: string) => {
-        if (filterBy === FILTER_BY_RECEIVED) {
-            filteredOrders = ordersContext.orders.filter((order) => {
-                return order.status === FILTER_BY_RECEIVED;
-            });
-        }
         if (filterBy === FILTER_BY_PENDING) {
             filteredOrders = ordersContext.orders.filter((order) => {
                 return order.status === FILTER_BY_PENDING;
             });
         }
+        if (filterBy === FILTER_BY_RECEIVED) {
+            filteredOrders = ordersContext.orders.filter((order) => {
+                return order.status === FILTER_BY_RECEIVED;
+            });
+        }
+        if (filterBy === FILTER_BY_CANCELLED) {
+            filteredOrders = ordersContext.orders.filter((order) => {
+                return order.status === FILTER_BY_CANCELLED;
+            });
+        }
         return setFilterOrder(filteredOrders);
     };
 
-    const noFilter = () => {
-        return setFilterOrder(ordersContext.orders);
-    };
-
     useEffect(() => {
-        noFilter();
+        filterBy(FILTER_BY_PENDING);
     }, [ordersContext.orders]);
 
     if (!ordersContext.orders) {
@@ -50,13 +52,6 @@ export default function OrdersList() {
     return (
         <div className="mx-10">
             <div>
-                <Button
-                    name="All Orders"
-                    type="button"
-                    clickEvent={() => {
-                        noFilter();
-                    }}
-                />
                 <Button
                     name="Pending"
                     type="button"
@@ -74,23 +69,25 @@ export default function OrdersList() {
                 <Button
                     name="Cancelled"
                     type="button"
-                    // clickEvent={() => {
-                    //     filterBy(filterByReceived);
-                    // }}
+                    clickEvent={() => {
+                        filterBy(FILTER_BY_CANCELLED);
+                    }}
                 />
             </div>
-            {filterOrder.map((order) => {
-                return (
-                    <Orders
-                        key={order._id}
-                        items={order.items}
-                        totalAmount={order.totalAmount}
-                        _id={order._id}
-                        createdAt={order.createdAt}
-                        status={order.status}
-                    />
-                );
-            })}
+            <div>
+                {filterOrder.map((order) => {
+                    return (
+                        <Orders
+                            key={order._id}
+                            items={order.items}
+                            totalAmount={order.totalAmount}
+                            _id={order._id}
+                            updatedAt={order.updatedAt}
+                            status={order.status}
+                        />
+                    );
+                })}
+            </div>
         </div>
     );
 }

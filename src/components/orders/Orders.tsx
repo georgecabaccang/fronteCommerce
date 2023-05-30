@@ -9,7 +9,7 @@ export default function Orders(props: IOrder) {
 
     const ordersContext = useContext(OrdersContext);
 
-    const timeOrdered = new Date(props.createdAt).toLocaleString();
+    const timeOrdered = new Date(props.updatedAt).toLocaleString();
 
     const cancel = async () => {
         setLaoding(true);
@@ -53,7 +53,7 @@ export default function Orders(props: IOrder) {
                             Status:
                             {` ${props.status.charAt(0).toUpperCase()}${props.status.slice(1)}`}
                         </div>
-                        {props.status != "received" && (
+                        {props.status != "received" && props.status != "cancelled" && (
                             <div className="grid grid-cols-2 gap-2 mx-2">
                                 <Button
                                     name={"Received"}
