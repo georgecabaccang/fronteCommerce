@@ -24,6 +24,7 @@ export default function Orders(props: IOrder) {
     };
 
     const isPaid = props.status === "received" ? "Paid" : "To Pay";
+    const eitherReceivedOrCancelled = props.status != "received" && props.status != "cancelled";
 
     return (
         <div className="border my-10 p-3">
@@ -53,7 +54,7 @@ export default function Orders(props: IOrder) {
                             Status:
                             {` ${props.status.charAt(0).toUpperCase()}${props.status.slice(1)}`}
                         </div>
-                        {props.status != "received" && props.status != "cancelled" && (
+                        {eitherReceivedOrCancelled && (
                             <div className="grid grid-cols-2 gap-2 mx-2">
                                 <Button
                                     name={"Received"}
