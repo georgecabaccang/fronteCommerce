@@ -23,6 +23,8 @@ export default function Orders(props: IOrder) {
         setLaoding(false);
     };
 
+    const isPaid = props.status === "received" ? "Paid" : "To Pay";
+
     return (
         <div className="border my-10 p-3">
             {loading && "Loading. . ."}
@@ -44,7 +46,9 @@ export default function Orders(props: IOrder) {
                         })}
                     </div>
                     <div>
-                        <div>Total Amount To Pay: ${props.totalAmount.toFixed(2)}</div>
+                        <div>
+                            <p> {`Total Amount ${isPaid}: $${props.totalAmount.toFixed(2)}`}</p>
+                        </div>
                         <div>
                             Status:
                             {` ${props.status.charAt(0).toUpperCase()}${props.status.slice(1)}`}

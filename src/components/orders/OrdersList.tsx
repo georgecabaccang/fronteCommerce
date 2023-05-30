@@ -1,25 +1,47 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { OrdersContext } from "../../providers/OrdersProvider";
 import Orders from "./Orders";
-// import Button from "../shared/Button";
-// import { IOrder } from "../../types/orderTypes";
+import Button from "../shared/Button";
+import { IOrder } from "../../types/orderTypes";
 
-// const filterByReceived = "received";
+const FILTER_BY_PENDING = "pending";
+const FILTER_BY_RECEIVED = "received";
 
 export default function OrdersList() {
-    // const [filterOrder, setFilterOrder] = useState<IOrder>();
     const ordersContext = useContext(OrdersContext);
+    const [filterOrder, setFilterOrder] = useState<Array<IOrder>>(ordersContext.orders);
 
-    // const filterBy = (filterBy: string) => {
-    //     let filteredOrders;
-    //     if (filterBy === filterByReceived) {
-    //         filteredOrders = ordersContext.orders.filter((order) => {
-    //             return order.status === filterByReceived;
-    //         });
-    //     }
+    let filteredOrders: Array<IOrder> = [
+        {
+            items: [],
+            totalAmount: 0,
+            createdAt: new Date(),
+            _id: "",
+            status: "",
+        },
+    ];
 
-    //     // setFilterOrder(filteredOrders);
-    // };
+    const filterBy = (filterBy: string) => {
+        if (filterBy === FILTER_BY_RECEIVED) {
+            filteredOrders = ordersContext.orders.filter((order) => {
+                return order.status === FILTER_BY_RECEIVED;
+            });
+        }
+        if (filterBy === FILTER_BY_PENDING) {
+            filteredOrders = ordersContext.orders.filter((order) => {
+                return order.status === FILTER_BY_PENDING;
+            });
+        }
+        return setFilterOrder(filteredOrders);
+    };
+
+    const noFilter = () => {
+        return setFilterOrder(ordersContext.orders);
+    };
+
+    useEffect(() => {
+        noFilter();
+    }, [ordersContext.orders]);
 
     if (!ordersContext.orders) {
         return <div>Loading . . .</div>;
@@ -27,13 +49,37 @@ export default function OrdersList() {
 
     return (
         <div className="mx-10">
-            {/* <Button
-                name="Received"
-                onClick={() => {
-                    filterBy(filterByReceived);
-                }}
-            /> */}
-            {ordersContext.orders.map((order) => {
+            <div>
+                <Button
+                    name="All Orders"
+                    type="button"
+                    clickEvent={() => {
+                        noFilter();
+                    }}
+                />
+                <Button
+                    name="Pending"
+                    type="button"
+                    clickEvent={() => {
+                        filterBy(FILTER_BY_PENDING);
+                    }}
+                />
+                <Button
+                    name="Received"
+                    type="button"
+                    clickEvent={() => {
+                        filterBy(FILTER_BY_RECEIVED);
+                    }}
+                />
+                <Button
+                    name="Cancelled"
+                    type="button"
+                    // clickEvent={() => {
+                    //     filterBy(filterByReceived);
+                    // }}
+                />
+            </div>
+            {filterOrder.map((order) => {
                 return (
                     <Orders
                         key={order._id}

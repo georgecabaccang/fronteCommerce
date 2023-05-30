@@ -17,6 +17,7 @@ export default function OrdersProvider(props: PropsWithChildren) {
 
     const getOrders = async () => {
         const response = await getOrdersRequest();
+        console.log(response);
         setOrders(response.orders);
     };
 
