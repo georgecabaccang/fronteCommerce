@@ -94,7 +94,7 @@ export default function OrdersList() {
             </div>
 
             {isLoading && <div>Loading...</div>}
-            {filterOrder.length != 0 && !isLoading ? (
+            {!isEmpty && !isLoading ? (
                 <div>
                     {filterOrder.map((order) => {
                         return (
