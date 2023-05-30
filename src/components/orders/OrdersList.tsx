@@ -12,14 +12,16 @@ const FILTER_BY_CANCELLED = "cancelled";
 export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [filterOrder, setFilterOrder] = useState<Array<IOrder> | null>(ordersContext.orders);
+    const [filterOrder, setFilterOrder] = useState<Array<IOrder>>(ordersContext.orders);
     const [isLoading, setIsLoading] = useState(true);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(true);
-        let filteredOrders: Array<IOrder> | null = filterOrder;
+        let filteredOrders: Array<IOrder> = filterOrder;
+        console.log(filteredOrders);
         if (searchParams.get("filter") === FILTER_BY_PENDING) {
             filteredOrders = ordersContext.orders.filter((order) => {
                 return order.status === FILTER_BY_PENDING;
@@ -35,11 +37,13 @@ export default function OrdersList() {
                 return order.status === FILTER_BY_CANCELLED;
             });
         }
-        if (filteredOrders && filteredOrders.length != 0) {
+
+        if (filteredOrders.length != 0) {
             setFilterOrder(filteredOrders);
-            return;
+            setIsEmpty(false);
+            return setIsLoading(false);
         } else {
-            setFilterOrder(null);
+            setIsEmpty(true);
             return setIsLoading(false);
         }
     }, [searchParams.get("filter")]);
@@ -50,10 +54,11 @@ export default function OrdersList() {
         });
         if (preFilteredOrders.length != 0) {
             setFilterOrder(preFilteredOrders);
-            return;
+            setIsEmpty(false);
+            return setIsLoading(false);
         } else {
-            setFilterOrder(null);
-            setIsLoading(false);
+            setIsEmpty(true);
+            return setIsLoading(false);
         }
     }, [ordersContext.orders]);
 
@@ -87,9 +92,9 @@ export default function OrdersList() {
                 />
             </div>
             <div>
-                {filterOrder && filterOrder.length == 0 && isLoading ? (
+                {filterOrder.length == 0 && isLoading ? (
                     <div>Loading...</div>
-                ) : !filterOrder ? (
+                ) : isEmpty ? (
                     <div>Empty</div>
                 ) : (
                     <div>
