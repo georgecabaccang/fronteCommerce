@@ -63,7 +63,8 @@ export default function OrdersList() {
     }, [ordersContext.orders]);
 
     if (!localStorage.getItem("token")) {
-        return navigate("/login");
+        navigate("/login");
+        return <div></div>;
     }
 
     return (
@@ -91,20 +92,26 @@ export default function OrdersList() {
                     }}
                 />
             </div>
-            <div>
-                {filterOrder.map((order) => {
-                    return (
-                        <Orders
-                            key={order._id}
-                            items={order.items}
-                            totalAmount={order.totalAmount}
-                            _id={order._id}
-                            updatedAt={order.updatedAt}
-                            status={order.status}
-                        />
-                    );
-                })}
-            </div>
+
+            {isLoading && <div>Loading...</div>}
+            {filterOrder.length != 0 && !isLoading ? (
+                <div>
+                    {filterOrder.map((order) => {
+                        return (
+                            <Orders
+                                key={order._id}
+                                items={order.items}
+                                totalAmount={order.totalAmount}
+                                _id={order._id}
+                                updatedAt={order.updatedAt}
+                                status={order.status}
+                            />
+                        );
+                    })}
+                </div>
+            ) : (
+                <div>Empty</div>
+            )}
         </div>
     );
 }
