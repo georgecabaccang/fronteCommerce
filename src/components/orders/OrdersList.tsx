@@ -21,44 +21,50 @@ export default function OrdersList() {
     useEffect(() => {
         setIsLoading(true);
         let filteredOrders: Array<IOrder> = filterOrder;
-        console.log(filteredOrders);
-        if (searchParams.get("filter") === FILTER_BY_PENDING) {
-            filteredOrders = ordersContext.orders.filter((order) => {
-                return order.status === FILTER_BY_PENDING;
-            });
-        }
-        if (searchParams.get("filter") === FILTER_BY_RECEIVED) {
-            filteredOrders = ordersContext.orders.filter((order) => {
-                return order.status === FILTER_BY_RECEIVED;
-            });
-        }
-        if (searchParams.get("filter") === FILTER_BY_CANCELLED) {
-            filteredOrders = ordersContext.orders.filter((order) => {
-                return order.status === FILTER_BY_CANCELLED;
-            });
-        }
+        if (ordersContext.orders) {
+            if (searchParams.get("filter") === FILTER_BY_PENDING) {
+                filteredOrders = ordersContext.orders.filter((order) => {
+                    return order.status === FILTER_BY_PENDING;
+                });
+            }
+            if (searchParams.get("filter") === FILTER_BY_RECEIVED) {
+                filteredOrders = ordersContext.orders.filter((order) => {
+                    return order.status === FILTER_BY_RECEIVED;
+                });
+            }
+            if (searchParams.get("filter") === FILTER_BY_CANCELLED) {
+                filteredOrders = ordersContext.orders.filter((order) => {
+                    return order.status === FILTER_BY_CANCELLED;
+                });
+            }
 
-        if (filteredOrders.length != 0) {
-            setFilterOrder(filteredOrders);
-            setIsEmpty(false);
-            return setIsLoading(false);
-        } else {
-            setIsEmpty(true);
-            return setIsLoading(false);
+            if (filteredOrders.length != 0) {
+                setFilterOrder(filteredOrders);
+                setIsEmpty(false);
+                return setIsLoading(false);
+            } else {
+                setIsEmpty(true);
+                return setIsLoading(false);
+            }
         }
     }, [searchParams.get("filter")]);
 
     useEffect(() => {
-        const preFilteredOrders = ordersContext.orders.filter((order) => {
-            return order.status === searchParams.get("filter");
-        });
-        if (preFilteredOrders.length != 0) {
-            setFilterOrder(preFilteredOrders);
-            setIsEmpty(false);
-            return setIsLoading(false);
-        } else {
-            setIsEmpty(true);
-            return setIsLoading(false);
+        if (!searchParams.get("filter")) {
+            setSearchParams({ filter: FILTER_BY_PENDING });
+        }
+        if (ordersContext.orders) {
+            const preFilteredOrders = ordersContext.orders.filter((order) => {
+                return order.status === searchParams.get("filter");
+            });
+            if (preFilteredOrders.length != 0) {
+                setFilterOrder(preFilteredOrders);
+                setIsEmpty(false);
+                return setIsLoading(false);
+            } else {
+                setIsEmpty(true);
+                return setIsLoading(false);
+            }
         }
     }, [ordersContext.orders]);
 
@@ -110,7 +116,7 @@ export default function OrdersList() {
                     })}
                 </div>
             ) : (
-                <div>Empty</div>
+                !isLoading && <div>Empty</div>
             )}
         </div>
     );
