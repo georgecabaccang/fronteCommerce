@@ -8,6 +8,8 @@ import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em] rounded";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
+const SHOW_EYE_ICON = "/images/png/showEyeIcon.png";
+const NOT_SHOW_EYE_ICON = "/images/png/notShowEyeIcon.png";
 
 // Regex for email validation
 const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
@@ -18,6 +20,7 @@ export default function Login() {
     const [password, setPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
     const [failedLogin, setFailedLogin] = useState(false);
+    const [showPassword, setShowPassword] = useState("password");
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -64,6 +67,11 @@ export default function Login() {
         return setFailedLogin(true);
     };
 
+    const showPasswordHandler = () => {
+        if (showPassword == "password") return setShowPassword("text");
+        return setShowPassword("password");
+    };
+
     return (
         <div className="flex place-content-center py-20">
             <div className="border min-w-[24em] min-h-[17.5em] py-3 px-12 text-center">
@@ -86,12 +94,23 @@ export default function Login() {
                         </div>
                         <div>
                             <div>Password:</div>
-                            <Input
-                                type="password"
-                                value={password}
-                                className={INPUT_CLASSNAME}
-                                setStateString={setPassword}
-                            />
+                            <div className="flex">
+                                <Input
+                                    type={showPassword}
+                                    value={password}
+                                    className={INPUT_CLASSNAME}
+                                    setStateString={setPassword}
+                                />
+                                <Button
+                                    type="button"
+                                    className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
+                                    image={
+                                        showPassword == "text" ? NOT_SHOW_EYE_ICON : SHOW_EYE_ICON
+                                    }
+                                    imageProps="object-contain h-[1.2em] mr-1"
+                                    clickEvent={showPasswordHandler}
+                                />
+                            </div>
                         </div>
                     </div>
                     <div>
