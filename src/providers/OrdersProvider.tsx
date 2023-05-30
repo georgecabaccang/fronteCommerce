@@ -17,7 +17,6 @@ export default function OrdersProvider(props: PropsWithChildren) {
 
     const getOrders = async () => {
         const response = await getOrdersRequest();
-        console.log(response);
         setOrders(response.orders);
     };
 
@@ -30,6 +29,13 @@ export default function OrdersProvider(props: PropsWithChildren) {
         await receiveOrderRequest(order_id);
         getOrders();
     };
+
+    // MAY FIX SOME BUGS@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // useEffect(() => {
+    //     if (userContext.accessToken) {
+    //         getOrders();
+    //     }
+    // }, [userContext.accessToken]);
 
     useEffect(() => {
         getOrders();
