@@ -95,23 +95,27 @@ export default function OrdersList() {
                 {filterOrder.length == 0 && isLoading ? (
                     <div>Loading...</div>
                 ) : (
-                    isEmpty && <div>Empty</div>
+                    <>
+                        {filterOrder.length != 0 ? (
+                            <div>
+                                {filterOrder.map((order) => {
+                                    return (
+                                        <Orders
+                                            key={order._id}
+                                            items={order.items}
+                                            totalAmount={order.totalAmount}
+                                            _id={order._id}
+                                            updatedAt={order.updatedAt}
+                                            status={order.status}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div>Empty</div>
+                        )}
+                    </>
                 )}
-                <div>
-                    {filterOrder.length != 0 &&
-                        filterOrder.map((order) => {
-                            return (
-                                <Orders
-                                    key={order._id}
-                                    items={order.items}
-                                    totalAmount={order.totalAmount}
-                                    _id={order._id}
-                                    updatedAt={order.updatedAt}
-                                    status={order.status}
-                                />
-                            );
-                        })}
-                </div>
             </div>
         </div>
     );
