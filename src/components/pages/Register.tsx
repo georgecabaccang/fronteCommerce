@@ -143,6 +143,7 @@ export default function Register() {
                                     setStateString={setPassword}
                                 />
                                 <Button
+                                    type="button"
                                     className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
                                     image={
                                         showPassword == "text" ? NOT_SHOW_EYE_ICON : SHOW_EYE_ICON
@@ -169,6 +170,7 @@ export default function Register() {
                                     setStateString={setConfirmPassword}
                                 />
                                 <Button
+                                    type="button"
                                     className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
                                     image={
                                         showConfirmPassword == "text"
