@@ -97,9 +97,9 @@ export default function OrdersList() {
                 ) : (
                     isEmpty && <div>Empty</div>
                 )}
-                {filterOrder.length != 0 && (
-                    <div>
-                        {filterOrder.map((order) => {
+                <div>
+                    {filterOrder.length != 0 &&
+                        filterOrder.map((order) => {
                             return (
                                 <Orders
                                     key={order._id}
@@ -111,8 +111,7 @@ export default function OrdersList() {
                                 />
                             );
                         })}
-                    </div>
-                )}
+                </div>
             </div>
         </div>
     );
