@@ -11,8 +11,6 @@ const FILTER_BY_CANCELLED = "cancelled";
 
 const BUTTON_CLASSNAME = "border rounded hover:shadow-md px-3";
 
-// REFACTOR TO MAKE CODE SHORTER. ALSO ADDED STYLINGS FOR BUTTTONS@@@@@@@@@
-
 export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
     const [searchParams, setSearchParams] = useSearchParams();
