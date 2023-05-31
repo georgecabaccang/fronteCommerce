@@ -12,17 +12,18 @@ export default function Layout(props: PropsWithChildren) {
     const userContext = useContext(UserContext);
 
     useEffect(() => {
+        clearTimeout(timer.current);
+        setExtendTimePrompt(false);
+
         if (userContext.accessToken) {
             timer.current = setTimeout(() => {
                 setExtendTimePrompt(true);
             }, TIME_FOR_PROMPT);
             return;
         }
-        if (!userContext.accessToken) {
-            clearTimeout(timer.current);
-            setExtendTimePrompt(false);
-            return;
-        }
+        // if (!userContext.accessToken) {
+        //     return;
+        // }
     }, [userContext.accessToken]);
 
     return (
