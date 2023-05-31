@@ -7,6 +7,7 @@ export interface IProductProperties {
     image: string;
     prod_id: string;
     _id?: string; // This is just for the ProductProvider. This is just the same as the value of prod_id
+    matchCount?: number; // for searching purposes
 }
 
 export interface IAxiosProductResponse {
@@ -16,4 +17,5 @@ export interface IAxiosProductResponse {
 export interface IProductContextPropperties {
     products: Array<IProductProperties>;
     getProducts: () => void;
+    searchProducts: (query: string) => void;
 }
