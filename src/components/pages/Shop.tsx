@@ -1,4 +1,4 @@
-import { useContext, FormEvent } from "react";
+import { useContext, FormEvent, useEffect } from "react";
 
 import Product from "../products/Product";
 import { ProductsContext } from "../../providers/ProductsProvider";
@@ -141,6 +141,12 @@ export default function Shop() {
         if (SEARCH_PARAMS_FIND) return productsContext.searchProducts(SEARCH_PARAMS_FIND!);
     };
 
+    useEffect(() => {
+        if (productsContext.products.length == 0) {
+            productsContext.getProducts();
+        }
+    }, []);
+
     return (
         <div className="mx-5 mt-5">
             <div className="flex min-w-100% border justify-center">
@@ -159,12 +165,16 @@ export default function Shop() {
                 </form>
             </div>
             <div>
-                <div className="grid grid-cols-5 gap-2">
-                    {productsContext.products.map((product) => {
-                        const prod_id = product._id;
-                        return <Product product={product} key={prod_id} />;
-                    })}
-                </div>
+                {productsContext.products.length != 0 ? (
+                    <div className="grid grid-cols-5 gap-2">
+                        {productsContext.products.map((product) => {
+                            const prod_id = product._id;
+                            return <Product product={product} key={prod_id} />;
+                        })}
+                    </div>
+                ) : (
+                    <div>No Products Found</div>
+                )}
             </div>
         </div>
     );
