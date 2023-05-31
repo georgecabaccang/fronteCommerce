@@ -3,11 +3,15 @@ import { OrdersContext } from "../../providers/OrdersProvider";
 import Orders from "./Orders";
 import Button from "../shared/Button";
 import { IOrder } from "../../types/orderTypes";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const FILTER_BY_PENDING = "pending";
 const FILTER_BY_RECEIVED = "received";
 const FILTER_BY_CANCELLED = "cancelled";
+
+const BUTTON_CLASSNAME = "border rounded hover:shadow-md px-3";
+
+// REFACTOR TO MAKE CODE SHORTER. ALSO ADDED STYLINGS FOR BUTTTONS@@@@@@@@@
 
 export default function OrdersList() {
     const ordersContext = useContext(OrdersContext);
@@ -16,69 +20,34 @@ export default function OrdersList() {
     const [isLoading, setIsLoading] = useState(true);
     const [isEmpty, setIsEmpty] = useState(false);
 
-    const navigate = useNavigate();
+    const SEARCH_PARAMS_FILTER = searchParams.get("filter");
 
     useEffect(() => {
         setIsLoading(true);
-        let filteredOrders: Array<IOrder> = filterOrder;
-        if (ordersContext.orders) {
-            if (searchParams.get("filter") === FILTER_BY_PENDING) {
-                filteredOrders = ordersContext.orders.filter((order) => {
-                    return order.status === FILTER_BY_PENDING;
-                });
-            }
-            if (searchParams.get("filter") === FILTER_BY_RECEIVED) {
-                filteredOrders = ordersContext.orders.filter((order) => {
-                    return order.status === FILTER_BY_RECEIVED;
-                });
-            }
-            if (searchParams.get("filter") === FILTER_BY_CANCELLED) {
-                filteredOrders = ordersContext.orders.filter((order) => {
-                    return order.status === FILTER_BY_CANCELLED;
-                });
-            }
-
-            if (filteredOrders.length != 0) {
-                setFilterOrder(filteredOrders);
-                setIsEmpty(false);
-                return setIsLoading(false);
-            } else {
-                setIsEmpty(true);
-                return setIsLoading(false);
-            }
-        }
-    }, [searchParams.get("filter")]);
-
-    useEffect(() => {
-        if (!searchParams.get("filter")) {
+        if (!SEARCH_PARAMS_FILTER) {
             setSearchParams({ filter: FILTER_BY_PENDING });
         }
-        if (ordersContext.orders) {
-            const preFilteredOrders = ordersContext.orders.filter((order) => {
-                return order.status === searchParams.get("filter");
-            });
-            if (preFilteredOrders.length != 0) {
-                setFilterOrder(preFilteredOrders);
-                setIsEmpty(false);
-                return setIsLoading(false);
-            } else {
-                setIsEmpty(true);
-                return setIsLoading(false);
-            }
-        }
-    }, [ordersContext.orders]);
 
-    if (!localStorage.getItem("token")) {
-        navigate("/login");
-        return <div></div>;
-    }
+        if (ordersContext.orders) {
+            const filteredOrders = ordersContext.orders.filter((order) => {
+                return order.status === SEARCH_PARAMS_FILTER;
+            });
+            setFilterOrder(filteredOrders);
+
+            filteredOrders.length != 0 ? setIsEmpty(false) : setIsEmpty(true);
+            return setIsLoading(false);
+        }
+    }, [SEARCH_PARAMS_FILTER, ordersContext.orders]);
 
     return (
-        <div className="mx-10">
-            <div>
+        <div className="mx-10 place-content-center">
+            <div className="flex justify-center min-w-100% gap-3 mt-3">
                 <Button
                     name="Pending"
                     type="button"
+                    className={`${BUTTON_CLASSNAME} ${
+                        SEARCH_PARAMS_FILTER == FILTER_BY_PENDING ? "shadow-md" : ""
+                    }`}
                     clickEvent={() => {
                         setSearchParams({ filter: FILTER_BY_PENDING });
                     }}
@@ -86,6 +55,9 @@ export default function OrdersList() {
                 <Button
                     name="Received"
                     type="button"
+                    className={`${BUTTON_CLASSNAME} ${
+                        SEARCH_PARAMS_FILTER == FILTER_BY_RECEIVED ? "shadow-md" : ""
+                    }`}
                     clickEvent={() => {
                         setSearchParams({ filter: FILTER_BY_RECEIVED });
                     }}
@@ -93,6 +65,9 @@ export default function OrdersList() {
                 <Button
                     name="Cancelled"
                     type="button"
+                    className={`${BUTTON_CLASSNAME} ${
+                        SEARCH_PARAMS_FILTER == FILTER_BY_CANCELLED ? "shadow-md" : ""
+                    }`}
                     clickEvent={() => {
                         setSearchParams({ filter: FILTER_BY_CANCELLED });
                     }}
