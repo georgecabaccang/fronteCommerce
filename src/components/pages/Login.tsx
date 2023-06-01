@@ -50,15 +50,14 @@ export default function Login() {
             email: email,
             password: password,
         };
-        await userLogin(userCredentials);
-
+        const userDetails = await userLogin(userCredentials);
+    
         if (localStorage.getItem("token")) {
-            const userEmail = localStorage.getItem("userEmail");
             const accessToken = localStorage.getItem("token");
             const refreshToken = localStorage.getItem("refreshToken");
-            userContext.setUserEmail(userEmail);
             userContext.setAccessToken(accessToken);
             userContext.setRefreshToken(refreshToken);
+            userContext.setUserProfileDetails(userDetails);
 
             setFailedLogin(false);
             if (userContext.loginFrom == "login") return navigate("/");

@@ -63,6 +63,15 @@ export default function Navigation() {
                                 Orders
                             </NavLink>
                             <NavLink
+                                to={`/user/profile/${userContext.userProfileDetails._id}`}
+                                className="flex place-content-center items-center w-full h-full link-page"
+                                onClick={() => {
+                                    activeLinkContext.setActiveLink("profile");
+                                }}
+                            >
+                                Profile
+                            </NavLink>
+                            <NavLink
                                 to={"/login"}
                                 className="flex place-content-center items-center w-full h-full link-page"
                                 onClick={logoutHandler}

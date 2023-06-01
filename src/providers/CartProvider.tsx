@@ -3,7 +3,7 @@ import { ICart, IICheckoutDetails, IItemInCheckout, IItemsProperties } from "../
 import { UserContext } from "./UserProvider";
 import { addToCartRequest } from "../api/cartRequests";
 
-import { getUserCart } from "../api/cartRequests";
+import { getUserCartRequest } from "../api/cartRequests";
 import { ActiveLinkContext } from "./ActiveLinkProvider";
 
 export const CartContext = createContext<ICart>({
@@ -26,7 +26,7 @@ export default function CartProvider(props: PropsWithChildren) {
     const activeLinkContext = useContext(ActiveLinkContext);
 
     const getCartData = async () => {
-        const response = await getUserCart();
+        const response = await getUserCartRequest(userContext.userProfileDetails.email);
         if (typeof response == "string") {
             return;
         }
@@ -34,7 +34,7 @@ export default function CartProvider(props: PropsWithChildren) {
     };
 
     const addToCart = async (productToBeAddedToCart: { prod_id: string; quantity: number }) => {
-        await addToCartRequest(productToBeAddedToCart);
+        await addToCartRequest(productToBeAddedToCart, userContext.userProfileDetails.email);
         getCartData();
     };
 

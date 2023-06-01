@@ -5,6 +5,7 @@ import Button from "../shared/Button";
 import { orderCheckOutRequest } from "../../api/orderRequests";
 import { OrdersContext } from "../../providers/OrdersProvider";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../providers/UserProvider";
 
 const CART_URL = "/cart";
 const ORDERS_URL = "/orders";
@@ -13,12 +14,16 @@ const BUTTON_CLASSNAME = "border py-2 px-4 bg-gray-200";
 export default function CheckOutItems() {
     const cartContext = useContext(CartContext);
     const odersContext = useContext(OrdersContext);
+    const userContext = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        await orderCheckOutRequest(cartContext.checkOutDetails);
+        await orderCheckOutRequest(
+            cartContext.checkOutDetails,
+            userContext.userProfileDetails.email
+        );
         cartContext.getCartData();
         cartContext.resetCheckout();
         odersContext.getOrders();

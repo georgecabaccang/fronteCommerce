@@ -6,6 +6,7 @@ import { CartContext } from "../../providers/CartProvider";
 
 import Input from "../shared/Input";
 import Quantity from "../shared/Quantity";
+import { UserContext } from "../../providers/UserProvider";
 
 export default function CartItem(props: IItemsProperties) {
     const [quantity, setQuantity] = useState<number>(props.quantity);
@@ -13,10 +14,15 @@ export default function CartItem(props: IItemsProperties) {
     const [loading, setLoading] = useState(false);
 
     const cartContext = useContext(CartContext);
+    const userContext = useContext(UserContext);
 
     const changeQuantityOfItemInCart = async () => {
         if (props.prod_id) {
-            await itemInCartChangeQuantity(quantity, props.prod_id);
+            await itemInCartChangeQuantity(
+                quantity,
+                props.prod_id,
+                userContext.userProfileDetails.email
+            );
             cartContext.getCartData();
             setLoading(false);
         }
@@ -24,7 +30,7 @@ export default function CartItem(props: IItemsProperties) {
 
     const removeFromCart = async () => {
         if (props.prod_id) {
-            await removeFromCartRequest(props.prod_id);
+            await removeFromCartRequest(props.prod_id, userContext.userProfileDetails.email);
             cartContext.getCartData();
             setLoading(false);
         }

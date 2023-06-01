@@ -1,11 +1,11 @@
 import axios from "axios";
 
 // GET USER CART
-export const getUserCart = async () => {
+export const getUserCartRequest = async (email: string) => {
     try {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/cart",
-            { email: localStorage.getItem("userEmail") },
+            { email: email },
             {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             }
@@ -17,17 +17,21 @@ export const getUserCart = async () => {
 };
 
 // ADD ITEMS TO CART
-export const addToCartRequest = async (productToBeAddedToCart: {
-    prod_id: string;
-    quantity: number;
-}) => {
+export const addToCartRequest = async (
+    productToBeAddedToCart: {
+        prod_id: string;
+        quantity: number;
+    },
+    email: string
+) => {
+    console.log(email);
     try {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/cart/add-to-cart",
             {
                 prod_id: productToBeAddedToCart.prod_id,
                 quantity: productToBeAddedToCart.quantity,
-                email: localStorage.getItem("userEmail"),
+                email: email,
             },
             {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -40,12 +44,12 @@ export const addToCartRequest = async (productToBeAddedToCart: {
 };
 
 // REMOVE ITEMS FROM CART
-export const removeFromCartRequest = async (itemInCartId: string) => {
+export const removeFromCartRequest = async (itemInCartId: string, email: string) => {
     try {
         await axios.delete("https://backend-commerce.vercel.app/cart/remove-from-cart", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             data: {
-                email: localStorage.getItem("userEmail"),
+                email: email,
                 prod_id: itemInCartId,
             },
         });
@@ -55,12 +59,16 @@ export const removeFromCartRequest = async (itemInCartId: string) => {
 };
 
 // CHANGING QUANTITY OF ITEMS IN CRART
-export const itemInCartChangeQuantity = async (quantity: number, prod_id: string) => {
+export const itemInCartChangeQuantity = async (
+    quantity: number,
+    prod_id: string,
+    email: string
+) => {
     try {
         const response = await axios.put(
             "https://backend-commerce.vercel.app/cart/change-quantity",
             {
-                email: localStorage.getItem("userEmail"),
+                email: email,
                 quantity: quantity,
                 prod_id: prod_id,
             },

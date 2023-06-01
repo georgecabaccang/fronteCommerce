@@ -21,12 +21,12 @@ export default function OrdersProvider(props: PropsWithChildren) {
     };
 
     const cancelOrder = async (order_id: string) => {
-        await cancelOrderRequest(order_id);
+        await cancelOrderRequest(order_id, userContext.userProfileDetails.email);
         getOrders();
     };
 
     const receiveOrder = async (order_id: string) => {
-        await receiveOrderRequest(order_id);
+        await receiveOrderRequest(order_id, userContext.userProfileDetails.email);
         getOrders();
     };
 

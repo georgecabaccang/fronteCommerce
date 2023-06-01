@@ -1,41 +1,58 @@
-import React, { PropsWithChildren, createContext, useState, useEffect } from "react";
+import React, { PropsWithChildren, createContext, useState, useEffect, useContext } from "react";
 import { logoutRequest } from "../api/logoutRequest";
 import { refreshTokenRequest } from "../api/refreshTokenRequest";
 import { useNavigate } from "react-router-dom";
+import { ActiveLinkContext } from "./ActiveLinkProvider";
+
+interface IIUserProfileDetails {
+    email: string;
+    _id: string;
+    isSeller: boolean;
+}
 
 interface IUserContext {
-    email: string | null;
+    userProfileDetails: IIUserProfileDetails;
     accessToken: string | null;
     refreshToken: string | null;
-    isAdmin: boolean;
+    isSeller: boolean;
     loginFrom: string;
     logout: () => void;
     getNewTokens: () => void;
-    setUserEmail: React.Dispatch<React.SetStateAction<string | null>>;
+    setUserProfileDetails: React.Dispatch<React.SetStateAction<IIUserProfileDetails>>;
     setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
     setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
     setLoginFrom: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserContext = createContext<IUserContext>({
-    email: "",
+    userProfileDetails: {
+        email: "",
+        _id: "",
+        isSeller: false,
+    },
     accessToken: "",
     refreshToken: "",
-    isAdmin: false,
+    isSeller: false,
     loginFrom: "",
     logout: () => {},
     getNewTokens: () => {},
-    setUserEmail: () => {},
+    setUserProfileDetails: () => {},
     setAccessToken: () => {},
     setRefreshToken: () => {},
     setLoginFrom: () => {},
 });
 
 export default function UserProvider(props: PropsWithChildren) {
-    const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail"));
     const [accessToken, setAccessToken] = useState(localStorage.getItem("token"));
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
+    const [userProfileDetails, setUserProfileDetails] = useState<IIUserProfileDetails>({
+        email: "",
+        _id: "",
+        isSeller: false,
+    });
     const [loginFrom, setLoginFrom] = useState("login");
+
+    const activeLinkContext = useContext(ActiveLinkContext);
 
     const navigate = useNavigate();
 
@@ -46,19 +63,20 @@ export default function UserProvider(props: PropsWithChildren) {
                 console.log("something went wrong");
                 return;
             }
-            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userID");
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
-            setUserEmail(null);
             setAccessToken(null);
             setRefreshToken(null);
+            activeLinkContext.setActiveLink("login");
+
             navigate("/login");
         }
     };
 
     const getNewTokens = async () => {
-        if (refreshToken && userEmail) {
-            const newTokens = await refreshTokenRequest(refreshToken, userEmail);
+        if (refreshToken) {
+            const newTokens = await refreshTokenRequest(refreshToken, userProfileDetails.email);
             if (typeof newTokens == "string") {
                 alert("Refresh Token Invalid. Please Relogin.");
                 logout();
@@ -71,18 +89,20 @@ export default function UserProvider(props: PropsWithChildren) {
     };
 
     useEffect(() => {
-        getNewTokens();
+        if (accessToken && refreshToken) {
+            getNewTokens();
+        }
     }, []);
 
     const userContextValues: IUserContext = {
-        email: userEmail,
+        userProfileDetails: userProfileDetails,
         accessToken: accessToken,
         refreshToken: refreshToken,
-        isAdmin: false,
+        isSeller: false,
         loginFrom: loginFrom,
         logout: logout,
         getNewTokens: getNewTokens,
-        setUserEmail: setUserEmail,
+        setUserProfileDetails: setUserProfileDetails,
         setAccessToken: setAccessToken,
         setRefreshToken: setRefreshToken,
         setLoginFrom: setLoginFrom,

@@ -21,9 +21,6 @@ export default function Layout(props: PropsWithChildren) {
             }, TIME_FOR_PROMPT);
             return;
         }
-        // if (!userContext.accessToken) {
-        //     return;
-        // }
     }, [userContext.accessToken]);
 
     return (

@@ -15,7 +15,7 @@ export const searchProductDetailsRequest = async (query: string) => {
     try {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/shop/search-products",
-            { email: localStorage.getItem("userEmail"), query: query },
+            { query: query },
             { headers: { Authorization: localStorage.getItem("token") } }
         );
         return data;
