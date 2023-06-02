@@ -4,7 +4,7 @@ import Button from "../shared/Button";
 import ChangePassword from "../ChangePassword";
 
 export default function Profile() {
-    const [changePassword, setChangePassword] = useState(false);
+    const [changePasswordShown, setChangePasswordShown] = useState(false);
 
     const userContext = useContext(UserContext);
 
@@ -15,19 +15,22 @@ export default function Profile() {
     } else {
         seller = "No";
     }
-    console.log(changePassword);
 
     return (
         <div>
             <div>User ID: {_id}</div>
             <div>Email: {email}</div>
             <div>Seller: {seller}</div>
-            <Button
-                name="Change Password"
-                className="border px-3 rounded bg-blue-200 shadow-sm"
-                clickEvent={() => setChangePassword(true)}
-            />
-            {changePassword && <ChangePassword />}
+            {!changePasswordShown && (
+                <Button
+                    name="Change Password"
+                    className="border px-3 rounded bg-blue-200 shadow-sm"
+                    clickEvent={() => setChangePasswordShown(true)}
+                />
+            )}
+            {changePasswordShown && (
+                <ChangePassword setChangePasswordShown={setChangePasswordShown} />
+            )}
         </div>
     );
 }
