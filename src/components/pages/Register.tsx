@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { registerUser } from "../../api/registerUser";
-import { IUserDetails } from "../../types/userRequestTypes";
-import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
 import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
@@ -46,25 +44,18 @@ export default function Register() {
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        const userDetails: IUserDetails = { email: email, password: password };
+        const userDetails = { email: email, password: password };
         const response = await registerUser(userDetails);
 
         if (response === "user created") {
-            const userCredentials: IUserDetails = {
+            const userCredentials = {
                 email: email,
                 password: password,
             };
-            const userDetails = await userLogin(userCredentials);
-            if (userDetails == "no tokens") {
-                return console.log("Something went wrong on our side. Please try again");
+            const response = await userContext.login(userCredentials);
+            if (response === "OK") {
+                setEmailDupe(false);
             }
-            const accessToken = localStorage.getItem("token");
-            const refreshToken = localStorage.getItem("refreshToken");
-            userContext.setAccessToken(accessToken);
-            userContext.setRefreshToken(refreshToken);
-            userContext.setUserProfileDetails(userDetails);
-            setEmailDupe(false);
-            return;
         }
         return setEmailDupe(true);
     };

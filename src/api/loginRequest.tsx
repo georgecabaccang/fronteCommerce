@@ -7,13 +7,7 @@ export const userLogin = async (userCredentials: IUserDetails) => {
             email: userCredentials.email,
             password: userCredentials.password,
         });
-        if (data.tokens) {
-            localStorage.setItem("token", data.tokens.accessToken);
-            localStorage.setItem("refreshToken", data.tokens.refreshToken);
-            return data.userDetails;
-        } else {
-            return "no tokens";
-        }
+        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }

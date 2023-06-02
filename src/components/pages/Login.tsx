@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
-import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import Inputs from "../shared/passwords/Inputs";
 
@@ -22,8 +21,6 @@ export default function Login() {
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (EMAIL_REGEX.test(email)) {
@@ -48,18 +45,9 @@ export default function Login() {
             email: email,
             password: password,
         };
-        const userDetails = await userLogin(userCredentials);
-
-        if (localStorage.getItem("token")) {
-            const accessToken = localStorage.getItem("token");
-            const refreshToken = localStorage.getItem("refreshToken");
-            userContext.setAccessToken(accessToken);
-            userContext.setRefreshToken(refreshToken);
-            userContext.setUserProfileDetails(userDetails);
-
-            setFailedLogin(false);
-            if (userContext.loginFrom == "login") return navigate("/");
-            if (userContext.loginFrom == "shop") return window.history.go(-1);
+        const response = await userContext.login(userCredentials);
+        if (response === "OK") {
+            return setFailedLogin(false);
         }
         return setFailedLogin(true);
     };

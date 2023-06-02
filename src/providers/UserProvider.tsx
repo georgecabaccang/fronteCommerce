@@ -17,9 +17,9 @@ interface IUserContext {
     refreshToken: string | null;
     isSeller: boolean;
     loginFrom: string;
+    login: (userCredentials: { email: string; password: string }) => Promise<string>;
     logout: () => void;
     getNewTokens: () => void;
-    setUserProfileDetails: React.Dispatch<React.SetStateAction<IIUserProfileDetails>>;
     setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
     setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
     setLoginFrom: React.Dispatch<React.SetStateAction<string>>;
@@ -35,9 +35,11 @@ export const UserContext = createContext<IUserContext>({
     refreshToken: "",
     isSeller: false,
     loginFrom: "",
+    login: async () => {
+        return "";
+    },
     logout: () => {},
     getNewTokens: () => {},
-    setUserProfileDetails: () => {},
     setAccessToken: () => {},
     setRefreshToken: () => {},
     setLoginFrom: () => {},
@@ -58,7 +60,18 @@ export default function UserProvider(props: PropsWithChildren) {
     const navigate = useNavigate();
 
     const login = async (userCredentials: { email: string; password: string }) => {
-        const userDetails = await userLogin(userCredentials);
+        const response = await userLogin(userCredentials);
+        if (response.tokens) {
+            localStorage.setItem("token", response.tokens.accessToken);
+            localStorage.setItem("refreshToken", response.tokens.refreshToken);
+            setAccessToken(response.tokens.accessToken);
+            setRefreshToken(response.tokens.refreshToken);
+            setUserProfileDetails(response.userDetails);
+            if (loginFrom == "login") navigate("/");
+            if (loginFrom == "shop") window.history.go(-1);
+            return "OK";
+        }
+        return "No Tokens";
     };
 
     const logout = async () => {
@@ -105,9 +118,9 @@ export default function UserProvider(props: PropsWithChildren) {
         refreshToken: refreshToken,
         isSeller: false,
         loginFrom: loginFrom,
+        login: login,
         logout: logout,
         getNewTokens: getNewTokens,
-        setUserProfileDetails: setUserProfileDetails,
         setAccessToken: setAccessToken,
         setRefreshToken: setRefreshToken,
         setLoginFrom: setLoginFrom,
