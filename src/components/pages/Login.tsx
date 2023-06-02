@@ -5,6 +5,7 @@ import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
 import { Link, useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
+import Inputs from "../shared/passwords/Inputs";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em] rounded";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
@@ -51,7 +52,7 @@ export default function Login() {
             password: password,
         };
         const userDetails = await userLogin(userCredentials);
-    
+
         if (localStorage.getItem("token")) {
             const accessToken = localStorage.getItem("token");
             const refreshToken = localStorage.getItem("refreshToken");
@@ -64,11 +65,6 @@ export default function Login() {
             if (userContext.loginFrom == "shop") return window.history.go(-1);
         }
         return setFailedLogin(true);
-    };
-
-    const showPasswordHandler = () => {
-        if (showPassword == "password") return setShowPassword("text");
-        return setShowPassword("password");
     };
 
     return (
@@ -91,26 +87,8 @@ export default function Login() {
                                 setStateString={setEmail}
                             />
                         </div>
-                        <div>
-                            <div>Password:</div>
-                            <div className="flex">
-                                <Input
-                                    type={showPassword}
-                                    value={password}
-                                    className={INPUT_CLASSNAME}
-                                    setStateString={setPassword}
-                                />
-                                <Button
-                                    type="button"
-                                    className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
-                                    image={
-                                        showPassword == "text" ? NOT_SHOW_EYE_ICON : SHOW_EYE_ICON
-                                    }
-                                    imageProps="object-contain h-[1.2em] mr-1"
-                                    clickEvent={showPasswordHandler}
-                                />
-                            </div>
-                        </div>
+
+                        <Inputs label={"Password"} setterPassword={setPassword} />
                     </div>
                     <div>
                         <Button

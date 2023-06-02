@@ -41,7 +41,7 @@ export default function Inputs(props: IInputs) {
 
     return (
         <div>
-            <div>{props.label}</div>
+            <div>{props.label}:</div>
             <div className="flex">
                 <Input
                     type={showPassword}
@@ -58,21 +58,23 @@ export default function Inputs(props: IInputs) {
                 />
             </div>
 
-            <div>
-                {props.label === "Confirm New Password"
-                    ? !props.passwordsMatch &&
-                      password && (
-                          <span className="text-red-500 text-xs">Passwords must match.</span>
-                      )
-                    : !props.isValidPassword &&
-                      password &&
-                      props.label !== "Old Password" && (
-                          <span className="text-red-500 text-xs break-normal">
-                              Password must be at least 8 characters long and contain at least one
-                              special character.
-                          </span>
-                      )}
-            </div>
+            {props.label != "Password" && (
+                <div>
+                    {props.label === "Confirm New Password"
+                        ? !props.passwordsMatch &&
+                          password && (
+                              <span className="text-red-500 text-xs">Passwords must match.</span>
+                          )
+                        : !props.isValidPassword &&
+                          password &&
+                          props.label !== "Old Password" && (
+                              <span className="text-red-500 text-xs break-normal">
+                                  Password must be at least 8 characters long and contain at least
+                                  one special character.
+                              </span>
+                          )}
+                </div>
+            )}
         </div>
     );
 }
