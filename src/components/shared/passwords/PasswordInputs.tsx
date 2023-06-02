@@ -5,7 +5,7 @@ interface IPasswords {
     inputOld?: string;
     inputNew: string;
     inputConfrim: string;
-    setOldPassword: React.Dispatch<React.SetStateAction<string>>;
+    setOldPassword?: React.Dispatch<React.SetStateAction<string>>;
     setNewPassword: React.Dispatch<React.SetStateAction<string>>;
     setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -36,7 +36,7 @@ export default function PasswordInputs(props: IPasswords) {
     return (
         <div>
             {props.inputOld && (
-                <Inputs label={props.inputOld} setterPassword={props.setOldPassword} />
+                <Inputs label={props.inputOld} setterPassword={props.setOldPassword!} />
             )}
             {props.inputNew && (
                 <Inputs

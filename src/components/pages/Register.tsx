@@ -7,30 +7,21 @@ import { userLogin } from "../../api/loginRequest";
 import { UserContext } from "../../providers/UserProvider";
 import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
+import PasswordInputs from "../shared/passwords/PasswordInputs";
 
 const INPUT_CLASSNAME =
     "border-l border-t border-b w-full px-3 py-[0.2em] focus:z-10 block rounded ";
 const LOGIN_LINK = "http://localhost:5173/login";
-const SHOW_EYE_ICON = "/images/png/showEyeIcon.png";
-const NOT_SHOW_EYE_ICON = "/images/png/notShowEyeIcon.png";
 
-// Regex for at least one special character, min length of 9
-const PASSWORD_REGEX = /^(?=.{8,})(?=.*[a-z])(?=.*[!@#$%^()&+=*]).*$/;
 // Regex for email validation
 const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
 
 export default function Register() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
     const [isEmailValid, setIsEmailIsValid] = useState(true);
-    const [isValidPassword, setIsValidPassword] = useState(true);
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [formIsValid, setFormIsValid] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const [emailDupe, setEmailDupe] = useState(false);
-
-    const [showConfirmPassword, setShowConfirmPassword] = useState("password");
-    const [showPassword, setShowPassword] = useState("password");
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -44,38 +35,13 @@ export default function Register() {
         return setIsEmailIsValid(false);
     }, [email]);
 
-    // Check regex for password
-    useEffect(() => {
-        if (password === "") return;
-        if (PASSWORD_REGEX.test(password)) {
-            return setIsValidPassword(true);
-        }
-        return setIsValidPassword(false);
-    }, [password, confirmPassword]);
-
-    // Check if passwords match
-    useEffect(() => {
-        if (confirmPassword === "") return;
-        if (password == confirmPassword) {
-            return setPasswordsMatch(true);
-        }
-        return setPasswordsMatch(false);
-    }, [password, confirmPassword]);
-
     // Check form validation
     useEffect(() => {
-        if (
-            email &&
-            password &&
-            confirmPassword &&
-            isEmailValid &&
-            isValidPassword &&
-            passwordsMatch
-        ) {
-            return setFormIsValid(true);
+        if (email && password && isEmailValid) {
+            return setIsDisabled(false);
         }
-        return setFormIsValid(false);
-    }, [isEmailValid, isValidPassword, passwordsMatch]);
+        return setIsDisabled(true);
+    }, [isEmailValid, password, email]);
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -88,28 +54,19 @@ export default function Register() {
                 email: email,
                 password: password,
             };
-            const response = await userLogin(userCredentials);
-            if (response == "no tokens") {
+            const userDetails = await userLogin(userCredentials);
+            if (userDetails == "no tokens") {
                 return console.log("Something went wrong on our side. Please try again");
             }
             const accessToken = localStorage.getItem("token");
             const refreshToken = localStorage.getItem("refreshToken");
             userContext.setAccessToken(accessToken);
             userContext.setRefreshToken(refreshToken);
+            userContext.setUserProfileDetails(userDetails);
             setEmailDupe(false);
             return;
         }
         return setEmailDupe(true);
-    };
-
-    const showPasswordHandler = () => {
-        if (showPassword == "password") return setShowPassword("text");
-        return setShowPassword("password");
-    };
-
-    const showConfirmPasswordHandler = () => {
-        if (showConfirmPassword == "password") return setShowConfirmPassword("text");
-        return setShowConfirmPassword("password");
     };
 
     return (
@@ -133,66 +90,19 @@ export default function Register() {
                                 </span>
                             )}
                         </div>
-                        <div>
-                            <div>Password:</div>
-                            <div className="flex">
-                                <Input
-                                    type={showPassword}
-                                    value={password}
-                                    className={INPUT_CLASSNAME}
-                                    setStateString={setPassword}
-                                />
-                                <Button
-                                    type="button"
-                                    className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
-                                    image={
-                                        showPassword == "text" ? NOT_SHOW_EYE_ICON : SHOW_EYE_ICON
-                                    }
-                                    imageProps="object-contain h-[1.2em] mr-1"
-                                    clickEvent={showPasswordHandler}
-                                />
-                            </div>
-
-                            {!isValidPassword && (
-                                <span className="text-red-500 text-xs break-normal">
-                                    Password must be at least 8 characters long and contain at least
-                                    one special character.
-                                </span>
-                            )}
-                        </div>
-                        <div>
-                            <div>Confirm Password:</div>
-                            <div className="flex ">
-                                <Input
-                                    type={showConfirmPassword}
-                                    value={confirmPassword}
-                                    className={INPUT_CLASSNAME}
-                                    setStateString={setConfirmPassword}
-                                />
-                                <Button
-                                    type="button"
-                                    className="inline-flex flex-shrink-0 justify-center items-center rounded-r-md border-r border-t border-b px-1"
-                                    image={
-                                        showConfirmPassword == "text"
-                                            ? NOT_SHOW_EYE_ICON
-                                            : SHOW_EYE_ICON
-                                    }
-                                    imageProps="object-contain h-[1.2em] mr-1"
-                                    clickEvent={showConfirmPasswordHandler}
-                                />
-                            </div>
-
-                            {!passwordsMatch && (
-                                <span className="text-red-500 text-xs">Passwords must match.</span>
-                            )}
-                        </div>
+                        <PasswordInputs
+                            inputNew="New Password"
+                            inputConfrim="Confirm New Password"
+                            setNewPassword={setPassword}
+                            setIsDisabled={setIsDisabled}
+                        />
                     </div>
                     <div>
                         <Button
                             type="submit"
                             name="Sign Up!"
                             className="px-5 py-2 border bg-blue-400 border-gray-100 rounded hover:bg-gray-300 hover:border-gray-200 disabled:bg-slate-200 w-full"
-                            disabled={!formIsValid}
+                            disabled={isDisabled}
                         />
                         <div className="text-sm mt-2">
                             <Link

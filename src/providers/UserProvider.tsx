@@ -3,6 +3,7 @@ import { logoutRequest } from "../api/logoutRequest";
 import { refreshTokenRequest } from "../api/refreshTokenRequest";
 import { useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "./ActiveLinkProvider";
+import { userLogin } from "../api/loginRequest";
 
 interface IIUserProfileDetails {
     email: string;
@@ -55,6 +56,10 @@ export default function UserProvider(props: PropsWithChildren) {
     const activeLinkContext = useContext(ActiveLinkContext);
 
     const navigate = useNavigate();
+
+    const login = async (userCredentials: { email: string; password: string }) => {
+        const userDetails = await userLogin(userCredentials);
+    };
 
     const logout = async () => {
         if (refreshToken) {
