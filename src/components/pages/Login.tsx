@@ -9,8 +9,6 @@ import Inputs from "../shared/passwords/Inputs";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em] rounded";
 const SIGN_UP_LINK = "http://localhost:5173/sign-up";
-const SHOW_EYE_ICON = "/images/png/showEyeIcon.png";
-const NOT_SHOW_EYE_ICON = "/images/png/notShowEyeIcon.png";
 
 // Regex for email validation
 const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
@@ -21,7 +19,6 @@ export default function Login() {
     const [password, setPassword] = useState<string>("");
     const [formIsValid, setFormIsValid] = useState(false);
     const [failedLogin, setFailedLogin] = useState(false);
-    const [showPassword, setShowPassword] = useState("password");
 
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
