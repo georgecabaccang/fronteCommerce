@@ -46,7 +46,11 @@ export default function Profile() {
                 />
             )}
             {changePasswordShown && (
-                <ChangePassword setChangePasswordShown={setChangePasswordShown} />
+                <ChangePassword
+                    email={email}
+                    user_id={_id}
+                    setChangePasswordShown={setChangePasswordShown}
+                />
             )}
         </div>
     );
