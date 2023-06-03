@@ -18,7 +18,6 @@ export default function Profile() {
     }
 
     const updateSellerStatus = async () => {
-        console.log('?')
         const response = await updateSellerStatusRequest(email, _id);
         userContext.updateUserDetailsInStore(response);
     };
@@ -34,7 +33,7 @@ export default function Profile() {
                         type="button"
                         name={isSeller ? "Revert To Buyer" : "Become Seller"}
                         className="border px-3 rounded bg-blue-200 shadow-sm  hover:bg-blue-500"
-                        clickEvent={updateSellerStatus}
+                        onClick={updateSellerStatus}
                     />
                 </div>
             </div>

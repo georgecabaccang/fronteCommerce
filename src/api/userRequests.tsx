@@ -8,7 +8,7 @@ export const updateSellerStatusRequest = async (email: string, user_id: string) 
                 email: email,
             },
             {
-                headers: { Authorization: localStorage.getItem("token") },
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             }
         );
         return data;
