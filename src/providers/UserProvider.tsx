@@ -20,8 +20,7 @@ interface IUserContext {
     login: (userCredentials: { email: string; password: string }) => Promise<string>;
     logout: () => void;
     getNewTokens: () => void;
-    setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-    setRefreshToken: React.Dispatch<React.SetStateAction<string | null>>;
+    updateUserDetailsInStore: (userDetails: IIUserProfileDetails) => void;
     setLoginFrom: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -40,8 +39,7 @@ export const UserContext = createContext<IUserContext>({
     },
     logout: () => {},
     getNewTokens: () => {},
-    setAccessToken: () => {},
-    setRefreshToken: () => {},
+    updateUserDetailsInStore: () => {},
     setLoginFrom: () => {},
 });
 
@@ -106,6 +104,10 @@ export default function UserProvider(props: PropsWithChildren) {
         }
     };
 
+    const updateUserDetailsInStore = (userProfileDetails: IIUserProfileDetails) => {
+        setUserProfileDetails(userProfileDetails);
+    };
+
     useEffect(() => {
         if (accessToken && refreshToken) {
             getNewTokens();
@@ -120,9 +122,8 @@ export default function UserProvider(props: PropsWithChildren) {
         loginFrom: loginFrom,
         login: login,
         logout: logout,
+        updateUserDetailsInStore: updateUserDetailsInStore,
         getNewTokens: getNewTokens,
-        setAccessToken: setAccessToken,
-        setRefreshToken: setRefreshToken,
         setLoginFrom: setLoginFrom,
     };
 
