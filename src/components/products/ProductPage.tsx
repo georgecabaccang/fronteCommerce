@@ -98,8 +98,8 @@ export default function ProductPage() {
         navigate("/login");
     };
 
-    const addToCartLoggedInOrOut = userContext.accessToken ? addToCart : redirectToLogin;
-    const buyNowLoggedInOrOut = userContext.accessToken ? buyNow : redirectToLogin;
+    const addToCartLoggedInOrOut = userContext.user ? addToCart : redirectToLogin;
+    const buyNowLoggedInOrOut = userContext.user ? buyNow : redirectToLogin;
 
     if (isLoading) {
         return (
