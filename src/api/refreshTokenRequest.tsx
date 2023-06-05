@@ -1,18 +1,14 @@
 import axios from "axios";
 
-export const refreshTokenRequest = async (refreshToken: string, email: string) => {
+export const refreshTokenRequest = async (email: string) => {
     try {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/user/refreshLogin",
+            // "http://localhost:8002/user/refreshLogin",
             {
                 email: email,
-                refreshToken: refreshToken,
             },
-            {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            }
+            { withCredentials: true }
         );
         return data;
     } catch (error) {

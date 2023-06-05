@@ -4,6 +4,8 @@ import { refreshTokenRequest } from "../api/refreshTokenRequest";
 import { useNavigate } from "react-router-dom";
 import { ActiveLinkContext } from "./ActiveLinkProvider";
 import { userLogin } from "../api/loginRequest";
+import CryptoJS from "crypto-js";
+import { getUserProfileDetailsRequest } from "../api/userRequests";
 
 interface IIUserProfileDetails {
     email: string;
@@ -13,14 +15,14 @@ interface IIUserProfileDetails {
 
 interface IUserContext {
     userProfileDetails: IIUserProfileDetails;
-    accessToken: string | null;
-    refreshToken: string | null;
-    isSeller: boolean;
     loginFrom: string;
+    user: string | null;
     login: (userCredentials: { email: string; password: string }) => Promise<string>;
     logout: () => void;
     getNewTokens: () => void;
-    updateUserDetailsInStore: (userDetails: IIUserProfileDetails) => void;
+    getUserProfileDetails: () => void;
+    // updateUserDetailsInStore: (userDetails: IIUserProfileDetails) => void;
+    refreshUserProfileDetails: () => void;
     setLoginFrom: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -30,22 +32,21 @@ export const UserContext = createContext<IUserContext>({
         _id: "",
         isSeller: false,
     },
-    accessToken: "",
-    refreshToken: "",
-    isSeller: false,
     loginFrom: "",
+    user: "",
     login: async () => {
         return "";
     },
     logout: () => {},
     getNewTokens: () => {},
-    updateUserDetailsInStore: () => {},
+    getUserProfileDetails: () => {},
+    // updateUserDetailsInStore: () => {},
+    refreshUserProfileDetails: () => {},
     setLoginFrom: () => {},
 });
 
 export default function UserProvider(props: PropsWithChildren) {
-    const [accessToken, setAccessToken] = useState(localStorage.getItem("token"));
-    const [refreshToken, setRefreshToken] = useState(localStorage.getItem("refreshToken"));
+    const [user, setUser] = useState(localStorage.getItem("user"));
     const [userProfileDetails, setUserProfileDetails] = useState<IIUserProfileDetails>({
         email: "",
         _id: "",
@@ -57,72 +58,86 @@ export default function UserProvider(props: PropsWithChildren) {
 
     const navigate = useNavigate();
 
+    const decryptDetails = (hashedDetails: string) => {
+        const decrypted = CryptoJS.AES.decrypt(hashedDetails, import.meta.env.VITE_CRYPTO_HASHER!);
+        const stringedDetials = decrypted.toString(CryptoJS.enc.Utf8);
+        const decryptedDetailsObject = JSON.parse(stringedDetials);
+        return decryptedDetailsObject;
+    };
+
     const login = async (userCredentials: { email: string; password: string }) => {
         const response = await userLogin(userCredentials);
-        if (response.tokens) {
-            localStorage.setItem("token", response.tokens.accessToken);
-            localStorage.setItem("refreshToken", response.tokens.refreshToken);
-            setAccessToken(response.tokens.accessToken);
-            setRefreshToken(response.tokens.refreshToken);
-            setUserProfileDetails(response.userDetails);
-            if (loginFrom == "login") navigate("/");
-            if (loginFrom == "shop") window.history.go(-1);
-            return "OK";
+        if (response == "user not found" || response == "wrong password") {
+            return "something's not right";
         }
-        return "No Tokens";
+        localStorage.setItem("user", response);
+        setUser(response);
+        if (loginFrom == "login") navigate("/");
+        if (loginFrom == "shop") window.history.go(-1);
+        return "OK";
     };
 
     const logout = async () => {
-        if (refreshToken) {
-            const response = await logoutRequest(refreshToken);
+        if (user) {
+            const response = await logoutRequest();
             if (response == false) {
                 console.log("something went wrong");
                 return;
             }
-            localStorage.removeItem("userID");
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            setAccessToken(null);
-            setRefreshToken(null);
-            activeLinkContext.setActiveLink("login");
-
+            localStorage.removeItem("user");
+            activeLinkContext.setActiveLink("/login");
+            setUser(null);
             navigate("/login");
         }
     };
 
     const getNewTokens = async () => {
-        if (refreshToken) {
-            const newTokens = await refreshTokenRequest(refreshToken, userProfileDetails.email);
-            if (typeof newTokens == "string") {
+        if (userProfileDetails.email) {
+            const response = await refreshTokenRequest(userProfileDetails.email);
+            if (response != "OK") {
                 alert("Refresh Token Invalid. Please Relogin.");
                 logout();
             }
-            localStorage.setItem("token", newTokens.accessToken);
-            localStorage.setItem("refreshToken", newTokens.refreshToken);
-            setAccessToken(localStorage.getItem("token"));
-            setRefreshToken(localStorage.getItem("refreshToken"));
         }
     };
 
-    const updateUserDetailsInStore = (userProfileDetails: IIUserProfileDetails) => {
-        setUserProfileDetails(userProfileDetails);
+    // const updateUserDetailsInStore = (userProfileDetails: IIUserProfileDetails) => {
+    //     setUserProfileDetails(userProfileDetails);
+    // };
+
+    const refreshUserProfileDetails = async () => {
+        if (user) {
+            const userDetails = await decryptDetails(user);
+            setUserProfileDetails(userDetails);
+        }
+    };
+
+    const getUserProfileDetails = async () => {
+        if (userProfileDetails.email) {
+            const user = await getUserProfileDetailsRequest(userProfileDetails.email);
+            setUser(user);
+        }
     };
 
     useEffect(() => {
-        if (accessToken && refreshToken) {
+        if (userProfileDetails.email) {
             getNewTokens();
         }
-    }, []);
+    }, [userProfileDetails]);
+
+    useEffect(() => {
+        refreshUserProfileDetails();
+    }, [user]);
 
     const userContextValues: IUserContext = {
         userProfileDetails: userProfileDetails,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        isSeller: false,
         loginFrom: loginFrom,
+        user: user,
         login: login,
         logout: logout,
-        updateUserDetailsInStore: updateUserDetailsInStore,
+        getUserProfileDetails: getUserProfileDetails,
+        // updateUserDetailsInStore: updateUserDetailsInStore,
+        refreshUserProfileDetails: refreshUserProfileDetails,
         getNewTokens: getNewTokens,
         setLoginFrom: setLoginFrom,
     };

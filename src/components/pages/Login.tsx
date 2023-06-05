@@ -7,7 +7,7 @@ import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import Inputs from "../shared/passwords/Inputs";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em] rounded";
-const SIGN_UP_LINK = "http://localhost:5173/sign-up";
+const SIGN_UP = "sign-up";
 
 // Regex for email validation
 const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
@@ -46,10 +46,10 @@ export default function Login() {
             password: password,
         };
         const response = await userContext.login(userCredentials);
-        if (response === "OK") {
-            return setFailedLogin(false);
+        if (response == "something's not right") {
+            return setFailedLogin(true);
         }
-        return setFailedLogin(true);
+        return setFailedLogin(false);
     };
 
     return (
@@ -86,7 +86,7 @@ export default function Login() {
                             <div>Forgot Password?</div>
                             <Link
                                 to={"/sign-up"}
-                                onClick={() => activeLinkContext.setActiveLink(SIGN_UP_LINK)}
+                                onClick={() => activeLinkContext.setActiveLink(SIGN_UP)}
                             >
                                 Sign Up
                             </Link>

@@ -9,9 +9,5 @@ export default function LoggedInRoutes() {
         userContext.setLoginFrom("shop");
     }, []);
 
-    return userContext.accessToken && userContext.refreshToken ? (
-        <Outlet />
-    ) : (
-        <Navigate to="/login" />
-    );
+    return userContext.user ? <Outlet /> : <Navigate to="/login" />;
 }

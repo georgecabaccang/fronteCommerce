@@ -6,9 +6,7 @@ export const getUserCartRequest = async (email: string) => {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/cart",
             { email: email },
-            {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            }
+            { withCredentials: true }
         );
         return data;
     } catch (error) {
@@ -33,9 +31,7 @@ export const addToCartRequest = async (
                 quantity: productToBeAddedToCart.quantity,
                 email: email,
             },
-            {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            }
+            { withCredentials: true }
         );
         return data;
     } catch (error) {
@@ -47,11 +43,11 @@ export const addToCartRequest = async (
 export const removeFromCartRequest = async (itemInCartId: string, email: string) => {
     try {
         await axios.delete("https://backend-commerce.vercel.app/cart/remove-from-cart", {
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             data: {
                 email: email,
                 prod_id: itemInCartId,
             },
+            withCredentials: true,
         });
     } catch (error) {
         if (error instanceof Error) return error.message;
@@ -72,7 +68,7 @@ export const itemInCartChangeQuantity = async (
                 quantity: quantity,
                 prod_id: prod_id,
             },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            { withCredentials: true }
         );
         return response;
     } catch (error) {

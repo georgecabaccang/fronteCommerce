@@ -77,7 +77,7 @@ export default function CartProvider(props: PropsWithChildren) {
 
     useEffect(() => {
         getCartData();
-    }, [userContext.accessToken]);
+    }, [userContext.userProfileDetails]);
 
     const CartPrroviderValues = {
         cart: cart,

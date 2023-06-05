@@ -2,6 +2,7 @@ import { PropsWithChildren, useState, useEffect, useContext, useRef } from "reac
 import Navigation from "./Navigation";
 import LoginTimeAlert from "./LoginTimeAlert";
 import { UserContext } from "../../providers/UserProvider";
+import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 
 const TIME_FOR_PROMPT = 300000;
 
@@ -10,18 +11,20 @@ export default function Layout(props: PropsWithChildren) {
     const [extendTimePrompt, setExtendTimePrompt] = useState(false);
 
     const userContext = useContext(UserContext);
+    const activeLinkContext = useContext(ActiveLinkContext);
 
     useEffect(() => {
         clearTimeout(timer.current);
         setExtendTimePrompt(false);
 
-        if (userContext.accessToken) {
-            timer.current = setTimeout(() => {
+        if (userContext.user) {
+            timer.current = window.setTimeout(() => {
+                // set window.setTimeout because using @types/nodes in dependencies
                 setExtendTimePrompt(true);
             }, TIME_FOR_PROMPT);
             return;
         }
-    }, [userContext.accessToken]);
+    }, [userContext.user, activeLinkContext.link]);
 
     return (
         <div>

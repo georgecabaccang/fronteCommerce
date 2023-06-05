@@ -16,7 +16,7 @@ export default function OrdersProvider(props: PropsWithChildren) {
     const userContext = useContext(UserContext);
 
     const getOrders = async () => {
-        const response = await getOrdersRequest();
+        const response = await getOrdersRequest(userContext.userProfileDetails.email);
         setOrders(response.orders);
     };
 
@@ -39,7 +39,7 @@ export default function OrdersProvider(props: PropsWithChildren) {
 
     useEffect(() => {
         getOrders();
-    }, [userContext.accessToken]);
+    }, [userContext.userProfileDetails]);
 
     const ordersContextValues = {
         orders: orders,

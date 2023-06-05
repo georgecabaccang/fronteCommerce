@@ -9,9 +9,7 @@ export const orderCheckOutRequest = async (checkOutDetails: IICheckoutDetails, e
                 email: email,
                 toPurchase: checkOutDetails,
             },
-            {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            }
+            { withCredentials: true }
         );
         return data;
     } catch (error) {
@@ -19,12 +17,13 @@ export const orderCheckOutRequest = async (checkOutDetails: IICheckoutDetails, e
     }
 };
 
-export const getOrdersRequest = async () => {
+export const getOrdersRequest = async (email: string) => {
     try {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/orders",
-            { email: localStorage.getItem("userEmail") },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            // "http://localhost:8002/orders",
+            { email: email },
+            { withCredentials: true }
         );
         return data;
     } catch (error) {
@@ -37,7 +36,7 @@ export const cancelOrderRequest = async (order_id: string, email: string) => {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/orders/cancel-order",
             { email: email, order_id: order_id },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            { withCredentials: true }
         );
         return data;
     } catch (error) {
@@ -50,7 +49,7 @@ export const receiveOrderRequest = async (order_id: string, email: string) => {
         const { data } = await axios.post(
             "https://backend-commerce.vercel.app/orders/order-status-received",
             { email: email, order_id: order_id },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            { withCredentials: true }
         );
         return data;
     } catch (error) {
