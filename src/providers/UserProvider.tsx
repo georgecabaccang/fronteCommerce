@@ -123,7 +123,7 @@ export default function UserProvider(props: PropsWithChildren) {
         if (userProfileDetails.email) {
             getNewTokens();
         }
-    }, [userProfileDetails]);
+    }, [userProfileDetails.email]);
 
     useEffect(() => {
         refreshUserProfileDetails();
