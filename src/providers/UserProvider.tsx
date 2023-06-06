@@ -21,7 +21,6 @@ interface IUserContext {
     logout: () => void;
     getNewTokens: () => void;
     getUserProfileDetails: () => void;
-    // updateUserDetailsInStore: (userDetails: IIUserProfileDetails) => void;
     refreshUserProfileDetails: () => void;
     setLoginFrom: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -40,7 +39,6 @@ export const UserContext = createContext<IUserContext>({
     logout: () => {},
     getNewTokens: () => {},
     getUserProfileDetails: () => {},
-    // updateUserDetailsInStore: () => {},
     refreshUserProfileDetails: () => {},
     setLoginFrom: () => {},
 });
@@ -62,6 +60,7 @@ export default function UserProvider(props: PropsWithChildren) {
         const decrypted = CryptoJS.AES.decrypt(hashedDetails, import.meta.env.VITE_CRYPTO_HASHER!);
         const stringedDetials = decrypted.toString(CryptoJS.enc.Utf8);
         const decryptedDetailsObject = JSON.parse(stringedDetials);
+        console.log(decryptedDetailsObject);
         return decryptedDetailsObject;
     };
 
@@ -93,17 +92,14 @@ export default function UserProvider(props: PropsWithChildren) {
 
     const getNewTokens = async () => {
         if (userProfileDetails.email) {
-            const response = await refreshTokenRequest(userProfileDetails.email);
-            if (response != "OK") {
+            const user = await refreshTokenRequest(userProfileDetails.email);
+            setUser(user);
+            if (user == "no refresh token provided" || user == "tampered refresh token") {
                 alert("Refresh Token Invalid. Please Relogin.");
                 logout();
             }
         }
     };
-
-    // const updateUserDetailsInStore = (userProfileDetails: IIUserProfileDetails) => {
-    //     setUserProfileDetails(userProfileDetails);
-    // };
 
     const refreshUserProfileDetails = async () => {
         if (user) {
@@ -115,6 +111,7 @@ export default function UserProvider(props: PropsWithChildren) {
     const getUserProfileDetails = async () => {
         if (userProfileDetails.email) {
             const user = await getUserProfileDetailsRequest(userProfileDetails.email);
+            localStorage.setItem("user", user);
             setUser(user);
         }
     };
@@ -123,7 +120,7 @@ export default function UserProvider(props: PropsWithChildren) {
         if (userProfileDetails.email) {
             getNewTokens();
         }
-    }, [userProfileDetails.email]);
+    }, []);
 
     useEffect(() => {
         refreshUserProfileDetails();
@@ -136,7 +133,6 @@ export default function UserProvider(props: PropsWithChildren) {
         login: login,
         logout: logout,
         getUserProfileDetails: getUserProfileDetails,
-        // updateUserDetailsInStore: updateUserDetailsInStore,
         refreshUserProfileDetails: refreshUserProfileDetails,
         getNewTokens: getNewTokens,
         setLoginFrom: setLoginFrom,

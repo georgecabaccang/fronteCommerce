@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from "../axios";
 import { IICheckoutDetails } from "../types/cartTypes";
 
 export const orderCheckOutRequest = async (checkOutDetails: IICheckoutDetails, email: string) => {
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/orders/order-checkout",
+            "/orders/order-checkout",
             {
                 email: email,
                 toPurchase: checkOutDetails,
@@ -20,8 +20,8 @@ export const orderCheckOutRequest = async (checkOutDetails: IICheckoutDetails, e
 export const getOrdersRequest = async (email: string) => {
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/orders",
-            // "http://localhost:8002/orders",
+            "/orders",
+
             { email: email },
             { withCredentials: true }
         );
@@ -34,7 +34,7 @@ export const getOrdersRequest = async (email: string) => {
 export const cancelOrderRequest = async (order_id: string, email: string) => {
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/orders/cancel-order",
+            "/orders/cancel-order",
             { email: email, order_id: order_id },
             { withCredentials: true }
         );
@@ -47,7 +47,7 @@ export const cancelOrderRequest = async (order_id: string, email: string) => {
 export const receiveOrderRequest = async (order_id: string, email: string) => {
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/orders/order-status-received",
+            "/orders/order-status-received",
             { email: email, order_id: order_id },
             { withCredentials: true }
         );

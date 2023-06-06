@@ -14,9 +14,6 @@ export default function Layout(props: PropsWithChildren) {
     const activeLinkContext = useContext(ActiveLinkContext);
 
     useEffect(() => {
-        clearTimeout(timer.current);
-        setExtendTimePrompt(false);
-
         if (userContext.user) {
             timer.current = window.setTimeout(() => {
                 // set window.setTimeout because using @types/nodes in dependencies
@@ -24,6 +21,10 @@ export default function Layout(props: PropsWithChildren) {
             }, TIME_FOR_PROMPT);
             return;
         }
+        return () => {
+            clearTimeout(timer.current);
+            setExtendTimePrompt(false);
+        };
     }, [userContext.user, activeLinkContext.link]);
 
     return (

@@ -22,6 +22,7 @@ export default function Profile() {
         if (response === "OK") {
             return userContext.getUserProfileDetails();
         }
+        return "something wrong happened when updating seller status";
     };
 
     return (

@@ -1,7 +1,7 @@
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { IProductContextPropperties, IProductProperties } from "../types/productTypes";
-import { searchProductDetailsRequest } from "../api/productDetailsReqeust";
+import { getProductsRequest, searchProductDetailsRequest } from "../api/productDetailsReqeust";
 
 export const ProductsContext = createContext<IProductContextPropperties>({
     products: [],
@@ -13,8 +13,8 @@ export default function ProductsProvider(props: PropsWithChildren) {
     const [products, setProducts] = useState<Array<IProductProperties>>([]);
 
     const loadProducts = async () => {
-        const { data } = await axios("https://backend-commerce.vercel.app/shop");
-        setProducts(data);
+        const products = await getProductsRequest();
+        setProducts(products);
     };
 
     const searchProducts = async (query: string) => {

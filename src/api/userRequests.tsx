@@ -1,10 +1,9 @@
-import axios from "axios";
+import axios from "../axios";
 
 export const updateSellerStatusRequest = async (email: string, user_id: string) => {
     try {
         const { data } = await axios.patch(
-            `https://backend-commerce.vercel.app/user/${user_id}/update-user-type`,
-            // `http://localhost:8002/user/${user_id}/update-user-type`,
+            `/user/${user_id}/update-user-type`,
             {
                 email: email,
             },
@@ -23,7 +22,7 @@ export const changePasswordRequest = async (
 ) => {
     try {
         const { data } = await axios.patch(
-            `https://backend-commerce.vercel.app/user/${user_id}/change-password`,
+            `/user/${user_id}/change-password`,
             {
                 email: email,
                 oldPassword: passwords.oldPassword,
@@ -40,8 +39,7 @@ export const changePasswordRequest = async (
 export const getUserProfileDetailsRequest = async (email: string) => {
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/user/profile-details",
-            // "http://localhost:8002/user/profile-details",
+            "/user/profile-details",
             {
                 email: email,
             },

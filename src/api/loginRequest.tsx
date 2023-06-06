@@ -1,11 +1,11 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import axios from "../axios";
 import { IUserDetails } from "../types/userRequestTypes";
 
 export const userLogin = async (userCredentials: IUserDetails) => {
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/user/login",
-            // "http://localhost:8002/user/login",
+            "/user/login",
             {
                 email: userCredentials.email,
                 password: userCredentials.password,

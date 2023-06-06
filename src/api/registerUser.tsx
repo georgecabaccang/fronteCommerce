@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from "../axios";
 import { IUserDetails } from "../types/userRequestTypes";
 
 export const registerUser = async (userDetails: IUserDetails) => {
     try {
-        const { data } = await axios.post("https://backend-commerce.vercel.app/user/register", {
+        const { data } = await axios.post("/user/register", {
             email: userDetails.email,
             password: userDetails.password,
         });

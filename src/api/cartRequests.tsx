@@ -1,13 +1,9 @@
-import axios from "axios";
+import axios from "../axios";
 
 // GET USER CART
 export const getUserCartRequest = async (email: string) => {
     try {
-        const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/cart",
-            { email: email },
-            { withCredentials: true }
-        );
+        const { data } = await axios.post("/cart", { email: email }, { withCredentials: true });
         return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
@@ -22,10 +18,9 @@ export const addToCartRequest = async (
     },
     email: string
 ) => {
-    console.log(email);
     try {
         const { data } = await axios.post(
-            "https://backend-commerce.vercel.app/cart/add-to-cart",
+            "/cart/add-to-cart",
             {
                 prod_id: productToBeAddedToCart.prod_id,
                 quantity: productToBeAddedToCart.quantity,
@@ -42,7 +37,7 @@ export const addToCartRequest = async (
 // REMOVE ITEMS FROM CART
 export const removeFromCartRequest = async (itemInCartId: string, email: string) => {
     try {
-        await axios.delete("https://backend-commerce.vercel.app/cart/remove-from-cart", {
+        await axios.delete("/cart/remove-from-cart", {
             data: {
                 email: email,
                 prod_id: itemInCartId,
@@ -62,7 +57,7 @@ export const itemInCartChangeQuantity = async (
 ) => {
     try {
         const response = await axios.put(
-            "https://backend-commerce.vercel.app/cart/change-quantity",
+            "/cart/change-quantity",
             {
                 email: email,
                 quantity: quantity,
