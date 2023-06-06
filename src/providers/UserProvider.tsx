@@ -1,4 +1,11 @@
-import React, { PropsWithChildren, createContext, useState, useEffect, useContext } from "react";
+import React, {
+    PropsWithChildren,
+    createContext,
+    useState,
+    useEffect,
+    useContext,
+    useRef,
+} from "react";
 import { logoutRequest } from "../api/logoutRequest";
 import { refreshTokenRequest } from "../api/refreshTokenRequest";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +18,7 @@ interface IIUserProfileDetails {
     email: string;
     _id: string;
     isSeller: boolean;
+    date: number;
 }
 
 interface IUserContext {
@@ -30,6 +38,7 @@ export const UserContext = createContext<IUserContext>({
         email: "",
         _id: "",
         isSeller: false,
+        date: 0,
     },
     loginFrom: "",
     user: "",
@@ -49,7 +58,9 @@ export default function UserProvider(props: PropsWithChildren) {
         email: "",
         _id: "",
         isSeller: false,
+        date: 0,
     });
+    const refreshTimer = useRef(0);
     const [loginFrom, setLoginFrom] = useState("login");
 
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -84,20 +95,10 @@ export default function UserProvider(props: PropsWithChildren) {
                 return;
             }
             localStorage.removeItem("user");
+            setUserProfileDetails({ email: "", _id: "", isSeller: false, date: 0 });
             activeLinkContext.setActiveLink("/login");
             setUser(null);
             navigate("/login");
-        }
-    };
-
-    const getNewTokens = async () => {
-        if (userProfileDetails.email) {
-            const user = await refreshTokenRequest(userProfileDetails.email);
-            setUser(user);
-            if (user == "no refresh token provided" || user == "tampered refresh token") {
-                alert("Refresh Token Invalid. Please Relogin.");
-                logout();
-            }
         }
     };
 
@@ -105,6 +106,18 @@ export default function UserProvider(props: PropsWithChildren) {
         if (user) {
             const userDetails = await decryptDetails(user);
             setUserProfileDetails(userDetails);
+        }
+    };
+
+    const getNewTokens = async () => {
+        if (userProfileDetails.email) {
+            const updatedUserToken = await refreshTokenRequest(userProfileDetails.email);
+            localStorage.setItem("user", updatedUserToken);
+            setUser(updatedUserToken);
+            if (user == "no refresh token provided" || user == "tampered refresh token") {
+                alert("Refresh Token Invalid. Please Relogin.");
+                logout();
+            }
         }
     };
 
@@ -116,11 +129,20 @@ export default function UserProvider(props: PropsWithChildren) {
         }
     };
 
+    // Will make a request for new tokens every 10 mins to keep user logged in
     useEffect(() => {
-        if (userProfileDetails.email) {
-            getNewTokens();
+        if (user && userProfileDetails.date) {
+            // const dateNow = Date.now() / 1000 + 10;
+            // const timer = dateNow - userProfileDetails.date;
+            // console.log(timer);
+            refreshTimer.current = window.setTimeout(() => {
+                getNewTokens();
+            }, 600000);
         }
-    }, []);
+        return () => {
+            clearTimeout(refreshTimer.current);
+        };
+    }, [userProfileDetails]);
 
     useEffect(() => {
         refreshUserProfileDetails();

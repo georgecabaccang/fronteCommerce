@@ -19,7 +19,6 @@ export default function Layout(props: PropsWithChildren) {
                 // set window.setTimeout because using @types/nodes in dependencies
                 setExtendTimePrompt(true);
             }, TIME_FOR_PROMPT);
-            return;
         }
         return () => {
             clearTimeout(timer.current);
