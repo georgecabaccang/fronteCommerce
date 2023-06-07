@@ -17,6 +17,7 @@ import MyProducts from "./components/products/MyProducts";
 import SellerRoutes from "./utils/SellerRoutes";
 import LoggedOutRoutes from "./utils/LoggedOutRoutes";
 import LoggedInRoutes from "./utils/LoggedInRoutes";
+import UpdateMyProduct from "./components/products/UpdateMyProduct";
 
 function App() {
     return (
@@ -38,6 +39,10 @@ function App() {
                     {/* Seller Routes */}
                     <Route element={<SellerRoutes />}>
                         <Route path="/user/:user_id/my-products" element={<MyProducts />} />
+                        <Route
+                            path="/user/:user_id/my-products/:prod_id/update"
+                            element={<UpdateMyProduct />}
+                        />
                     </Route>
 
                     {/* Should-be-logged-OUT-to-access routes */}

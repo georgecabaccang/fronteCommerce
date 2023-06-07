@@ -35,7 +35,14 @@ export default function MyProducts() {
             {!isEmpty && !isLoading ? (
                 <div>
                     {myProducts.map((product) => {
-                        return <Product product={product} key={product._id} />;
+                        return (
+                            <Product
+                                product={product}
+                                key={product._id}
+                                isSeller={userContext.userProfileDetails.isSeller}
+                                user_id={userContext.userProfileDetails._id}
+                            />
+                        );
                     })}
                 </div>
             ) : (

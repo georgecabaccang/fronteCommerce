@@ -168,7 +168,7 @@ export default function Shop() {
                 {productsContext.products.length != 0 ? (
                     <div className="grid grid-cols-5 gap-2">
                         {productsContext.products.map((product) => {
-                            return <Product product={product} key={product._id} />;
+                            return <Product product={product} key={product._id} isSeller={false} />;
                         })}
                     </div>
                 ) : (
