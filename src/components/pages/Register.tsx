@@ -12,7 +12,7 @@ const INPUT_CLASSNAME =
 const LOGIN_LINK = "http://localhost:5173/login";
 
 // Regex for email validation
-const EMAIL_REGEX = /^[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z]+\.[a-z]{2,3}/;
 
 export default function Register() {
     const [email, setEmail] = useState<string>("");

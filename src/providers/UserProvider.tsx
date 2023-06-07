@@ -71,7 +71,6 @@ export default function UserProvider(props: PropsWithChildren) {
         const decrypted = CryptoJS.AES.decrypt(hashedDetails, import.meta.env.VITE_CRYPTO_HASHER!);
         const stringedDetials = decrypted.toString(CryptoJS.enc.Utf8);
         const decryptedDetailsObject = JSON.parse(stringedDetials);
-        console.log(decryptedDetailsObject);
         return decryptedDetailsObject;
     };
 
