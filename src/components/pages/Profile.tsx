@@ -3,9 +3,11 @@ import { UserContext } from "../../providers/UserProvider";
 import Button from "../shared/Button";
 import ChangePassword from "../ChangePassword";
 import { updateSellerStatusRequest } from "../../api/userRequests";
+import PostProduct from "../products/PostProduct";
 
 export default function Profile() {
     const [changePasswordShown, setChangePasswordShown] = useState(false);
+    const [postProductFormShown, setPostProductFormShown] = useState(false);
 
     const userContext = useContext(UserContext);
 
@@ -20,8 +22,10 @@ export default function Profile() {
     const updateSellerStatus = async () => {
         const response = await updateSellerStatusRequest(email, _id);
         if (response === "OK") {
+            setPostProductFormShown(false);
             return userContext.getUserProfileDetails();
         }
+        setPostProductFormShown(false);
         return "something wrong happened when updating seller status";
     };
 
@@ -40,6 +44,21 @@ export default function Profile() {
                     />
                 </div>
             </div>
+            {isSeller && (
+                <div>
+                    <Button
+                        name="Post Product"
+                        type="button"
+                        className="border px-3 rounded bg-blue-200 shadow-sm  hover:bg-blue-500"
+                        clickEvent={() => setPostProductFormShown(true)}
+                    />
+                </div>
+            )}
+            {postProductFormShown && (
+                <div>
+                    <PostProduct setPostProductFormShown={setPostProductFormShown} />
+                </div>
+            )}
 
             {!changePasswordShown && (
                 <Button

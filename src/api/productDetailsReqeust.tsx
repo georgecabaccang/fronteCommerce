@@ -28,3 +28,29 @@ export const getProductsRequest = async () => {
         if (error instanceof Error) return error.message;
     }
 };
+
+export const postProductRequest = async (
+    email: string,
+    product: {
+        image: string;
+        productName: string;
+        description: string;
+        price: number;
+        discount: number;
+        stock: number;
+    }
+) => {
+    try {
+        const { data } = await axios.post(
+            "/shop/add-product",
+            {
+                email: email,
+                product: product,
+            },
+            { withCredentials: true }
+        );
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
