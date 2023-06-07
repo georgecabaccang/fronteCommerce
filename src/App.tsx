@@ -8,12 +8,15 @@ import Layout from "./components/shared/Layout";
 import ProductPage from "./components/products/ProductPage";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
-import LoggedOutRoutes from "./utils/LoggedOutRoutes";
-import LoggedInRoutes from "./utils/LoggedInRoutes";
+
 import CheckOutItems from "./components/cart/CheckOutItems";
 import OrdersList from "./components/orders/OrdersList";
 import Profile from "./components/pages/Profile";
 import MyProducts from "./components/products/MyProducts";
+
+import SellerRoutes from "./utils/SellerRoutes";
+import LoggedOutRoutes from "./utils/LoggedOutRoutes";
+import LoggedInRoutes from "./utils/LoggedInRoutes";
 
 function App() {
     return (
@@ -30,6 +33,10 @@ function App() {
                         <Route path="/cart/checkout" element={<CheckOutItems />} />
                         <Route path="/orders" element={<OrdersList />} />
                         <Route path="/user/profile/:user_id" element={<Profile />} />
+                    </Route>
+
+                    {/* Seller Routes */}
+                    <Route element={<SellerRoutes />}>
                         <Route path="/user/:user_id/my-products" element={<MyProducts />} />
                     </Route>
 
