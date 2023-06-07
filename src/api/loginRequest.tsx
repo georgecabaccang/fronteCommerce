@@ -1,14 +1,12 @@
 import { AxiosError } from "axios";
 import axios from "../axios";
-import { IUserDetails } from "../types/userRequestTypes";
 
-export const userLogin = async (userCredentials: IUserDetails) => {
+export const userLogin = async (hashedCredentials: string) => {
     try {
         const { data } = await axios.post(
             "/user/login",
             {
-                email: userCredentials.email,
-                password: userCredentials.password,
+                hashedCredentials: hashedCredentials,
             },
             { withCredentials: true }
         );

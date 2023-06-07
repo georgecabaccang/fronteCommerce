@@ -1,11 +1,9 @@
 import axios from "../axios";
-import { IUserDetails } from "../types/userRequestTypes";
 
-export const registerUser = async (userDetails: IUserDetails) => {
+export const registerUser = async (hashedCredentials: string) => {
     try {
         const { data } = await axios.post("/user/register", {
-            email: userDetails.email,
-            password: userDetails.password,
+            hashedCredentials: hashedCredentials,
         });
         if (data === "email is taken") {
             return data;

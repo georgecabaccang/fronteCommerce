@@ -6,6 +6,7 @@ import { UserContext } from "../../providers/UserProvider";
 import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import PasswordInputs from "../shared/passwords/PasswordInputs";
+import CryptoJS from "crypto-js";
 
 const INPUT_CLASSNAME =
     "border-l border-t border-b w-full px-3 py-[0.2em] focus:z-10 block rounded ";
@@ -43,16 +44,19 @@ export default function Register() {
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-
-        const userDetails = { email: email, password: password };
-        const response = await registerUser(userDetails);
+        const userCredentials = {
+            email: email,
+            password: password,
+        };
+        const hashedCredentials = CryptoJS.AES.encrypt(
+            JSON.stringify(userCredentials),
+            import.meta.env.VITE_CRYPTO_CRED_HASHER!
+        ).toString();
+        const response = await registerUser(hashedCredentials);
+        console.log(response);
 
         if (response === "user created") {
-            const userCredentials = {
-                email: email,
-                password: password,
-            };
-            const response = await userContext.login(userCredentials);
+            const response = await userContext.login(hashedCredentials);
             if (response === "OK") {
                 setEmailDupe(false);
             }

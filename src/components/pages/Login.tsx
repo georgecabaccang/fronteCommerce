@@ -5,6 +5,7 @@ import { UserContext } from "../../providers/UserProvider";
 import { Link } from "react-router-dom";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import Inputs from "../shared/passwords/Inputs";
+import CryptoJS from "crypto-js";
 
 const INPUT_CLASSNAME = "border w-full px-3 py-[0.2em] rounded";
 const SIGN_UP = "sign-up";
@@ -45,7 +46,12 @@ export default function Login() {
             email: email,
             password: password,
         };
-        const response = await userContext.login(userCredentials);
+        const hashedCredentials = CryptoJS.AES.encrypt(
+            JSON.stringify(userCredentials),
+            import.meta.env.VITE_CRYPTO_CRED_HASHER!
+        ).toString();
+
+        const response = await userContext.login(hashedCredentials);
         if (response == "something's not right") {
             return setFailedLogin(true);
         }

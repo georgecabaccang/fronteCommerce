@@ -25,7 +25,7 @@ interface IUserContext {
     userProfileDetails: IIUserProfileDetails;
     loginFrom: string;
     user: string | null;
-    login: (userCredentials: { email: string; password: string }) => Promise<string>;
+    login: (hashedCredentials: string) => Promise<string>;
     logout: () => void;
     getNewTokens: () => void;
     getUserProfileDetails: () => void;
@@ -74,16 +74,17 @@ export default function UserProvider(props: PropsWithChildren) {
         return decryptedDetailsObject;
     };
 
-    const login = async (userCredentials: { email: string; password: string }) => {
-        const response = await userLogin(userCredentials);
+    const login = async (hashedCredentials: string) => {
+        const response = await userLogin(hashedCredentials);
         if (response == "user not found" || response == "wrong password") {
             return "something's not right";
+        } else {
+            localStorage.setItem("user", response);
+            setUser(response);
+            if (loginFrom == "login") navigate("/");
+            if (loginFrom == "shop") window.history.go(-1);
+            return "OK";
         }
-        localStorage.setItem("user", response);
-        setUser(response);
-        if (loginFrom == "login") navigate("/");
-        if (loginFrom == "shop") window.history.go(-1);
-        return "OK";
     };
 
     const logout = async () => {
