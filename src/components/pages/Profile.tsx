@@ -4,6 +4,7 @@ import Button from "../shared/Button";
 import ChangePassword from "../ChangePassword";
 import { updateSellerStatusRequest } from "../../api/userRequests";
 import PostProduct from "../products/PostProduct";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
     const [changePasswordShown, setChangePasswordShown] = useState(false);
@@ -46,17 +47,28 @@ export default function Profile() {
             </div>
             {isSeller && (
                 <div>
-                    <Button
-                        name="Post Product"
-                        type="button"
-                        className="border px-3 rounded bg-blue-200 shadow-sm  hover:bg-blue-500"
-                        clickEvent={() => setPostProductFormShown(true)}
-                    />
-                </div>
-            )}
-            {postProductFormShown && (
-                <div>
-                    <PostProduct setPostProductFormShown={setPostProductFormShown} />
+                    {postProductFormShown ? (
+                        <div>
+                            <PostProduct setPostProductFormShown={setPostProductFormShown} />
+                        </div>
+                    ) : (
+                        <div>
+                            <Button
+                                name="Post Product"
+                                type="button"
+                                className="border px-3 rounded bg-blue-200 shadow-sm  hover:bg-blue-500"
+                                clickEvent={() => setPostProductFormShown(true)}
+                            />
+                        </div>
+                    )}
+                    <div>
+                        <Link
+                            to={`/user/${userContext.userProfileDetails._id}/my-products`}
+                            className="border px-3 rounded bg-blue-200 shadow-sm  hover:bg-blue-500"
+                        >
+                            My Products
+                        </Link>
+                    </div>
                 </div>
             )}
 

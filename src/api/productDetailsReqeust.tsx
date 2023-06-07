@@ -54,3 +54,18 @@ export const postProductRequest = async (
         if (error instanceof Error) return error.message;
     }
 };
+
+export const getUserProductsRequest = async (email: string) => {
+    try {
+        const { data } = await axios.post(
+            "/shop/my-products",
+            {
+                email: email,
+            },
+            { withCredentials: true }
+        );
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};

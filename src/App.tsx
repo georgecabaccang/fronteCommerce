@@ -13,6 +13,7 @@ import LoggedInRoutes from "./utils/LoggedInRoutes";
 import CheckOutItems from "./components/cart/CheckOutItems";
 import OrdersList from "./components/orders/OrdersList";
 import Profile from "./components/pages/Profile";
+import MyProducts from "./components/products/MyProducts";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                         <Route path="/cart/checkout" element={<CheckOutItems />} />
                         <Route path="/orders" element={<OrdersList />} />
                         <Route path="/user/profile/:user_id" element={<Profile />} />
+                        <Route path="/user/:user_id/my-products" element={<MyProducts />} />
                     </Route>
 
                     {/* Should-be-logged-OUT-to-access routes */}
