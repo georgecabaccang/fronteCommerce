@@ -110,14 +110,18 @@ export default function UserProvider(props: PropsWithChildren) {
     };
 
     const getNewTokens = async () => {
-        if (userProfileDetails.email) {
-            const updatedUserToken = await refreshTokenRequest(userProfileDetails.email);
+        if (user) {
+            const userDetails = await decryptDetails(user);
+            const updatedUserToken = await refreshTokenRequest(userDetails.email);
             localStorage.setItem("user", updatedUserToken);
-            setUser(updatedUserToken);
-            if (user == "no refresh token provided" || user == "tampered refresh token") {
+            if (
+                updatedUserToken == "no refresh token provided" ||
+                updatedUserToken == "tampered refresh token"
+            ) {
                 alert("Refresh Token Invalid. Please Relogin.");
                 logout();
             }
+            setUser(updatedUserToken);
         }
     };
 
@@ -132,9 +136,6 @@ export default function UserProvider(props: PropsWithChildren) {
     // Will make a request for new tokens every 10 mins to keep user logged in
     useEffect(() => {
         if (user && userProfileDetails.date) {
-            // const dateNow = Date.now() / 1000 + 10;
-            // const timer = dateNow - userProfileDetails.date;
-            // console.log(timer);
             refreshTimer.current = window.setTimeout(() => {
                 getNewTokens();
             }, 600000);
@@ -147,6 +148,10 @@ export default function UserProvider(props: PropsWithChildren) {
     useEffect(() => {
         refreshUserProfileDetails();
     }, [user]);
+
+    useEffect(() => {
+        getNewTokens();
+    }, []);
 
     const userContextValues: IUserContext = {
         userProfileDetails: userProfileDetails,
