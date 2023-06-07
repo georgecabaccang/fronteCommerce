@@ -6,7 +6,7 @@ import { IProductProperties } from "../../types/productTypes";
 
 export default function MyProducts() {
     const [myProducts, setMyProducts] = useState<Array<IProductProperties>>([]);
-    const [isEmpty, setIsEmpty] = useState(true);
+    const [isEmpty, setIsEmpty] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const userContext = useContext(UserContext);
@@ -27,7 +27,7 @@ export default function MyProducts() {
         if (userContext.user && userContext.userProfileDetails.email) {
             getUserProducts();
         }
-    }, []);
+    }, [userContext.userProfileDetails.email]);
 
     return (
         <div>
@@ -39,7 +39,7 @@ export default function MyProducts() {
                     })}
                 </div>
             ) : (
-                <div>{isEmpty ? "You Have No Posted Products" : "Loading..."}</div>
+                <div>{!isEmpty && isLoading ? "Loading..." : "You Have No Posted Products"}</div>
             )}
         </div>
     );
