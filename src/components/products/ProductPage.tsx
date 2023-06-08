@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { productDetailsReqeust } from "../../api/productDetailsReqeust";
-import { IProductProperties } from "../../types/productTypes";
 import styles from "../../styles/product.module.css";
 
 import Button from "../shared/Button";
@@ -10,16 +9,24 @@ import Quantity from "../shared/Quantity";
 import { CartContext } from "../../providers/CartProvider";
 import { UserContext } from "../../providers/UserProvider";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
+import { addToCartRequest, getDetailsOfItemInCartRequest } from "../../api/cartRequests";
+import useDecryptUser from "../../hooks/useDecryptUser";
+
+interface IProductInCart {
+    _id: string;
+    image: string;
+    productName: string;
+    description: string;
+    price: number;
+    discount: number;
+    discountedPrice: number;
+    stock: number;
+    salesCount: number;
+}
 
 export default function ProductPage() {
-    const [productDetails, setProductDetails] = useState<IProductProperties>({
-        productName: "",
-        price: 0,
-        discount: 0,
-        stock: 0,
-        prod_id: "",
-        image: "",
-    });
+    const { userDetails, isNull } = useDecryptUser();
+    const [productDetails, setProductDetails] = useState<IProductInCart>();
     const [isLoading, setIsLoading] = useState(true);
     const [productFound, setProductFound] = useState(false);
     const [quantity, setQuantity] = useState<number>(1);
@@ -32,15 +39,14 @@ export default function ProductPage() {
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
 
-    const addToCart = () => {
-        const prod_id = productDetails?._id;
-
-        if (prod_id) {
+    const addToCart = async () => {
+        if (productDetails?._id && userDetails && !isNull) {
             const productAddToCart = {
-                prod_id: prod_id,
+                prod_id: productDetails._id,
                 quantity: quantity,
             };
-            cartContext.addToCart(productAddToCart);
+            const response = await addToCartRequest(productAddToCart, userDetails?.email);
+            console.log(response);
         }
     };
 
@@ -50,48 +56,55 @@ export default function ProductPage() {
     }
 
     const buyNow = async () => {
-        const item = {
-            quantity: quantity,
-            productName: productDetails.productName,
-            price: productDetails.price,
-            discount: productDetails.discount,
-            stock: productDetails.stock,
-            prod_id: productDetails._id as string,
-            image: productDetails.image,
-        };
+        if (productDetails) {
+            const item = {
+                prod_id: productDetails._id as string,
+                image: productDetails.image,
+                productName: productDetails.productName,
+                description: productDetails.description,
+                price: productDetails.price,
+                discount: productDetails.discount,
+                discountedPrice: productDetails.discountedPrice,
+                quantity: quantity,
+            };
 
-        cartContext.updateCheckout(item, "add");
-        activeLinkContext.setActiveLink("checkout");
-        navigate("/cart/checkout");
+            cartContext.updateCheckout(item, "add");
+            activeLinkContext.setActiveLink("checkout");
+            navigate("/cart/checkout");
+        }
+    };
+
+    const checkIfInCart = async () => {
+        if (userDetails && !isNull && prod_id) {
+            const response = await getDetailsOfItemInCartRequest(userDetails?.email, prod_id);
+            if (typeof response === "object") {
+                return setInCart(true);
+            }
+            return setInCart(false);
+        }
+    };
+
+    const getDetails = async () => {
+        if (prod_id) {
+            const returnedDetails = await productDetailsReqeust(prod_id);
+            if (returnedDetails.message) {
+                setProductFound(false);
+                setIsLoading(false);
+                return;
+            }
+            setProductDetails(returnedDetails);
+            setProductFound(true);
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
-        const inCart = cartContext.cart.findIndex((product) => {
-            return productDetails._id === product.prod_id;
-        });
-
-        if (inCart != -1) {
-            return setInCart(true);
-        }
-        return setInCart(false);
-    }, [isLoading]);
+        getDetails();
+    }, []);
 
     useEffect(() => {
-        if (prod_id) {
-            const getDetails = async () => {
-                const returnedDetails = await productDetailsReqeust(prod_id);
-                if (returnedDetails.message) {
-                    setProductFound(false);
-                    setIsLoading(false);
-                    return;
-                }
-                setProductDetails(returnedDetails);
-                setProductFound(true);
-                setIsLoading(false);
-            };
-            getDetails();
-        }
-    }, []);
+        checkIfInCart();
+    }, [userDetails]);
 
     const redirectToLogin = () => {
         userContext.setLoginFrom("shop");

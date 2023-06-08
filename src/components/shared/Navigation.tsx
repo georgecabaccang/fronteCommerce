@@ -4,6 +4,7 @@ import { UserContext } from "../../providers/UserProvider";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import { CartContext } from "../../providers/CartProvider";
 import { Link } from "react-router-dom";
+import useDecryptUser from "../../hooks/useDecryptUser";
 
 const LOGIN = "/login";
 const SIGN_UP = "/sign-up";
@@ -12,6 +13,7 @@ const LOGGED_IN_CLASSNAME = "ms-auto flex w-1/3 h-full items-center navbar";
 const LOGGED_OUT_CLASSNAME = "ms-auto flex w-1/4 h-full items-center navbar";
 
 export default function Navigation() {
+    const { userDetails, isNull, setUserChange } = useDecryptUser();
     const userContext = useContext(UserContext);
     const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -66,7 +68,7 @@ export default function Navigation() {
                                 Orders
                             </NavLink>
                             <NavLink
-                                to={`/user/profile/${userContext.userProfileDetails._id}`}
+                                to={`/user/profile/${userDetails?._id}`}
                                 className="flex place-content-center items-center w-full h-full link-page"
                                 onClick={() => {
                                     activeLinkContext.setActiveLink("profile");

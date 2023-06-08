@@ -3,6 +3,7 @@ import { IProductProperties } from "./productTypes";
 export interface IItemsProperties extends IProductProperties {
     quantity: number;
     cart_id?: string;
+    getUserCart: () => void;
 }
 
 export interface ICheckOut {
@@ -13,10 +14,12 @@ export interface ICheckOut {
 export interface IItemInCheckout {
     quantity: number;
     prod_id: string;
-    price: number;
-    productName: string;
-    discount: number;
     image: string;
+    productName: string;
+    description: string;
+    price: number;
+    discount: number;
+    discountedPrice: number;
 }
 
 export interface IICheckoutDetails {
@@ -25,10 +28,7 @@ export interface IICheckoutDetails {
 }
 
 export interface ICart {
-    cart: Array<IItemsProperties>;
     checkOutDetails: IICheckoutDetails;
-    addToCart: (productToBeAddedToCart: { prod_id: string; quantity: number }) => void;
     updateCheckout: (item: IItemInCheckout, action: string) => void;
     resetCheckout: () => void;
-    getCartData: () => void;
 }

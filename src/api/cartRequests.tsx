@@ -35,15 +35,16 @@ export const addToCartRequest = async (
 };
 
 // REMOVE ITEMS FROM CART
-export const removeFromCartRequest = async (itemInCartId: string, email: string) => {
+export const removeFromCartRequest = async (prod_id: string, email: string) => {
     try {
-        await axios.delete("/cart/remove-from-cart", {
-            data: {
-                email: email,
-                prod_id: itemInCartId,
-            },
-            withCredentials: true,
-        });
+        const { data } = await axios.post(
+            "/cart/remove-from-cart",
+            { email: email, prod_id: prod_id },
+            {
+                withCredentials: true,
+            }
+        );
+        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }
@@ -56,7 +57,7 @@ export const itemInCartChangeQuantity = async (
     email: string
 ) => {
     try {
-        const response = await axios.put(
+        const { data } = await axios.put(
             "/cart/change-quantity",
             {
                 email: email,
@@ -65,7 +66,23 @@ export const itemInCartChangeQuantity = async (
             },
             { withCredentials: true }
         );
-        return response;
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
+
+export const getDetailsOfItemInCartRequest = async (email: string, prod_id: string) => {
+    try {
+        const { data } = await axios.post(
+            "/cart/item/get-details",
+            {
+                email: email,
+                prod_id: prod_id,
+            },
+            { withCredentials: true }
+        );
+        return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }

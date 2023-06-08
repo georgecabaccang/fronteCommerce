@@ -1,7 +1,7 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useState } from "react";
-import { UserContext } from "./UserProvider";
+import { PropsWithChildren, createContext, useEffect, useState } from "react";
 import { cancelOrderRequest, getOrdersRequest, receiveOrderRequest } from "../api/orderRequests";
 import { IOrder, IOrderList } from "../types/orderTypes";
+import useDecryptUser from "../hooks/useDecryptUser";
 
 export const OrdersContext = createContext<IOrderList>({
     orders: [],
@@ -11,35 +11,33 @@ export const OrdersContext = createContext<IOrderList>({
 });
 
 export default function OrdersProvider(props: PropsWithChildren) {
+    const { userDetails, isNull } = useDecryptUser();
     const [orders, setOrders] = useState<Array<IOrder>>([]);
 
-    const userContext = useContext(UserContext);
-
     const getOrders = async () => {
-        const response = await getOrdersRequest(userContext.userProfileDetails.email);
-        setOrders(response.orders);
+        if (userDetails && !isNull) {
+            const response = await getOrdersRequest(userDetails.email);
+            setOrders(response.orders);
+        }
     };
 
     const cancelOrder = async (order_id: string) => {
-        await cancelOrderRequest(order_id, userContext.userProfileDetails.email);
-        getOrders();
+        if (userDetails && !isNull) {
+            await cancelOrderRequest(order_id, userDetails.email);
+            getOrders();
+        }
     };
 
     const receiveOrder = async (order_id: string) => {
-        await receiveOrderRequest(order_id, userContext.userProfileDetails.email);
-        getOrders();
+        if (userDetails && !isNull) {
+            await receiveOrderRequest(order_id, userDetails.email);
+            getOrders();
+        }
     };
-
-    // MAY FIX SOME BUGS@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    // useEffect(() => {
-    //     if (userContext.accessToken) {
-    //         getOrders();
-    //     }
-    // }, [userContext.accessToken]);
 
     useEffect(() => {
         getOrders();
-    }, [userContext.userProfileDetails]);
+    }, [userDetails]);
 
     const ordersContextValues = {
         orders: orders,

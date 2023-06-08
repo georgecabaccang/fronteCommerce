@@ -4,10 +4,32 @@ import CartItem from "./CartItem";
 import { useNavigate } from "react-router-dom";
 import Button from "../shared/Button";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
+import useDecryptUser from "../../hooks/useDecryptUser";
+import { getUserCartRequest } from "../../api/cartRequests";
 
 const CHECKOUT_URL = "/cart/checkout";
 
+interface ICart {
+    items: Array<{
+        _id: string;
+        prod_id: string;
+        image: string;
+        productName: string;
+        description: string;
+        price: number;
+        discount: number;
+        discountedPrice: number;
+        stock: number;
+        quantity: number;
+    }>;
+    _id: string;
+    cartOwner: string;
+}
+
 export default function Cart() {
+    const { userDetails, isNull, setUserChange } = useDecryptUser();
+    const [cart, setCart] = useState<ICart>();
+    const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(true);
 
     const cartContext = useContext(CartContext);
@@ -20,34 +42,61 @@ export default function Cart() {
         navigate(CHECKOUT_URL);
     };
 
-    useEffect(() => {
-        if (cartContext.checkOutDetails.items.length != 0) {
-            return setIsDisabled(false);
+    // useEffect(() => {
+    //     if (cartContext.checkOutDetails.items.length != 0) {
+    //         return setIsDisabled(false);
+    //     }
+    //     return setIsDisabled(true);
+    // }, [cartContext.checkOutDetails]);
+
+    const getUserCart = async () => {
+        setIsLoading(true);
+        if (userDetails) {
+            const cartData = await getUserCartRequest(userDetails.email);
+            setCart(cartData);
+            return setIsLoading(false);
         }
-        return setIsDisabled(true);
-    }, [cartContext.checkOutDetails]);
+        return setIsLoading(false);
+    };
+
+    useEffect(() => {
+        if (userDetails) {
+            getUserCart();
+        }
+    }, [userDetails]);
+
+    if (isLoading) {
+        return <div>Loading Cart...</div>;
+    }
 
     return (
         <div>
             Cart
             <form onSubmit={checkoutHandler}>
-                <div>
-                    {cartContext?.cart?.map((item) => {
-                        return (
-                            <CartItem
-                                key={item._id}
-                                productName={item.productName}
-                                description={item.description}
-                                price={item.price}
-                                discount={item.discount}
-                                stock={item.stock}
-                                image={item.image}
-                                prod_id={item.prod_id}
-                                quantity={item.quantity}
-                            />
-                        );
-                    })}
-                </div>
+                {cart?.items.length === 0 ? (
+                    <div>Cart Is Empty</div>
+                ) : (
+                    <div>
+                        {cart?.items.map((item) => {
+                            return (
+                                <CartItem
+                                    key={item._id}
+                                    prod_id={item.prod_id}
+                                    productName={item.productName}
+                                    description={item.description}
+                                    price={item.price}
+                                    discount={item.discount}
+                                    discountedPrice={item.discountedPrice}
+                                    stock={item.stock}
+                                    image={item.image}
+                                    item_id={item._id}
+                                    quantity={item.quantity}
+                                    getUserCart={getUserCart}
+                                />
+                            );
+                        })}
+                    </div>
+                )}
                 <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay.toFixed(2)}</div>
                 <div className="my-2">
                     <Button

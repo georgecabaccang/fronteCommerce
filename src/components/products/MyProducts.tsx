@@ -3,8 +3,10 @@ import { getUserProductsRequest } from "../../api/productDetailsReqeust";
 import { UserContext } from "../../providers/UserProvider";
 import Product from "./Product";
 import { IProductProperties } from "../../types/productTypes";
+import useDecryptUser from "../../hooks/useDecryptUser";
 
 export default function MyProducts() {
+    const { userDetails, isNull } = useDecryptUser();
     const [myProducts, setMyProducts] = useState<Array<IProductProperties>>([]);
     const [isEmpty, setIsEmpty] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -12,22 +14,23 @@ export default function MyProducts() {
     const userContext = useContext(UserContext);
 
     const getUserProducts = async () => {
-        const response = await getUserProductsRequest(userContext.userProfileDetails.email);
-        console.log(response);
-        if (response != "no posted products") {
-            setMyProducts(response);
-            setIsEmpty(false);
+        if (!isNull) {
+            const response = await getUserProductsRequest(userDetails!.email);
+            console.log(response);
+            if (response != "no posted products") {
+                setMyProducts(response);
+                setIsEmpty(false);
+                return setIsLoading(false);
+            }
+            setIsEmpty(true);
             return setIsLoading(false);
         }
-        setIsEmpty(true);
-        return setIsLoading(false);
+        return console.log("no user");
     };
 
     useEffect(() => {
-        if (userContext.user && userContext.userProfileDetails.email) {
-            getUserProducts();
-        }
-    }, [userContext.userProfileDetails.email]);
+        getUserProducts();
+    }, [userDetails]);
 
     return (
         <div>

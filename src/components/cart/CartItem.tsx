@@ -1,37 +1,62 @@
 import { useState, useEffect, useContext } from "react";
 
-import { IItemsProperties } from "../../types/cartTypes";
-import { itemInCartChangeQuantity, removeFromCartRequest } from "../../api/cartRequests";
+import {
+    getDetailsOfItemInCartRequest,
+    itemInCartChangeQuantity,
+    removeFromCartRequest,
+} from "../../api/cartRequests";
 import { CartContext } from "../../providers/CartProvider";
 
 import Input from "../shared/Input";
 import Quantity from "../shared/Quantity";
-import { UserContext } from "../../providers/UserProvider";
+import useDecryptUser from "../../hooks/useDecryptUser";
 
-export default function CartItem(props: IItemsProperties) {
+interface ICartItem {
+    prod_id: string;
+    image: string;
+    productName: string;
+    description: string;
+    price: number;
+    discount: number;
+    discountedPrice: number;
+    stock: number;
+    quantity: number;
+    item_id: string;
+    getUserCart: () => {};
+}
+
+export default function CartItem(props: ICartItem) {
+    const { userDetails, isNull } = useDecryptUser();
+    const [itemDetails, setItemDetails] = useState<ICartItem>();
     const [quantity, setQuantity] = useState<number>(props.quantity);
     const [inCheckOut, setInCheckOut] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
     const cartContext = useContext(CartContext);
-    const userContext = useContext(UserContext);
 
     const changeQuantityOfItemInCart = async () => {
-        if (props.prod_id) {
-            await itemInCartChangeQuantity(
+        if (itemDetails?.prod_id && userDetails && !isNull) {
+            const response = await itemInCartChangeQuantity(
                 quantity,
-                props.prod_id,
-                userContext.userProfileDetails.email
+                itemDetails.prod_id,
+                userDetails.email
             );
-            cartContext.getCartData();
+            if (response == "OK") {
+                return setLoading(false);
+            }
             setLoading(false);
+            return alert("Smething went wrong");
         }
     };
 
     const removeFromCart = async () => {
-        if (props.prod_id) {
-            await removeFromCartRequest(props.prod_id, userContext.userProfileDetails.email);
-            cartContext.getCartData();
+        if (itemDetails?.prod_id && userDetails && !isNull) {
+            const response = await removeFromCartRequest(itemDetails.prod_id, userDetails.email);
+            console.log(response);
+            if (response == "OK") {
+                setLoading(false);
+                props.getUserCart();
+            }
             setLoading(false);
         }
     };
@@ -39,7 +64,7 @@ export default function CartItem(props: IItemsProperties) {
     const addOrRemoveToOrFromCheckOut = () => {
         const item = {
             quantity: quantity,
-            prod_id: props.prod_id,
+            prod_id: props.item_id,
             price: props.price,
             productName: props.productName,
             discount: props.discount,
@@ -53,6 +78,14 @@ export default function CartItem(props: IItemsProperties) {
         }
     };
 
+    const getItemDetails = async () => {
+        if (props.prod_id && userDetails && !isNull) {
+            const response = await getDetailsOfItemInCartRequest(userDetails.email, props.prod_id);
+            setItemDetails(response);
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         addOrRemoveToOrFromCheckOut();
     }, [inCheckOut]);
@@ -60,12 +93,18 @@ export default function CartItem(props: IItemsProperties) {
     useEffect(() => {
         setLoading(true);
         if (quantity === 0) {
+            console.log("??");
             removeFromCart();
             return;
         }
         changeQuantityOfItemInCart();
-        return;
     }, [quantity]);
+
+    useEffect(() => {
+        if (userDetails && !isNull) {
+            getItemDetails();
+        }
+    }, [userDetails]);
 
     return (
         <div className="border">
@@ -93,10 +132,10 @@ export default function CartItem(props: IItemsProperties) {
                 {!loading && quantity != 0 && (
                     <>
                         <div className="flex place-content-center col-span-2">
-                            <img src={props.image} className="max-h-[10em] min-h-[10em]" />
+                            <img src={itemDetails?.image} className="max-h-[10em] min-h-[10em]" />
                         </div>
                         <div className="col-span-3">
-                            <div>{props.productName}</div>
+                            <div>{itemDetails?.productName}</div>
                             <div>
                                 <Quantity
                                     quantity={quantity}
