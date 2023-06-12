@@ -1,12 +1,25 @@
-import { useContext, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect } from "react";
 
 import Product from "../products/Product";
-import { ProductsContext } from "../../providers/ProductsProvider";
 import { useSearchParams } from "react-router-dom";
 import Button from "../shared/Button";
+import { getProductsRequest, searchProductDetailsRequest } from "../../api/productDetailsReqeust";
+
+interface IProduct {
+    _id: string;
+    image: string;
+    productName: string;
+    description: string;
+    price: number;
+    discount: number;
+    discountedPrice: number;
+    stock: number;
+    salesCount: number;
+    postedBy: string;
+}
 
 export default function Shop() {
-    const productsContext = useContext(ProductsContext);
+    const [products, setProducts] = useState<Array<IProduct>>([]);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const SEARCH_PARAMS_FIND = searchParams.get("find") ? searchParams.get("find") : "";
@@ -136,15 +149,21 @@ export default function Shop() {
     //     }
     // }, [productsContext.products]);
 
-    const submitSearchHandler = (event: FormEvent) => {
+    const getProducts = async () => {
+        const resposne = await getProductsRequest();
+        setProducts(resposne);
+    };
+
+    const submitSearchHandler = async (event: FormEvent) => {
         event.preventDefault();
-        if (SEARCH_PARAMS_FIND) return productsContext.searchProducts(SEARCH_PARAMS_FIND!);
+        if (SEARCH_PARAMS_FIND) {
+            const response = await searchProductDetailsRequest(SEARCH_PARAMS_FIND!);
+            setProducts(response);
+        }
     };
 
     useEffect(() => {
-        if (productsContext.products.length == 0) {
-            productsContext.getProducts();
-        }
+        getProducts();
     }, []);
 
     return (
@@ -165,9 +184,9 @@ export default function Shop() {
                 </form>
             </div>
             <div>
-                {productsContext.products.length != 0 ? (
+                {products.length != 0 ? (
                     <div className="grid grid-cols-5 gap-2">
-                        {productsContext.products.map((product) => {
+                        {products.map((product) => {
                             return <Product product={product} key={product._id} isSeller={false} />;
                         })}
                     </div>

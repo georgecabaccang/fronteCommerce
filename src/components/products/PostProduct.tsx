@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useContext, FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { postProductRequest } from "../../api/productDetailsReqeust";
-import { UserContext } from "../../providers/UserProvider";
 import Swal from "sweetalert2";
+import useDecryptUser from "../../hooks/useDecryptUser";
 
 interface IPostProduct {
     setPostProductFormShown: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function PostProduct(props: IPostProduct) {
+    const { userDetails, isNull } = useDecryptUser();
     const [image, setImage] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -18,12 +19,10 @@ export default function PostProduct(props: IPostProduct) {
     const [stock, setStock] = useState(0);
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const userContext = useContext(UserContext);
-
     const onSubmitHandler = async (event: FormEvent) => {
         event.preventDefault();
 
-        if (isFormValid) {
+        if (isFormValid && userDetails && !isNull) {
             const product = {
                 image: image,
                 productName: name,
@@ -32,10 +31,7 @@ export default function PostProduct(props: IPostProduct) {
                 discount: discount / 100,
                 stock: stock,
             };
-            const response = await postProductRequest(
-                userContext.userProfileDetails.email,
-                product
-            );
+            const response = await postProductRequest(userDetails.email, product);
             if (response == "product created") {
                 return Swal.fire({
                     icon: "success",

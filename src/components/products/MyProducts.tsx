@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { getUserProductsRequest } from "../../api/productDetailsReqeust";
-import { UserContext } from "../../providers/UserProvider";
 import Product from "./Product";
 import { IProductProperties } from "../../types/productTypes";
 import useDecryptUser from "../../hooks/useDecryptUser";
@@ -11,12 +10,9 @@ export default function MyProducts() {
     const [isEmpty, setIsEmpty] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const userContext = useContext(UserContext);
-
     const getUserProducts = async () => {
         if (!isNull) {
             const response = await getUserProductsRequest(userDetails!.email);
-            console.log(response);
             if (response != "no posted products") {
                 setMyProducts(response);
                 setIsEmpty(false);
@@ -25,7 +21,6 @@ export default function MyProducts() {
             setIsEmpty(true);
             return setIsLoading(false);
         }
-        return console.log("no user");
     };
 
     useEffect(() => {
@@ -42,8 +37,8 @@ export default function MyProducts() {
                             <Product
                                 product={product}
                                 key={product._id}
-                                isSeller={userContext.userProfileDetails.isSeller}
-                                user_id={userContext.userProfileDetails._id}
+                                isSeller={userDetails?.isSeller}
+                                user_id={userDetails?._id}
                             />
                         );
                     })}

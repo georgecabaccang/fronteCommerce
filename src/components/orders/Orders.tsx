@@ -1,26 +1,49 @@
-import { useState, useContext } from "react";
-import { IOrder } from "../../types/orderTypes";
+import { useState } from "react";
 import Button from "../shared/Button";
 import OrderItem from "./OrderItem";
-import { OrdersContext } from "../../providers/OrdersProvider";
+import useDecryptUser from "../../hooks/useDecryptUser";
+import { cancelOrderRequest, receiveOrderRequest } from "../../api/orderRequests";
+export interface IOrder {
+    items: Array<{
+        productName: string;
+        prod_id: string;
+        quantity: number;
+        price: number;
+        image: string;
+        discount: number;
+    }>;
+    totalAmount: number;
+    updatedAt: Date;
+    _id: string;
+    status: string;
+    setSearchParams: (filter: { filter: string }) => void;
+    getOrders: () => void;
+}
 
 export default function Orders(props: IOrder) {
+    const { userDetails, isNull } = useDecryptUser();
     const [loading, setLaoding] = useState(false);
-
-    const ordersContext = useContext(OrdersContext);
 
     const timeOrdered = new Date(props.updatedAt).toLocaleString();
 
     const cancel = async () => {
-        setLaoding(true);
-        ordersContext.cancelOrder(props._id);
-        setLaoding(false);
+        if (userDetails && !isNull) {
+            setLaoding(true);
+            await cancelOrderRequest(props._id, userDetails?.email);
+            props.getOrders();
+            setLaoding(false);
+            props.setSearchParams({ filter: "cancelled" });
+        }
     };
 
-    const receive = () => {
-        setLaoding(true);
-        ordersContext.receiveOrder(props._id);
-        setLaoding(false);
+    const receive = async () => {
+        if (userDetails && !isNull) {
+            setLaoding(true);
+            await receiveOrderRequest(props._id, userDetails?.email);
+            props.getOrders();
+            setLaoding(false);
+            props.setSearchParams({ filter: "received" });
+        }
     };
 
     const isPaid = props.status === "received" ? "Paid" : "To Pay";

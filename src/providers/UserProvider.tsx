@@ -14,31 +14,16 @@ import { userLogin } from "../api/loginRequest";
 import CryptoJS from "crypto-js";
 import useDecryptUser from "../hooks/useDecryptUser";
 
-interface IIUserProfileDetails {
-    email: string;
-    _id: string;
-    isSeller: boolean;
-    date: number;
-}
-
 interface IUserContext {
-    // userProfileDetails: IIUserProfileDetails;
     loginFrom: string;
     user: string | null;
     login: (hashedCredentials: string) => Promise<string>;
     logout: () => void;
     getNewTokens: () => void;
-    // refreshUserProfileDetails: () => void;
     setLoginFrom: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserContext = createContext<IUserContext>({
-    // userProfileDetails: {
-    //     email: "",
-    //     _id: "",
-    //     isSeller: false,
-    //     date: 0,
-    // },
     loginFrom: "",
     user: "",
     login: async () => {
@@ -46,21 +31,15 @@ export const UserContext = createContext<IUserContext>({
     },
     logout: () => {},
     getNewTokens: () => {},
-    // refreshUserProfileDetails: () => {},
     setLoginFrom: () => {},
 });
 
 export default function UserProvider(props: PropsWithChildren) {
     const [user, setUser] = useState(localStorage.getItem("user"));
-    const { userDetails, isNull, setUserChange } = useDecryptUser();
-    // const [userProfileDetails, setUserProfileDetails] = useState<IIUserProfileDetails>({
-    //     email: "",
-    //     _id: "",
-    //     isSeller: false,
-    //     date: 0,
-    // });
-    const refreshTimer = useRef(0);
+    const { userDetails, setUserChange } = useDecryptUser();
     const [loginFrom, setLoginFrom] = useState("login");
+
+    const refreshTimer = useRef(0);
 
     const activeLinkContext = useContext(ActiveLinkContext);
 
@@ -95,19 +74,13 @@ export default function UserProvider(props: PropsWithChildren) {
                 return;
             }
             localStorage.removeItem("user");
+            setUser(null);
             setUserChange((prev) => !prev);
             activeLinkContext.setActiveLink("/login");
             setUser(null);
             navigate("/login");
         }
     };
-
-    // const refreshUserProfileDetails = async () => {
-    //     if (user) {
-    //         const userDetails = await decryptDetails(user);
-    //         setUserProfileDetails(userDetails);
-    //     }
-    // };
 
     const getNewTokens = async () => {
         if (user) {
@@ -127,7 +100,7 @@ export default function UserProvider(props: PropsWithChildren) {
 
     // Will make a request for new tokens every 10 mins to keep user logged in
     useEffect(() => {
-        if (user) {
+        if (user && userDetails) {
             refreshTimer.current = window.setTimeout(() => {
                 getNewTokens();
             }, 600000);
@@ -135,23 +108,17 @@ export default function UserProvider(props: PropsWithChildren) {
         return () => {
             clearTimeout(refreshTimer.current);
         };
-    }, [userDetails]);
-
-    // useEffect(() => {
-    //     refreshUserProfileDetails();
-    // }, [user]);
+    }, [userDetails, user]);
 
     useEffect(() => {
         getNewTokens();
     }, []);
 
     const userContextValues: IUserContext = {
-        // userProfileDetails: userProfileDetails,
         loginFrom: loginFrom,
         user: user,
         login: login,
         logout: logout,
-        // refreshUserProfileDetails: refreshUserProfileDetails,
         getNewTokens: getNewTokens,
         setLoginFrom: setLoginFrom,
     };

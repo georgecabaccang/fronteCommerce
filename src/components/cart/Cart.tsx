@@ -27,7 +27,7 @@ interface ICart {
 }
 
 export default function Cart() {
-    const { userDetails, isNull, setUserChange } = useDecryptUser();
+    const { userDetails, isNull } = useDecryptUser();
     const [cart, setCart] = useState<ICart>();
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(true);
@@ -42,16 +42,16 @@ export default function Cart() {
         navigate(CHECKOUT_URL);
     };
 
-    // useEffect(() => {
-    //     if (cartContext.checkOutDetails.items.length != 0) {
-    //         return setIsDisabled(false);
-    //     }
-    //     return setIsDisabled(true);
-    // }, [cartContext.checkOutDetails]);
+    useEffect(() => {
+        if (cartContext.checkOutDetails.items.length != 0) {
+            return setIsDisabled(false);
+        }
+        return setIsDisabled(true);
+    }, [cartContext.checkOutDetails]);
 
     const getUserCart = async () => {
         setIsLoading(true);
-        if (userDetails) {
+        if (userDetails && !isNull) {
             const cartData = await getUserCartRequest(userDetails.email);
             setCart(cartData);
             return setIsLoading(false);
@@ -100,7 +100,7 @@ export default function Cart() {
                 <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay.toFixed(2)}</div>
                 <div className="my-2">
                     <Button
-                        className="border py-2 px-5 my-3 bg-blue-100"
+                        className="border py-2 px-5 my-3 bg-blue-200 disabled:bg-gray-400 rounded"
                         type="submit"
                         name="Checkout"
                         disabled={isDisabled}

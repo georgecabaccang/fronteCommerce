@@ -77,10 +77,10 @@ export default function ProductPage() {
     const checkIfInCart = async () => {
         if (userDetails && !isNull && prod_id) {
             const response = await getDetailsOfItemInCartRequest(userDetails?.email, prod_id);
-            if (typeof response === "object") {
-                return setInCart(true);
+            if (response === "item not in cart") {
+                return setInCart(false);
             }
-            return setInCart(false);
+            return setInCart(true);
         }
     };
 

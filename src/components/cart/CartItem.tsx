@@ -63,12 +63,14 @@ export default function CartItem(props: ICartItem) {
 
     const addOrRemoveToOrFromCheckOut = () => {
         const item = {
-            quantity: quantity,
-            prod_id: props.item_id,
-            price: props.price,
-            productName: props.productName,
-            discount: props.discount,
+            prod_id: props.prod_id,
             image: props.image,
+            productName: props.productName,
+            description: props.description,
+            price: props.price,
+            discount: props.discount,
+            discountedPrice: props.discountedPrice,
+            quantity: quantity,
         };
         if (inCheckOut) {
             return cartContext.updateCheckout(item, "add");

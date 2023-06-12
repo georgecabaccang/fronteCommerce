@@ -1,13 +1,24 @@
-import { useContext } from "react";
-import { UserContext } from "../providers/UserProvider";
+import { useEffect, useState } from "react";
+
 import { Navigate, Outlet } from "react-router-dom";
+import useDecryptUser from "../hooks/useDecryptUser";
 
 export default function SellerRoutes() {
-    const userContext = useContext(UserContext);
+    const { userDetails } = useDecryptUser();
+    const [isNull, setIsNull] = useState(true);
 
-    return userContext.userProfileDetails.isSeller ? (
+    useEffect(() => {
+        if (userDetails) {
+            setIsNull(false);
+        }
+    }, [userDetails]);
+
+    if (isNull) {
+        return <></>;
+    }
+    return userDetails?.isSeller ? (
         <Outlet />
     ) : (
-        <Navigate to={`/user/profile/${userContext.userProfileDetails._id}`} />
+        <Navigate to={`/user/profile/${userDetails?._id}`} />
     );
 }
