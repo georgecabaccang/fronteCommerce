@@ -168,17 +168,25 @@ export default function Shop() {
 
     return (
         <div className="mx-5 mt-5">
-            <div className="flex min-w-100% border justify-center">
+            <div className="grid grid-cols-1 text-center min-w-full my-2">
                 <form onSubmit={submitSearchHandler}>
+                    <Button
+                        name="All Products"
+                        type="button"
+                        className="border rounded px-2 mx-2 bg-white shadow-sm"
+                        clickEvent={() => {
+                            getProducts();
+                        }}
+                    />
                     <input
                         type="text"
-                        className="border min-w-[50%]"
+                        className="border min-w-[50%] rounded"
                         value={SEARCH_PARAMS_FIND as string}
                         onChange={(event) => setSearchParams({ find: event.target.value })}
                     />
                     <Button
                         name="Search"
-                        className="border rounded px-2 hover:bg-gray-300 ms-2"
+                        className="border rounded px-2 mx-2 bg-white shadow-sm"
                         type="submit"
                     />
                 </form>
