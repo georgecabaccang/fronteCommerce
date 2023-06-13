@@ -64,12 +64,12 @@ export default function LoginTimeAlert(props: ILoginTimeAlert) {
                 <Button
                     name="Keep Me Logged In"
                     className={BUTTON_CLASSNAME}
-                    clickEvent={extendTime}
+                    clickEvent={() => extendTime()}
                 />
                 <Button
                     name="Log Me Out"
                     className={BUTTON_CLASSNAME}
-                    clickEvent={logMeOutHandler}
+                    clickEvent={() => logMeOutHandler()}
                 />
             </div>
         </div>

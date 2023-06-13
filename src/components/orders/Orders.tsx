@@ -39,7 +39,8 @@ export default function Orders(props: IOrder) {
     const receive = async () => {
         if (userDetails && !isNull) {
             setLaoding(true);
-            await receiveOrderRequest(props._id, userDetails?.email);
+            const response = await receiveOrderRequest(props._id, userDetails?.email);
+            console.log(response);
             props.getOrders();
             setLaoding(false);
             props.setSearchParams({ filter: "received" });

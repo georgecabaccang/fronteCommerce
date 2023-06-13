@@ -34,7 +34,7 @@ export default function Quantity(props: IQuantity) {
             {
                 <Button
                     name="-"
-                    className="border px-[0.7em] inline ms-2 disabled:bg-slate-200"
+                    className="border px-[0.7em] inline ms-2 disabled:bg-slate-200 rounded-tl-md rounded-bl-md"
                     clickEvent={minusQuantity}
                     getStateNumber={quantity}
                     type="button"
@@ -54,7 +54,7 @@ export default function Quantity(props: IQuantity) {
             {
                 <Button
                     name="+"
-                    className="border px-[0.6em] inline disabled:bg-slate-200"
+                    className="border px-[0.6em] inline disabled:bg-slate-200 rounded-tr-md rounded-br-md"
                     getStateNumber={quantity}
                     clickEvent={plusQuantity}
                     type="button"

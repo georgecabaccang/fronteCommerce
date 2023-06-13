@@ -13,7 +13,7 @@ const LOGGED_IN_CLASSNAME = "ms-auto flex w-1/3 h-full items-center navbar";
 const LOGGED_OUT_CLASSNAME = "ms-auto flex w-1/4 h-full items-center navbar";
 
 export default function Navigation() {
-    const { userDetails, isNull, setUserChange } = useDecryptUser();
+    const { userDetails } = useDecryptUser();
     const userContext = useContext(UserContext);
     const cartContext = useContext(CartContext);
     const activeLinkContext = useContext(ActiveLinkContext);
@@ -28,7 +28,7 @@ export default function Navigation() {
     };
 
     return (
-        <div className="bg-orange-100 h-[3em] sticky top-0 z-10">
+        <div className="bg-gray-200 h-[3em] sticky top-0 z-10 shadow-md">
             <div className="flex mx-10 h-full items-center">
                 <div>
                     <Link to={"/"}>Shop</Link>

@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { productDetailsReqeust } from "../../api/productDetailsReqeust";
-import styles from "../../styles/product.module.css";
 
 import Button from "../shared/Button";
 import Quantity from "../shared/Quantity";
@@ -50,9 +49,11 @@ export default function ProductPage() {
         }
     };
 
-    let totalPrice = productDetails?.price;
+    let totalPrice = productDetails?.discountedPrice
+        ? productDetails?.discountedPrice
+        : productDetails?.price;
     if (productDetails?.price) {
-        totalPrice = productDetails?.price * quantity;
+        totalPrice = totalPrice! * quantity;
     }
 
     const buyNow = async () => {
@@ -132,51 +133,85 @@ export default function ProductPage() {
 
     return (
         <div className="pt-8 flex justify-center items-center">
-            <div className={`${styles.card} h-[30em] w-[50em] grid grid-cols-3 p-5`}>
+            <div
+                className={`border max-h-[30em] max-w-[50em] grid grid-cols-3 p-5 shadow-sm rounded-md`}
+            >
                 <div className={`col-span-2`}>
-                    <div className="h-[20em] flex place-content-center mr-6 mb-2 p-1 border">
+                    <div className="h-[20em] flex place-content-center mr-6 mb-2 p-1">
                         <img
                             src={productDetails?.image}
                             className="max-h-[100%] min-h-[10em] object-fill"
                         />
                     </div>
-                    <p>{productDetails?.description}</p>
                 </div>
                 <div className="grid grid-cols-1 ">
                     <div>
-                        <h1>{productDetails?.productName}</h1>
-                        <div className="text-[0.85em] text-gray-400 font-semibold">
-                            Stock: {productDetails?.stock}
+                        <h3 className="font-semibold mb-1">{productDetails?.productName}</h3>
+                        <p className="min-h-[9.5em] break-words text-sm">
+                            {productDetails?.description}
+                        </p>
+                        <p className="inline text-[1em]">Price: </p>
+                        <p
+                            className={`inline ${
+                                productDetails?.discount &&
+                                "line-through text-[0.8em] text-gray-400"
+                            }`}
+                        >
+                            ${productDetails?.price && productDetails?.price.toFixed(2)}
+                        </p>
+                        {productDetails?.discountedPrice && (
+                            <div className="inline text-[1em] ms-2 m">
+                                <div className="inline me-2">${productDetails?.discountedPrice.toFixed(2)}</div>
+                                <div className="inline text-sm border px-2 rounded bg-yellow-200">
+                                    {productDetails.discount * 100}% off
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex justify-between items-center">
+                            <div className="text-[0.85em] text-gray-400 font-semibold">
+                                Stock: {productDetails?.stock}
+                            </div>
+                            {inCart && (
+                                <div className="text-xs">{productDetails?.salesCount} Sold</div>
+                            )}
                         </div>
-                        <div>
-                            Price: ${productDetails?.price && productDetails?.price.toFixed(2)}
-                        </div>
-                        <div>
-                            <Quantity
-                                quantity={quantity}
-                                setQuantity={setQuantity}
-                                quantityFrom={"shop"}
-                            />
-                        </div>
-                        <div>Total: ${totalPrice?.toFixed(2)}</div>
                     </div>
                     {!inCart && (
                         <div>
-                            <Button
-                                type="button"
-                                name="Buy Now"
-                                className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                                clickEvent={buyNowLoggedInOrOut}
-                            />
-                            <Button
-                                type="button"
-                                name="Add To Cart"
-                                className="border rounded-sm px-2 py-1 hover:bg-orange-500"
-                                clickEvent={addToCartLoggedInOrOut}
-                            />
+                            <div className="mb-2">
+                                <div className="mb-2">
+                                    <Quantity
+                                        quantity={quantity}
+                                        setQuantity={setQuantity}
+                                        quantityFrom={"shop"}
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <div>Total: ${totalPrice?.toFixed(2)}</div>
+                                    <div className="text-xs">{productDetails?.salesCount} Sold</div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 max-h-[2.2em] gap-2">
+                                <Button
+                                    type="button"
+                                    name="Buy Now"
+                                    className="border rounded-md shadow-sm hover:shadow-md px-2 py-1 hover:bg-white bg-gray-100"
+                                    clickEvent={buyNowLoggedInOrOut}
+                                />
+                                <Button
+                                    type="button"
+                                    name="Add To Cart"
+                                    className="border rounded-md shadow-sm hover:shadow-md px-2 py-1 hover:bg-white bg-gray-100"
+                                    clickEvent={addToCartLoggedInOrOut}
+                                />
+                            </div>
                         </div>
                     )}
-                    {inCart && <div>In Cart</div>}
+                    {inCart && (
+                        <div className="flex place-content-center items-center border max-h-[3em] shadow-sm rounded font-semibold">
+                            Already In Cart
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

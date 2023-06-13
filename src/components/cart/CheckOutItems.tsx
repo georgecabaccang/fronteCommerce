@@ -8,13 +8,20 @@ import useDecryptUser from "../../hooks/useDecryptUser";
 
 const CART_URL = "/cart";
 const ORDERS_URL = "/orders";
-const BUTTON_CLASSNAME = "border py-2 px-4 bg-blue-200 hover:bg-blue-500 rounded";
+const BUTTON_CLASSNAME =
+    "border w-[6em] py-2 px-5 my-3 bg-gray-300 disabled:text-gray-400 disabled:hover:shadow-sm rounded disabled:hover:bg-gray-300 shadow-sm hover:shadow-md hover:bg-white";
 
 export default function CheckOutItems() {
     const { userDetails, isNull } = useDecryptUser();
     const cartContext = useContext(CartContext);
 
     const navigate = useNavigate();
+
+    const totalAmountToPay = cartContext.checkOutDetails.totalAmountToPay;
+    const currencyFormat = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    });
 
     const submitHandler = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -60,15 +67,23 @@ export default function CheckOutItems() {
                         );
                     })}
                 </div>
-                <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay.toFixed(2)}</div>
-                <div>
-                    <Button className={BUTTON_CLASSNAME} name="Order" type="submit" />
-                    <Button
-                        className={BUTTON_CLASSNAME}
-                        name="Cancel"
-                        type="button"
-                        clickEvent={cancelCheckoutHandler}
-                    />
+                <div className="min-w-[100%] text-right fixed bottom-0 border bg-gray-100 z-10">
+                    <div className="inline mr-10">
+                        Total Amount: {currencyFormat.format(totalAmountToPay)}
+                    </div>
+                    <div className="my-2 inline mr-10">
+                        <div className="inline mx-2">
+                            <Button className={BUTTON_CLASSNAME} name="Order" type="submit" />
+                        </div>
+                        <div className="inline ml-2">
+                            <Button
+                                className={BUTTON_CLASSNAME}
+                                name="Cancel"
+                                type="button"
+                                clickEvent={cancelCheckoutHandler}
+                            />
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

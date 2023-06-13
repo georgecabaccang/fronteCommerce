@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import styles from "../../styles/product.module.css";
 
 interface IProdcutDetails {
     product: {
@@ -31,21 +30,40 @@ export default function Product(props: IProdcutDetails) {
     }
 
     return (
-        <Link
-            to={
-                isSellerOfProduct
-                    ? `/user/${user_id}/my-products/${prod_id}/update`
-                    : `/shop/product/${prod_id}`
-            }
-            className={`${styles.card} grid grid-cols-1 p-2`}
-        >
-            <div className="flex place-content-center">
-                <img src={product.image} className="max-h-[10em] min-h-[10em]" />
-            </div>
-            <div className="pt-2">
-                <h3>{product.productName}</h3>
-                <p>Price: ${product.price && product.price.toFixed(2)}</p>
-            </div>
-        </Link>
+        <div className="border rounded p-1 shadow-sm hover:shadow-md hover:border-gray-300 text-sm">
+            <Link
+                to={
+                    isSellerOfProduct
+                        ? `/user/${user_id}/my-products/${prod_id}/update`
+                        : `/shop/product/${prod_id}`
+                }
+            >
+                <div className="flex place-content-end bottom">
+                    {product.discount != 0 && (
+                        <div className="absolute bg-gray-200 text-[0.7em] px-1 rounded-s rounded-t-none rounded-br-none rounded-r">
+                            <p>{product.discount * 100}% Off</p>
+                        </div>
+                    )}
+                    <img src={product.image} className="max-h-[10em] min-h-[10em] rounded" />
+                </div>
+                <div className="pt-2 text-xs">
+                    <h3 className="my-2">{product.productName}</h3>
+                    <p className="inline text-[1em]">Price: </p>
+                    <p
+                        className={`inline ${
+                            product.discount && "line-through text-[0.8em] text-gray-400"
+                        }`}
+                    >
+                        ${product.price && product.price.toFixed(2)}
+                    </p>
+                    {product.discountedPrice && (
+                        <p className="inline text-[1em]"> ${product.discountedPrice.toFixed(2)}</p>
+                    )}
+                </div>
+                <div className="flex place-content-end">
+                    <p className="text-xs">{product.salesCount} Sold</p>
+                </div>
+            </Link>
+        </div>
     );
 }

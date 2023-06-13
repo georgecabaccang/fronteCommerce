@@ -24,7 +24,7 @@ const FILTER_BY_PENDING = "pending";
 const FILTER_BY_RECEIVED = "received";
 const FILTER_BY_CANCELLED = "cancelled";
 
-const BUTTON_CLASSNAME = "border rounded hover:shadow-md px-3";
+const BUTTON_CLASSNAME = "border rounded hover:shadow-md px-3 bg-gray-200";
 
 export default function OrdersList() {
     const { userDetails, isNull } = useDecryptUser();
@@ -72,7 +72,7 @@ export default function OrdersList() {
                     name="Pending"
                     type="button"
                     className={`${BUTTON_CLASSNAME} ${
-                        SEARCH_PARAMS_FILTER == FILTER_BY_PENDING ? "shadow-md" : ""
+                        SEARCH_PARAMS_FILTER == FILTER_BY_PENDING ? "shadow-md bg-white" : ""
                     }`}
                     clickEvent={() => {
                         setSearchParams({ filter: FILTER_BY_PENDING });
@@ -82,7 +82,7 @@ export default function OrdersList() {
                     name="Received"
                     type="button"
                     className={`${BUTTON_CLASSNAME} ${
-                        SEARCH_PARAMS_FILTER == FILTER_BY_RECEIVED ? "shadow-md" : ""
+                        SEARCH_PARAMS_FILTER == FILTER_BY_RECEIVED ? "shadow-md bg-white" : ""
                     }`}
                     clickEvent={() => {
                         setSearchParams({ filter: FILTER_BY_RECEIVED });
@@ -92,7 +92,7 @@ export default function OrdersList() {
                     name="Cancelled"
                     type="button"
                     className={`${BUTTON_CLASSNAME} ${
-                        SEARCH_PARAMS_FILTER == FILTER_BY_CANCELLED ? "shadow-md" : ""
+                        SEARCH_PARAMS_FILTER == FILTER_BY_CANCELLED ? "shadow-md bg-white" : ""
                     }`}
                     clickEvent={() => {
                         setSearchParams({ filter: FILTER_BY_CANCELLED });

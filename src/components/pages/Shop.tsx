@@ -173,27 +173,27 @@ export default function Shop() {
                     <Button
                         name="All Products"
                         type="button"
-                        className="border rounded px-2 mx-2 bg-white shadow-sm"
+                        className="border rounded px-2 mx-2 bg-white shadow-sm align-middle hover:shadow-md"
                         clickEvent={() => {
                             getProducts();
                         }}
                     />
                     <input
                         type="text"
-                        className="border min-w-[50%] rounded"
+                        className="border min-w-[50%] rounded focus:outline-none focus:shadow-md hover:shadow-md py-1 px-2 text-[0.8em]"
                         value={SEARCH_PARAMS_FIND as string}
                         onChange={(event) => setSearchParams({ find: event.target.value })}
                     />
                     <Button
                         name="Search"
-                        className="border rounded px-2 mx-2 bg-white shadow-sm"
+                        className="border rounded px-2 mx-2 bg-white shadow-sm align-middle hover:shadow-md"
                         type="submit"
                     />
                 </form>
             </div>
             <div>
                 {products.length != 0 ? (
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-6 gap-2">
                         {products.map((product) => {
                             return <Product product={product} key={product._id} isSeller={false} />;
                         })}

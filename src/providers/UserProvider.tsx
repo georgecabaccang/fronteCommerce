@@ -36,10 +36,10 @@ export const UserContext = createContext<IUserContext>({
 
 export default function UserProvider(props: PropsWithChildren) {
     const [user, setUser] = useState(localStorage.getItem("user"));
-    const { userDetails, setUserChange } = useDecryptUser();
+    const { userDetails } = useDecryptUser();
     const [loginFrom, setLoginFrom] = useState("login");
 
-    const refreshTimer = useRef(0);
+    const refreshTimer = useRef<number>();
 
     const activeLinkContext = useContext(ActiveLinkContext);
 
@@ -59,7 +59,6 @@ export default function UserProvider(props: PropsWithChildren) {
         } else {
             localStorage.setItem("user", response);
             setUser(response);
-            setUserChange((prev) => !prev);
             if (loginFrom == "login") navigate("/");
             if (loginFrom == "shop") window.history.go(-1);
             return "OK";
@@ -75,7 +74,6 @@ export default function UserProvider(props: PropsWithChildren) {
             }
             localStorage.removeItem("user");
             setUser(null);
-            setUserChange((prev) => !prev);
             activeLinkContext.setActiveLink("/login");
             setUser(null);
             navigate("/login");

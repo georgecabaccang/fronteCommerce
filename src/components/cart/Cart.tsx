@@ -37,6 +37,12 @@ export default function Cart() {
 
     const navigate = useNavigate();
 
+    const totalAmountToPay = cartContext.checkOutDetails.totalAmountToPay;
+    const currencyFormat = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    });
+
     const checkoutHandler = (event: FormEvent) => {
         event.preventDefault();
         navigate(CHECKOUT_URL);
@@ -70,8 +76,7 @@ export default function Cart() {
     }
 
     return (
-        <div>
-            Cart
+        <div className="mt-5 mb-20">
             <form onSubmit={checkoutHandler}>
                 {cart?.items.length === 0 ? (
                     <div>Cart Is Empty</div>
@@ -97,17 +102,21 @@ export default function Cart() {
                         })}
                     </div>
                 )}
-                <div>Total Amount: ${cartContext.checkOutDetails.totalAmountToPay.toFixed(2)}</div>
-                <div className="my-2">
-                    <Button
-                        className="border py-2 px-5 my-3 bg-blue-200 disabled:bg-gray-400 rounded"
-                        type="submit"
-                        name="Checkout"
-                        disabled={isDisabled}
-                        onClick={() => {
-                            activeLinkContext.setActiveLink("checkout");
-                        }}
-                    />
+                <div className="min-w-[100%] text-right fixed bottom-0 border bg-gray-100 z-10">
+                    <div className="inline mr-16">
+                       Checkout Total Amount: {currencyFormat.format(totalAmountToPay)}
+                    </div>
+                    <div className="my-2 inline mr-10">
+                        <Button
+                            className="border py-2 px-5 my-3 bg-gray-300 disabled:text-gray-400 disabled:hover:shadow-sm rounded disabled:hover:bg-gray-300 shadow-sm hover:shadow-md hover:bg-white"
+                            type="submit"
+                            name="Checkout"
+                            disabled={isDisabled}
+                            onClick={() => {
+                                activeLinkContext.setActiveLink("checkout");
+                            }}
+                        />
+                    </div>
                 </div>
             </form>
         </div>

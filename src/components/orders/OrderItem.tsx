@@ -1,4 +1,11 @@
-import { IOrderItem } from "../../types/orderTypes";
+interface IOrderItem {
+    prod_id: string;
+    image: string;
+    productName: string;
+    price: number;
+    discount: number;
+    quantity: number;
+}
 
 export default function OrderItem(props: IOrderItem) {
     const totalAmountPerItem = (props.price - props.price * props.discount) * props.quantity;
