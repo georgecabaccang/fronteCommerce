@@ -17,6 +17,7 @@ export default function ChangePassword(props: IChangePassword) {
     const [oldPassword, setOldPassword] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(true);
+    const [correctOldPasasword, setCorrectOldPassword] = useState(true);
 
     const submitHandler = async (event: FormEvent) => {
         event.preventDefault();
@@ -26,7 +27,10 @@ export default function ChangePassword(props: IChangePassword) {
             newPassword: newPassword,
         };
         const response = await changePasswordRequest(props.email, props.user_id, passwords);
-        console.log(response);
+        if (response == "incorrect password") {
+            return setCorrectOldPassword(false);
+        }
+        return setCorrectOldPassword(true);
     };
 
     useEffect(() => {
@@ -38,6 +42,9 @@ export default function ChangePassword(props: IChangePassword) {
 
     return (
         <div>
+            <div className="text-center mb-2 font-bold">Change Password</div>
+            {!correctOldPasasword && <div className="text-red-500">Incorrect Old Password</div>}
+
             <form onSubmit={submitHandler}>
                 <PasswordInputs
                     inputOld={"Old Password"}
@@ -47,18 +54,20 @@ export default function ChangePassword(props: IChangePassword) {
                     setNewPassword={setNewPassword}
                     setIsDisabled={setIsDisabled}
                 />
-                <Button
-                    name="Submit"
-                    type="submit"
-                    disabled={isDisabled}
-                    className="border rounded px-2 bg-blue-200 disabled:bg-gray-400"
-                />
-                <Button
-                    name="Cancel"
-                    type="button"
-                    className="border rounded px-2 bg-blue-200 disabled:bg-gray-400"
-                    clickEvent={() => props.setChangePasswordShown(false)}
-                />
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                    <Button
+                        name="Submit"
+                        type="submit"
+                        disabled={isDisabled}
+                        className="border rounded bg-gray-200 shadow-sm hover:bg-white hover:shadow-md disabled:hover:shadow-sm disabled:hover:bg-gray-200 disabled:text-gray-500"
+                    />
+                    <Button
+                        name="Cancel"
+                        type="button"
+                        className="border rounded bg-gray-200 disabled:bg-gray-400"
+                        clickEvent={() => props.setChangePasswordShown(false)}
+                    />
+                </div>
             </form>
         </div>
     );

@@ -5,6 +5,7 @@ import Button from "../shared/Button";
 import { orderCheckOutRequest } from "../../api/orderRequests";
 import { useNavigate } from "react-router-dom";
 import useDecryptUser from "../../hooks/useDecryptUser";
+import Swal from "sweetalert2";
 
 const CART_URL = "/cart";
 const ORDERS_URL = "/orders";
@@ -31,8 +32,28 @@ export default function CheckOutItems() {
                 userDetails.email
             );
             if (response == "OK") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Order Sent",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
                 cartContext.resetCheckout();
                 return navigate(ORDERS_URL);
+            }
+            if (response == "some items' prices don't match") {
+                return Swal.fire({
+                    icon: "error",
+                    title: "Some Items' Prices Don't Match!",
+                    text: "Please Re-add Items to Cart.",
+                });
+            }
+            if (response.includes("out of stock")) {
+                return Swal.fire({
+                    icon: "error",
+                    title: response,
+                    text: "Please Remove Product From Cart.",
+                });
             }
             return console.log("Something went wrong");
         }
@@ -51,21 +72,23 @@ export default function CheckOutItems() {
         <div>
             <form onSubmit={submitHandler}>
                 <div>
-                    {cartContext.checkOutDetails.items.map((item) => {
-                        return (
-                            <CheckOutItem
-                                key={item.prod_id}
-                                prod_id={item.prod_id}
-                                image={item.image}
-                                productName={item.productName}
-                                description={item.description}
-                                price={item.price}
-                                discount={item.discount}
-                                discountedPrice={item.discountedPrice}
-                                quantity={item.quantity}
-                            />
-                        );
-                    })}
+                    {cartContext.checkOutDetails.items
+                        .map((item) => {
+                            return (
+                                <CheckOutItem
+                                    key={item.prod_id}
+                                    prod_id={item.prod_id}
+                                    image={item.image}
+                                    productName={item.productName}
+                                    description={item.description}
+                                    price={item.price}
+                                    discount={item.discount}
+                                    discountedPrice={item.discountedPrice}
+                                    quantity={item.quantity}
+                                />
+                            );
+                        })
+                        .reverse()}
                 </div>
                 <div className="min-w-[100%] text-right fixed bottom-0 border bg-gray-100 z-10">
                     <div className="inline mr-10">

@@ -199,7 +199,7 @@ export default function Shop() {
                         })}
                     </div>
                 ) : (
-                    <div>No Products Found</div>
+                    <div className="text-center">No Products Found</div>
                 )}
             </div>
         </div>

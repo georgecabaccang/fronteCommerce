@@ -4,6 +4,7 @@ import useDecryptUser from "../../hooks/useDecryptUser";
 import { cancelOrderRequest, receiveOrderRequest } from "../../api/orderRequests";
 import { Link } from "react-router-dom";
 import { IOrder } from "../../types/orderTypes";
+import Swal from "sweetalert2";
 
 export default function Orders(props: IOrder) {
     const { userDetails, isNull } = useDecryptUser();
@@ -23,6 +24,10 @@ export default function Orders(props: IOrder) {
             setLaoding(true);
             await cancelOrderRequest(props._id, userDetails?.email);
             props.getOrders();
+            Swal.fire({
+                icon: "info",
+                title: "You Cancelled An Order",
+            });
             setLaoding(false);
             props.setSearchParams({ filter: "cancelled" });
         }
@@ -31,9 +36,12 @@ export default function Orders(props: IOrder) {
     const receive = async () => {
         if (userDetails && !isNull) {
             setLaoding(true);
-            const response = await receiveOrderRequest(props._id, userDetails?.email);
-            console.log(response);
+            await receiveOrderRequest(props._id, userDetails?.email);
             props.getOrders();
+            Swal.fire({
+                icon: "info",
+                title: "You Received An Order",
+            });
             setLaoding(false);
             props.setSearchParams({ filter: "received" });
         }
@@ -69,7 +77,7 @@ export default function Orders(props: IOrder) {
                             {productDetails?.discount != 0 && (
                                 <div className="inline text-[1em] ms-2 m">
                                     <div className="inline me-2">
-                                        {currencyFormat.format(productDetails!.discountedPrice)}
+                                        {currencyFormat.format(productDetails?.discountedPrice)}
                                     </div>
                                     <div className="inline text-sm border px-2 rounded bg-yellow-200">
                                         {productDetails!.discount * 100}% off

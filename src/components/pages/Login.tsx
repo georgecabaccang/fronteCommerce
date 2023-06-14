@@ -60,7 +60,7 @@ export default function Login() {
 
     return (
         <div className="flex place-content-center py-20">
-            <div className="border min-w-[24em] min-h-[17.5em] py-3 px-12 text-center">
+            <div className="border min-w-[24em] min-h-[17.5em] py-3 px-12 text-center rounded shadow-md">
                 <div className="font-bold text-lg">Login</div>
                 {failedLogin && (
                     <div className="text-red-500  text-sm">

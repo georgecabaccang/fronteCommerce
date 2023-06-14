@@ -66,7 +66,7 @@ export default function Register() {
 
     return (
         <div className="flex place-content-center py-20">
-            <div className="border min-w-[24em] min-h-[21em] py-3 px-12 text-center">
+            <div className="border min-w-[24em] min-h-[21em] py-3 px-12 text-center rounded shadow-md">
                 <div className="font-bold text-lg">Register</div>
                 {emailDupe && <div className="text-red-500 text-sm">Email Already Taken</div>}
                 <form onSubmit={submitHandler} className="grid grid-cols-1 gap-3">
@@ -80,7 +80,7 @@ export default function Register() {
                                 setStateString={setEmail}
                             />
                             {!isEmailValid && (
-                                <span className="text-red-500 text-xs border">
+                                <span className="text-red-500 text-xs">
                                     Please enter a valid email address.
                                 </span>
                             )}

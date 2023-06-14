@@ -9,7 +9,6 @@ export default function ItemDetails(props: IItemDetails) {
         style: "currency",
         currency: "USD",
     });
-    console.log(props);
 
     return (
         <div className="grid grid-cols-2 border min-w-[40em] items-center shadow-md rounded">

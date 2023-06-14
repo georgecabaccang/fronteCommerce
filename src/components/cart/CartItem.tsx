@@ -39,7 +39,6 @@ export default function CartItem(props: ICartItem) {
     if (props?.price) {
         totalPrice = totalPrice! * quantity;
     }
-
     const currencyFormat = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -155,11 +154,11 @@ export default function CartItem(props: ICartItem) {
                                 props?.discount && "line-through text-[0.8em] text-gray-400"
                             }`}
                         >
-                            ${props?.price && props?.price.toFixed(2)}
+                            {currencyFormat.format(props.price)}
                         </p>
-                        {props?.discountedPrice && (
+                        {props?.discount != 0 && (
                             <div className="inline text-[1em]  ms-2">
-                                ${props?.discountedPrice.toFixed(2)}{" "}
+                                {currencyFormat.format(props.discountedPrice)}{" "}
                                 <div className="inline text-sm border px-2 rounded bg-yellow-200">
                                     {props.discount * 100}% off
                                 </div>
