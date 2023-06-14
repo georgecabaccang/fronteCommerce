@@ -82,29 +82,31 @@ export default function Cart() {
                     <div>Cart Is Empty</div>
                 ) : (
                     <div>
-                        {cart?.items.map((item) => {
-                            return (
-                                <CartItem
-                                    key={item._id}
-                                    prod_id={item.prod_id}
-                                    productName={item.productName}
-                                    description={item.description}
-                                    price={item.price}
-                                    discount={item.discount}
-                                    discountedPrice={item.discountedPrice}
-                                    stock={item.stock}
-                                    image={item.image}
-                                    item_id={item._id}
-                                    quantity={item.quantity}
-                                    getUserCart={getUserCart}
-                                />
-                            );
-                        })}
+                        {cart?.items
+                            .map((item) => {
+                                return (
+                                    <CartItem
+                                        key={item._id}
+                                        prod_id={item.prod_id}
+                                        productName={item.productName}
+                                        description={item.description}
+                                        price={item.price}
+                                        discount={item.discount}
+                                        discountedPrice={item.discountedPrice}
+                                        stock={item.stock}
+                                        image={item.image}
+                                        item_id={item._id}
+                                        quantity={item.quantity}
+                                        getUserCart={getUserCart}
+                                    />
+                                );
+                            })
+                            .reverse()}
                     </div>
                 )}
                 <div className="min-w-[100%] text-right fixed bottom-0 border bg-gray-100 z-10">
                     <div className="inline mr-16">
-                       Checkout Total Amount: {currencyFormat.format(totalAmountToPay)}
+                        Checkout Total Amount: {currencyFormat.format(totalAmountToPay)}
                     </div>
                     <div className="my-2 inline mr-10">
                         <Button

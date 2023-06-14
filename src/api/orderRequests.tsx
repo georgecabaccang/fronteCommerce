@@ -56,3 +56,18 @@ export const receiveOrderRequest = async (order_id: string, email: string) => {
         if (error instanceof Error) return error.message;
     }
 };
+
+export const getOrderDetailsRequest = async (email: string, orderList_id: string) => {
+    try {
+        const response = await axios.post(
+            `/orders/${orderList_id}/view-order`,
+            {
+                email: email,
+            },
+            { withCredentials: true }
+        );
+        return response.data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};

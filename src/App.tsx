@@ -18,6 +18,7 @@ import SellerRoutes from "./utils/SellerRoutes";
 import LoggedOutRoutes from "./utils/LoggedOutRoutes";
 import LoggedInRoutes from "./utils/LoggedInRoutes";
 import UpdateMyProduct from "./components/products/UpdateMyProduct";
+import OrderDetails from "./components/orders/OrderDetails";
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
                         <Route path="/cart/checkout" element={<CheckOutItems />} />
                         <Route path="/orders" element={<OrdersList />} />
                         <Route path="/user/profile/:user_id" element={<Profile />} />
+                        <Route path="/orders/:order_id/view-order" element={<OrderDetails />} />
                     </Route>
 
                     {/* Seller Routes */}

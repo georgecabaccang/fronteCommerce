@@ -4,16 +4,10 @@ import Button from "../shared/Button";
 import { useSearchParams } from "react-router-dom";
 import { getOrdersRequest } from "../../api/orderRequests";
 import useDecryptUser from "../../hooks/useDecryptUser";
+import { IItemDetails } from "../../types/orderTypes";
 
 interface IOrders {
-    items: Array<{
-        prod_id: string;
-        productName: string;
-        quantity: number;
-        price: number;
-        discount: number;
-        image: string;
-    }>;
+    items: Array<IItemDetails>;
     totalAmount: number;
     status: string;
     _id: string;
@@ -35,6 +29,15 @@ export default function OrdersList() {
     const [isEmpty, setIsEmpty] = useState(false);
 
     const SEARCH_PARAMS_FILTER = searchParams.get("filter");
+
+    let emptyOrderListByFilter: string = "";
+    if (SEARCH_PARAMS_FILTER == FILTER_BY_PENDING) {
+        emptyOrderListByFilter = "No Pending Orders";
+    } else if (SEARCH_PARAMS_FILTER == FILTER_BY_RECEIVED) {
+        emptyOrderListByFilter = "No Received Orders";
+    } else {
+        emptyOrderListByFilter = "No Cancelled Orders";
+    }
 
     const getOrders = async () => {
         setIsLoading(true);
@@ -59,6 +62,8 @@ export default function OrdersList() {
             filteredOrders.length != 0 ? setIsEmpty(false) : setIsEmpty(true);
             return setIsLoading(false);
         }
+        setIsEmpty(true);
+        return setIsLoading(false);
     }, [orders, SEARCH_PARAMS_FILTER]);
 
     useEffect(() => {
@@ -66,7 +71,7 @@ export default function OrdersList() {
     }, [userDetails]);
 
     return (
-        <div className="mx-10 place-content-center">
+        <div className="grid grid-cols-1 mx-10">
             <div className="flex justify-center min-w-100% gap-3 mt-3">
                 <Button
                     name="Pending"
@@ -102,7 +107,7 @@ export default function OrdersList() {
 
             {isLoading && <div>Loading...</div>}
             {!isEmpty && !isLoading ? (
-                <div>
+                <div className="max-w-[100%] grid place-content-center">
                     {filterOrder
                         .map((order) => {
                             return (
@@ -121,7 +126,9 @@ export default function OrdersList() {
                         .reverse()}
                 </div>
             ) : (
-                !isLoading && <div>Empty</div>
+                !isLoading && (
+                    <div className="my-10 place-self-center">{emptyOrderListByFilter}</div>
+                )
             )}
         </div>
     );

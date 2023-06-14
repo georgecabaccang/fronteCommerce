@@ -24,6 +24,11 @@ export default function Product(props: IProdcutDetails) {
     const user_id = props.user_id;
     const prod_id = product._id;
 
+    const currencyFormat = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    });
+
     let isSellerOfProduct: boolean = false;
     if (user_id) {
         isSellerOfProduct = product.postedBy === user_id;
@@ -54,10 +59,13 @@ export default function Product(props: IProdcutDetails) {
                             product.discount && "line-through text-[0.8em] text-gray-400"
                         }`}
                     >
-                        ${product.price && product.price.toFixed(2)}
+                        {currencyFormat.format(product.price)}
                     </p>
-                    {product.discountedPrice && (
-                        <p className="inline text-[1em]"> ${product.discountedPrice.toFixed(2)}</p>
+                    {product.discount != 0 && (
+                        <p className="inline text-[1em]">
+                            {" "}
+                            {currencyFormat.format(product.discountedPrice)}
+                        </p>
                     )}
                 </div>
                 <div className="flex place-content-end">

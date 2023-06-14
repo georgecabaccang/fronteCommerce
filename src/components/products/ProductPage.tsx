@@ -10,6 +10,7 @@ import { UserContext } from "../../providers/UserProvider";
 import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import { addToCartRequest, getDetailsOfItemInCartRequest } from "../../api/cartRequests";
 import useDecryptUser from "../../hooks/useDecryptUser";
+import Swal from "sweetalert2";
 
 interface IProductInCart {
     _id: string;
@@ -38,6 +39,11 @@ export default function ProductPage() {
     const userContext = useContext(UserContext);
     const activeLinkContext = useContext(ActiveLinkContext);
 
+    const currencyFormat = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    });
+
     const addToCart = async () => {
         if (productDetails?._id && userDetails && !isNull) {
             const productAddToCart = {
@@ -45,7 +51,20 @@ export default function ProductPage() {
                 quantity: quantity,
             };
             const response = await addToCartRequest(productAddToCart, userDetails?.email);
-            console.log(response);
+            if (response == "OK") {
+                return Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Added To Cart",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+            return Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+            });
         }
     };
 
@@ -157,13 +176,15 @@ export default function ProductPage() {
                                 "line-through text-[0.8em] text-gray-400"
                             }`}
                         >
-                            ${productDetails?.price && productDetails?.price.toFixed(2)}
+                            {currencyFormat.format(productDetails!.price)}
                         </p>
-                        {productDetails?.discountedPrice && (
+                        {productDetails?.discount != 0 && (
                             <div className="inline text-[1em] ms-2 m">
-                                <div className="inline me-2">${productDetails?.discountedPrice.toFixed(2)}</div>
+                                <div className="inline me-2">
+                                    {currencyFormat.format(productDetails!.discountedPrice)}
+                                </div>
                                 <div className="inline text-sm border px-2 rounded bg-yellow-200">
-                                    {productDetails.discount * 100}% off
+                                    {productDetails!.discount * 100}% off
                                 </div>
                             </div>
                         )}

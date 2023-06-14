@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
 import { getUserProductsRequest } from "../../api/productDetailsReqeust";
 import Product from "./Product";
-import { IProductProperties } from "../../types/productTypes";
 import useDecryptUser from "../../hooks/useDecryptUser";
+
+interface IProductDetails {
+    _id: string;
+    image: string;
+    productName: string;
+    description: string;
+    price: number;
+    discount: number;
+    discountedPrice: number;
+    stock: number;
+    salesCount: number;
+    postedBy: string;
+}
 
 export default function MyProducts() {
     const { userDetails, isNull } = useDecryptUser();
-    const [myProducts, setMyProducts] = useState<Array<IProductProperties>>([]);
+    const [myProducts, setMyProducts] = useState<Array<IProductDetails>>([]);
     const [isEmpty, setIsEmpty] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
