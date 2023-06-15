@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import useDecryptUser from "../../hooks/useDecryptUser";
 
 interface IProdcutDetails {
     product: {
@@ -17,9 +16,7 @@ interface IProdcutDetails {
 }
 
 export default function Product(props: IProdcutDetails) {
-    const { userDetails } = useDecryptUser();
     const product = props.product;
-    const user_id = userDetails?._id;
     const prod_id = product._id;
 
     const currencyFormat = new Intl.NumberFormat("en-US", {
@@ -27,20 +24,9 @@ export default function Product(props: IProdcutDetails) {
         currency: "USD",
     });
 
-    let isSellerOfProduct: boolean = false;
-    if (user_id) {
-        isSellerOfProduct = product.postedBy === user_id;
-    }
-
     return (
         <div className="border rounded p-1 shadow-sm hover:shadow-md hover:border-gray-300 text-sm">
-            <Link
-                to={
-                    isSellerOfProduct
-                        ? `/user/${user_id}/my-products/${prod_id}/update`
-                        : `/shop/product/${prod_id}`
-                }
-            >
+            <Link to={`/shop/product/${prod_id}`}>
                 <div className="flex place-content-end bottom">
                     {product.discount != 0 && (
                         <div className="absolute bg-gray-200 text-[0.7em] px-1 rounded-s rounded-t-none rounded-br-none rounded-r">

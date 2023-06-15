@@ -28,7 +28,7 @@ export default function Navigation() {
     };
 
     return (
-        <div className="bg-gray-200 h-[3em] sticky top-0 z-10 shadow-md">
+        <div className="bg-gray-200 h-[3em] sticky top-0 z-50 shadow-md">
             <div className="flex mx-10 h-full items-center">
                 <div>
                     <Link to={"/"}>Shop</Link>

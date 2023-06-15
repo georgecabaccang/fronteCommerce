@@ -52,7 +52,9 @@ export default function MyProducts() {
                         .reverse()}
                 </div>
             ) : (
-                <div>{!isEmpty && isLoading ? "Loading..." : "You Have No Posted Products"}</div>
+                <div className="text-center mt-3">
+                    {!isEmpty && isLoading ? "Loading..." : "You Have No Posted Products"}
+                </div>
             )}
         </div>
     );

@@ -11,6 +11,7 @@ import { ActiveLinkContext } from "../../providers/ActiveLinkProvider";
 import { addToCartRequest, getDetailsOfItemInCartRequest } from "../../api/cartRequests";
 import useDecryptUser from "../../hooks/useDecryptUser";
 import Swal from "sweetalert2";
+import DescriptionModal from "./DescriptionModal";
 
 interface IProductInCart {
     _id: string;
@@ -22,6 +23,7 @@ interface IProductInCart {
     discountedPrice: number;
     stock: number;
     salesCount: number;
+    postedBy: string;
 }
 
 export default function ProductPage() {
@@ -31,6 +33,8 @@ export default function ProductPage() {
     const [productFound, setProductFound] = useState(false);
     const [quantity, setQuantity] = useState<number>(1);
     const [inCart, setInCart] = useState<boolean>(false);
+    const [readDesc, setReadDesc] = useState(false);
+    const [showDescriptionModal, setShowDescriptionModal] = useState(false);
 
     const { prod_id } = useParams();
     const navigate = useNavigate();
@@ -73,6 +77,11 @@ export default function ProductPage() {
         : productDetails?.price;
     if (productDetails?.price) {
         totalPrice = totalPrice! * quantity;
+    }
+
+    let isSellerOfProduct: boolean = false;
+    if (userDetails) {
+        isSellerOfProduct = productDetails?.postedBy === userDetails._id;
     }
 
     const buyNow = async () => {
@@ -152,6 +161,12 @@ export default function ProductPage() {
 
     return (
         <div className="pt-8 flex justify-center items-center">
+            {showDescriptionModal && (
+                <DescriptionModal
+                    description={productDetails!.description}
+                    setShowDescriptionModal={setShowDescriptionModal}
+                />
+            )}
             <div
                 className={`border max-h-[30em] max-w-[50em] grid grid-cols-3 p-5 shadow-sm rounded-md`}
             >
@@ -166,9 +181,28 @@ export default function ProductPage() {
                 <div className="grid grid-cols-1 ">
                     <div>
                         <h3 className="font-semibold mb-1">{productDetails?.productName}</h3>
-                        <p className="min-h-[9.5em] break-words text-sm">
+                        <div
+                            className="min-h-[8.8em] break-words text-sm line-clamp-6 relative"
+                            onMouseEnter={() => {
+                                setReadDesc(true);
+                            }}
+                            onMouseLeave={() => {
+                                setReadDesc(false);
+                            }}
+                        >
+                            {readDesc && (
+                                <div className="bg-black bg-opacity-70 min-h-[100%] min-w-[100%] rounded absolute flex justify-center items-center">
+                                    <Button
+                                        name="Read Description"
+                                        className="rounded bg-gray-200 hover:bg-white p-2 shadow-gray-500 shadow-sm hover:shadow-md hover:shadow-gray-500 "
+                                        clickEvent={() => {
+                                            setShowDescriptionModal(true);
+                                        }}
+                                    />
+                                </div>
+                            )}
                             {productDetails?.description}
-                        </p>
+                        </div>
                         <p className="inline text-[1em]">Price: </p>
                         <p
                             className={`inline ${
@@ -192,12 +226,12 @@ export default function ProductPage() {
                             <div className="text-[0.85em] text-gray-400 font-semibold">
                                 Stock: {productDetails?.stock}
                             </div>
-                            {inCart && (
+                            {inCart || isSellerOfProduct && (
                                 <div className="text-xs">{productDetails?.salesCount} Sold</div>
                             )}
                         </div>
                     </div>
-                    {!inCart && (
+                    {!inCart && !isSellerOfProduct && (
                         <div>
                             <div className="mb-2">
                                 <div className="mb-2">
@@ -228,9 +262,14 @@ export default function ProductPage() {
                             </div>
                         </div>
                     )}
-                    {inCart && (
+                    {inCart && !isSellerOfProduct && (
                         <div className="flex place-content-center items-center border max-h-[3em] shadow-sm rounded font-semibold">
                             Already In Cart
+                        </div>
+                    )}
+                    {isSellerOfProduct && (
+                        <div className="flex place-content-center items-center border max-h-[3em] shadow-sm rounded font-semibold">
+                            Cannot Buy Own Product
                         </div>
                     )}
                 </div>
