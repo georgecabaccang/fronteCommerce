@@ -2,6 +2,7 @@ import { useState, FormEvent, useEffect } from "react";
 import PasswordInputs from "./shared/passwords/PasswordInputs";
 import Button from "./shared/Button";
 import { changePasswordRequest } from "../api/userRequests";
+import Swal from "sweetalert2";
 
 // TRY TO MAKE THIS A SEPARATE COMPONENT TO BE REUSABLE FOR BOTH CHANGE PASSWORD
 // AND REGISTER
@@ -10,7 +11,7 @@ import { changePasswordRequest } from "../api/userRequests";
 interface IChangePassword {
     email: string;
     user_id: string;
-    setChangePasswordShown: React.Dispatch<React.SetStateAction<boolean>>;
+    setForm: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function ChangePassword(props: IChangePassword) {
@@ -30,6 +31,14 @@ export default function ChangePassword(props: IChangePassword) {
         if (response == "incorrect password") {
             return setCorrectOldPassword(false);
         }
+        if (response == "password changed") {
+            props.setForm("");
+            Swal.fire({
+                icon: "success",
+                title: "Password Changed",
+            });
+            setCorrectOldPassword(true);
+        }
         return setCorrectOldPassword(true);
     };
 
@@ -43,7 +52,9 @@ export default function ChangePassword(props: IChangePassword) {
     return (
         <div>
             <div className="text-center mb-2 font-bold">Change Password</div>
-            {!correctOldPasasword && <div className="text-red-500">Incorrect Old Password</div>}
+            {!correctOldPasasword && (
+                <div className="text-red-500 text-center">Incorrect Old Password</div>
+            )}
 
             <form onSubmit={submitHandler}>
                 <PasswordInputs
@@ -65,7 +76,7 @@ export default function ChangePassword(props: IChangePassword) {
                         name="Cancel"
                         type="button"
                         className="border rounded bg-gray-200 disabled:bg-gray-400"
-                        clickEvent={() => props.setChangePasswordShown(false)}
+                        clickEvent={() => props.setForm("")}
                     />
                 </div>
             </form>

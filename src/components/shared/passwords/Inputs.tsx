@@ -68,7 +68,7 @@ export default function Inputs(props: IInputs) {
                         : !props.isValidPassword &&
                           password &&
                           props.label !== "Old Password" && (
-                              <span className="text-red-500 text-xs break-normal">
+                              <span className="text-red-500 text-xs break-normal break-words">
                                   Password must be at least 8 characters long and contain at least
                                   one special character.
                               </span>

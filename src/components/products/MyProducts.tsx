@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getUserProductsRequest } from "../../api/productDetailsReqeust";
-import Product from "./Product";
 import useDecryptUser from "../../hooks/useDecryptUser";
+import MyProduct from "./MyProduct";
 
 interface IProductDetails {
     _id: string;
@@ -41,19 +41,15 @@ export default function MyProducts() {
 
     return (
         <div>
-            My Products
+            <div className="text-center mt-5">My Products</div>
+
             {!isEmpty && !isLoading ? (
                 <div>
-                    {myProducts.map((product) => {
-                        return (
-                            <Product
-                                product={product}
-                                key={product._id}
-                                isSeller={userDetails?.isSeller}
-                                user_id={userDetails?._id}
-                            />
-                        );
-                    })}
+                    {myProducts
+                        .map((product) => {
+                            return <MyProduct product={product} key={product._id} />;
+                        })
+                        .reverse()}
                 </div>
             ) : (
                 <div>{!isEmpty && isLoading ? "Loading..." : "You Have No Posted Products"}</div>
