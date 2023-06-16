@@ -27,9 +27,9 @@ export default function Product(props: IProdcutDetails) {
     return (
         <div className="border rounded p-1 shadow-sm hover:shadow-md hover:border-gray-300 text-sm">
             <Link to={`/shop/product/${prod_id}`}>
-                <div className="flex place-content-end bottom">
+                <div className="flex justify-center bottom relative">
                     {product.discount != 0 && (
-                        <div className="absolute bg-gray-200 text-[0.7em] px-1 rounded-s rounded-t-none rounded-br-none rounded-r">
+                        <div className="absolute bg-gray-200 text-[0.7em] px-1 rounded-s rounded-t-none rounded-br-none rounded-r end-0">
                             <p>{product.discount * 100}% Off</p>
                         </div>
                     )}

@@ -5,6 +5,7 @@ import { getUserProfileDetailsRequest, updateSellerStatusRequest } from "../../a
 import PostProduct from "../products/PostProduct";
 import { Link } from "react-router-dom";
 import useDecryptUser from "../../hooks/useDecryptUser";
+import Swal from "sweetalert2";
 
 const CHANGE_PASSWORD_FORM = "change password";
 const POST_PRODUCT_FORM = "post product";
@@ -15,7 +16,27 @@ export default function Profile() {
     const [form, setForm] = useState("");
 
     const updateSellerStatus = async () => {
-        if (!isNull) {
+        let confirmRevert = true;
+        if (userDetails?.isSeller) {
+            await Swal.fire({
+                title: "Are you sure?",
+                text: "All Your Posted Products Will Be Deleted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, revert to Buyer!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    confirmRevert = true;
+                }
+                if (result.isDismissed) {
+                    confirmRevert = false;
+                }
+            });
+        }
+
+        if (!isNull && confirmRevert) {
             setIsLoading(true);
             const response = await updateSellerStatusRequest(userDetails!.email, userDetails!._id);
             if (response === "OK") {
@@ -73,7 +94,6 @@ export default function Profile() {
                             {!isLoading && (
                                 <div className="inline">{userDetails?.isSeller ? "Yes" : "No"}</div>
                             )}
-                            {/* </div> */}
                         </div>
                     </div>
                     <div className="grid gap-2">

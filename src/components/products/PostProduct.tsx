@@ -5,6 +5,7 @@ import { postProductRequest } from "../../api/productDetailsReqeust";
 import Swal from "sweetalert2";
 import useDecryptUser from "../../hooks/useDecryptUser";
 import InputImage from "../shared/typeImageInput/InputImage";
+import { useNavigate } from "react-router-dom";
 
 interface IPostProduct {
     setForm: React.Dispatch<React.SetStateAction<string>>;
@@ -20,6 +21,8 @@ export default function PostProduct(props: IPostProduct) {
     const [stock, setStock] = useState(0);
     const [isFormValid, setIsFormValid] = useState(false);
 
+    const navigate = useNavigate();
+
     const onSubmitHandler = async (event: FormEvent) => {
         event.preventDefault();
 
@@ -34,10 +37,11 @@ export default function PostProduct(props: IPostProduct) {
             };
             const response = await postProductRequest(userDetails.email, product);
             if (response == "product created") {
-                return Swal.fire({
+                Swal.fire({
                     icon: "success",
                     title: "Product Posted!",
                 });
+                return navigate(`/user/${userDetails._id}/my-products`);
             }
             return Swal.fire({
                 icon: "error",
@@ -57,7 +61,6 @@ export default function PostProduct(props: IPostProduct) {
     return (
         <div className="text-[0.95em]">
             <form onSubmit={onSubmitHandler}>
-                <div></div>
                 <div>
                     <label className="inline">
                         Image: <img src={image} className="max-h-[4em] max-w-[7em] inline mx-5" />
@@ -76,7 +79,8 @@ export default function PostProduct(props: IPostProduct) {
                 <div>
                     <label className="block">Description:</label>
                     <textarea
-                        className="border rounded shadow-sm min-w-full resize-none min-h-[4em] px-2 py-[0.3em] text-sm"
+                        className="border rounded shadow-sm min-w-full resize-none min-h-[4em] px-2 py-[0.3em] text-sm hide-but-with-function"
+                        maxLength={500}
                         value={description}
                         onChange={(event) => {
                             setDescription(event.target.value);

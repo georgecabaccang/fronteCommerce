@@ -47,7 +47,13 @@ export default function MyProducts() {
                 <div>
                     {myProducts
                         .map((product) => {
-                            return <MyProduct product={product} key={product._id} />;
+                            return (
+                                <MyProduct
+                                    product={product}
+                                    key={product._id}
+                                    getUserProducts={getUserProducts}
+                                />
+                            );
                         })
                         .reverse()}
                 </div>

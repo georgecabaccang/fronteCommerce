@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import axios from "../axios";
 
 export const productDetailsReqeust = async (prod_id: string) => {
@@ -29,6 +30,21 @@ export const getProductsRequest = async () => {
     }
 };
 
+export const getUserProductsRequest = async (email: string) => {
+    try {
+        const { data } = await axios.post(
+            "/shop/my-products",
+            {
+                email: email,
+            },
+            { withCredentials: true }
+        );
+        return data;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
+
 export const postProductRequest = async (
     email: string,
     product: {
@@ -55,16 +71,42 @@ export const postProductRequest = async (
     }
 };
 
-export const getUserProductsRequest = async (email: string) => {
+export const updateProductRequest = async (
+    email: string,
+    updatedProductDetails: {
+        image: string;
+        productName: string;
+        description: string;
+        price: number;
+        discount: number;
+        stock: number;
+    }
+) => {
     try {
-        const { data } = await axios.post(
-            "/shop/my-products",
+        const response: AxiosResponse = await axios.patch(
+            "/shop/update-my-product",
+            {
+                email: email,
+                updatedProductDetails: updatedProductDetails,
+            },
+            { withCredentials: true }
+        );
+        return response;
+    } catch (error) {
+        if (error instanceof Error) return error.message;
+    }
+};
+
+export const deleteProductRequest = async (email: string, prod_id: string) => {
+    try {
+        const response: AxiosResponse = await axios.post(
+            `/shop/${prod_id}/delete`,
             {
                 email: email,
             },
             { withCredentials: true }
         );
-        return data;
+        return response;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }
