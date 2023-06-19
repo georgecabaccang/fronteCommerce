@@ -53,8 +53,6 @@ export default function Register() {
             import.meta.env.VITE_CRYPTO_CRED_HASHER!
         ).toString();
         const response = await registerUser(hashedCredentials);
-        console.log(response);
-
         if (response === "user created") {
             const response = await userContext.login(hashedCredentials);
             if (response === "OK") {

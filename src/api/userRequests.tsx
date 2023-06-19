@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import axios from "../axios";
 
 export const updateSellerStatusRequest = async (email: string, user_id: string) => {
@@ -48,5 +49,18 @@ export const getUserProfileDetailsRequest = async (email: string) => {
         return data;
     } catch (error) {
         if (error instanceof Error) return error.message;
+    }
+};
+
+export const deleteAccountRequest = async (email: string) => {
+    try {
+        const response = await axios.post(
+            `user/delete-account`,
+            { email: email },
+            { withCredentials: true }
+        );
+        return response.data;
+    } catch (error) {
+        if (error instanceof AxiosError) return error.message;
     }
 };

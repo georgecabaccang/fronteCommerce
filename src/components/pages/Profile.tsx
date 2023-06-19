@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "../shared/Button";
 import ChangePassword from "../ChangePassword";
-import { getUserProfileDetailsRequest, updateSellerStatusRequest } from "../../api/userRequests";
+import {
+    deleteAccountRequest,
+    getUserProfileDetailsRequest,
+    updateSellerStatusRequest,
+} from "../../api/userRequests";
 import PostProduct from "../products/PostProduct";
 import { Link } from "react-router-dom";
 import useDecryptUser from "../../hooks/useDecryptUser";
 import Swal from "sweetalert2";
+import { UserContext } from "../../providers/UserProvider";
 
 const CHANGE_PASSWORD_FORM = "change password";
 const POST_PRODUCT_FORM = "post product";
@@ -14,6 +19,8 @@ export default function Profile() {
     const { userDetails, isNull, setUserChange } = useDecryptUser();
     const [isLoading, setIsLoading] = useState(false);
     const [form, setForm] = useState("");
+
+    const userContext = useContext(UserContext);
 
     const updateSellerStatus = async () => {
         let confirmRevert = true;
@@ -58,12 +65,46 @@ export default function Profile() {
         }
     };
 
+    const deleteAccount = async () => {
+        let confirmDeletion = false;
+        if (userDetails) {
+            await Swal.fire({
+                title: "Are you sure?",
+                text: "Deletion Of Account Is Not Reversable.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Delete My Account",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    confirmDeletion = true;
+                }
+                if (result.isDismissed) {
+                    confirmDeletion = false;
+                }
+            });
+        }
+
+        if (confirmDeletion && userDetails) {
+            const response = await deleteAccountRequest(userDetails.email);
+            if (response.deletedCount == 1) {
+                Swal.fire({
+                    title: "Account Deleted!",
+                    icon: "info",
+                    confirmButtonColor: "#3085d6",
+                });
+                return userContext.logout();
+            }
+        }
+    };
+
     return (
-        <div className={`grid place-items-center my-8`}>
+        <div className="grid place-items-center my-8">
             <div
                 className={`grid ${
                     form != "" && "grid-cols-2 min-w-[50em]"
-                } border rounded shadow-md min-w-[23em] min-h-[30em]`}
+                } border rounded shadow-md min-w-[23em] min-h-[30em] relative`}
             >
                 <div className="border-r p-10">
                     <div className="mb-10 mt-5">
@@ -129,6 +170,16 @@ export default function Profile() {
                                 </div>
                             </div>
                         )}
+                    </div>
+                    <div className=" absolute bottom-0 mb-5 w-[17.82em] flex place-content-center">
+                        <Button
+                            type="button"
+                            name="Delete Account"
+                            className="border px-3 rounded bg-gray-200 shadow-sm hover:bg-white hover:shadow-md w-full"
+                            clickEvent={() => {
+                                deleteAccount();
+                            }}
+                        />
                     </div>
                 </div>
                 <div className="grid place-content-center">
