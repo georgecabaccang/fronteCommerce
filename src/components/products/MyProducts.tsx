@@ -27,7 +27,6 @@ export default function MyProducts() {
         if (userDetails && !isNull) {
             const response = (await getUserProductsRequest(userDetails!.email)) as AxiosResponse;
             if (response.data != "no posted products") {
-                console.log(response);
                 setMyProducts(response.data);
                 setIsEmpty(false);
                 return setIsLoading(false);

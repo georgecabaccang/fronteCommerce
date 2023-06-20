@@ -25,7 +25,6 @@ export default function InputImage(props: IInputImage) {
                 if (typeof result === "string") {
                     return props.imageSetter(result as string);
                 }
-                return console.log(result);
             } catch (error) {
                 if (error instanceof Error) {
                     console.log(error.message);
