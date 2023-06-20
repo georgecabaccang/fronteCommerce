@@ -32,14 +32,14 @@ export const getProductsRequest = async () => {
 
 export const getUserProductsRequest = async (email: string) => {
     try {
-        const { data } = await axios.post(
+        const response = await axios.post(
             "/shop/my-products",
             {
                 email: email,
             },
             { withCredentials: true }
         );
-        return data;
+        return response;
     } catch (error) {
         if (error instanceof Error) return error.message;
     }

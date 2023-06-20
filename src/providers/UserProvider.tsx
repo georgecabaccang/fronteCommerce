@@ -89,7 +89,7 @@ export default function UserProvider(props: PropsWithChildren) {
                 updatedUserToken == "no refresh token provided" ||
                 updatedUserToken == "tampered refresh token"
             ) {
-                alert("Refresh Token Invalid. Please Relogin.");
+                alert(updatedUserToken);
                 logout();
             }
             setUser(updatedUserToken);
@@ -106,11 +106,11 @@ export default function UserProvider(props: PropsWithChildren) {
         return () => {
             clearTimeout(refreshTimer.current);
         };
-    }, [userDetails, user]);
-
-    useEffect(() => {
-        getNewTokens();
     }, []);
+
+    // useEffect(() => {
+    //     getNewTokens();
+    // }, []);
 
     const userContextValues: IUserContext = {
         loginFrom: loginFrom,

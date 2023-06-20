@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getUserProductsRequest } from "../../api/productDetailsReqeust";
 import useDecryptUser from "../../hooks/useDecryptUser";
 import MyProduct from "./MyProduct";
+import { AxiosResponse } from "axios";
 
 interface IProductDetails {
     _id: string;
@@ -23,10 +24,11 @@ export default function MyProducts() {
     const [isLoading, setIsLoading] = useState(true);
 
     const getUserProducts = async () => {
-        if (!isNull) {
-            const response = await getUserProductsRequest(userDetails!.email);
-            if (response != "no posted products") {
-                setMyProducts(response);
+        if (userDetails && !isNull) {
+            const response = (await getUserProductsRequest(userDetails!.email)) as AxiosResponse;
+            if (response.data != "no posted products") {
+                console.log(response);
+                setMyProducts(response.data);
                 setIsEmpty(false);
                 return setIsLoading(false);
             }
@@ -42,8 +44,9 @@ export default function MyProducts() {
     return (
         <div>
             <div className="text-center mt-5">My Products</div>
-
-            {!isEmpty && !isLoading ? (
+            {isLoading && <div>Loading...</div>}
+            {isEmpty && <div className="text-center mt-3">You Have No Posted Products</div>}
+            {!isEmpty && (
                 <div>
                     {myProducts
                         .map((product) => {
@@ -56,10 +59,6 @@ export default function MyProducts() {
                             );
                         })
                         .reverse()}
-                </div>
-            ) : (
-                <div className="text-center mt-3">
-                    {!isEmpty && isLoading ? "Loading..." : "You Have No Posted Products"}
                 </div>
             )}
         </div>
