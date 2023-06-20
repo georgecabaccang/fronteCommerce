@@ -64,3 +64,28 @@ export const deleteAccountRequest = async (email: string) => {
         if (error instanceof AxiosError) return error.message;
     }
 };
+
+export const resetPasswordRequest = async (email: string) => {
+    try {
+        const response = await axios.post("/user/reset-password", { email: email });
+        return response;
+    } catch (error) {
+        if (error instanceof AxiosError) return error.code;
+    }
+};
+
+export const setNewPasswordRequest = async (
+    user_id: string,
+    resetPasswordToken: string,
+    password: string
+) => {
+    try {
+        const response = await axios.patch(
+            `/user/${user_id}/set-new-password/${resetPasswordToken}`,
+            { data: { newPassword: password } }
+        );
+        return response;
+    } catch (error) {
+        if (error instanceof AxiosError) return error.code;
+    }
+};

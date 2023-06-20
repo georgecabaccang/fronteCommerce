@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import Button from "../shared/Button";
-import ChangePassword from "../ChangePassword";
+import ChangePassword from "../user/ChangePassword";
 import {
     deleteAccountRequest,
     getUserProfileDetailsRequest,

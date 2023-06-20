@@ -1,7 +1,7 @@
 import { useState, FormEvent, useEffect } from "react";
-import PasswordInputs from "./shared/passwords/PasswordInputs";
-import Button from "./shared/Button";
-import { changePasswordRequest } from "../api/userRequests";
+import PasswordInputs from "../shared/passwords/PasswordInputs";
+import Button from "../shared/Button";
+import { changePasswordRequest } from "../../api/userRequests";
 import Swal from "sweetalert2";
 
 // TRY TO MAKE THIS A SEPARATE COMPONENT TO BE REUSABLE FOR BOTH CHANGE PASSWORD

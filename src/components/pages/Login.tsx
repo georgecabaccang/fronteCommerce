@@ -89,7 +89,9 @@ export default function Login() {
                             disabled={!formIsValid}
                         />
                         <div className="text-sm mt-2">
-                            <div>Forgot Password?</div>
+                            <Link to="/forgot-password" className="block my-2" onClick={() => activeLinkContext.setActiveLink('/')}>
+                                Forgot Password?
+                            </Link>
                             <Link
                                 to={"/sign-up"}
                                 onClick={() => activeLinkContext.setActiveLink(SIGN_UP)}

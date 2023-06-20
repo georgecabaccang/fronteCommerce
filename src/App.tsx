@@ -19,6 +19,8 @@ import LoggedOutRoutes from "./utils/LoggedOutRoutes";
 import LoggedInRoutes from "./utils/LoggedInRoutes";
 import UpdateMyProduct from "./components/products/UpdateMyProduct";
 import OrderDetails from "./components/orders/OrderDetails";
+import ForgotPassword from "./components/user/ForgotPassword";
+import ResetPassword from "./components/user/ResetPassword";
 
 function App() {
     return (
@@ -51,6 +53,11 @@ function App() {
                     <Route element={<LoggedOutRoutes />}>
                         <Route path="/login" element={<Login />} />
                         <Route path="/sign-up" element={<Register />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route
+                            path="/reset-password/:user_id/:resetToken"
+                            element={<ResetPassword />}
+                        />
                     </Route>
                 </Routes>
             </Layout>
