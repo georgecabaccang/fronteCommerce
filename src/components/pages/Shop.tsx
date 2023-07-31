@@ -173,7 +173,7 @@ export default function Shop() {
 
     return (
         <div className="mx-5 mt-5">
-            <div className="grid grid-cols-1 text-center min-w-full my-2">
+            <div className="grid grid-cols-1 text-center min-w-full mt-10">
                 <form onSubmit={submitSearchHandler}>
                     <Button
                         name="All Products"
@@ -196,7 +196,7 @@ export default function Shop() {
                     />
                 </form>
             </div>
-            <div>
+            <div className="mt-14">
                 {isLoading && (
                     <div className="grid mt-5 text-center place-content-center min-h-[80vh]">
                         <div role="status">
@@ -219,13 +219,15 @@ export default function Shop() {
                         </div>
                     </div>
                 )}
-                {!isLoading && products.length != 0 ? (
+                {!isLoading && products.length != 0 && (
                     <div className="grid grid-cols-6 gap-2">
                         {products.map((product) => {
                             return <Product product={product} key={product._id} />;
                         })}
                     </div>
-                ) : (
+                )}
+
+                {!isLoading && products.length == 0 && (
                     <div className="text-center">No Products Found</div>
                 )}
             </div>

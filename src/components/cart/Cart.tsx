@@ -97,7 +97,7 @@ export default function Cart() {
                     </div>
                 )}
                 {!isLoading && cart?.items.length === 0 ? (
-                    <div className="text-center">Cart Is Empty</div>
+                    <div className="text-center mt-20">Cart Is Empty</div>
                 ) : (
                     <div>
                         {cart?.items
